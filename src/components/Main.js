@@ -1,15 +1,15 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import pic01 from '../images/pic01.jpg'
+import pic01 from '../images/the_cyber.png'
 import pic02 from '../images/pic02.jpg'
-import pic03 from '../images/pic03.jpg'
+import pic03 from '../images/that_face.png'
 
 //import MailLink from './MailLink'
 
-const mailLink = require('./MailLink.js')
+//const mailLink = require('./MailLink.js')
 
-console.log(mailLink)
+//console.log(mailLink)
 
 class Main extends React.Component {
   render() {
@@ -35,29 +35,26 @@ class Main extends React.Component {
           }`}
           style={{ display: 'none' }}
         >
-          <h2 className="major">Intro</h2>
+          <h2 className="major">Dave Kanter Intro</h2>
           <span className="image main">
-            <img src={pic01} alt="" />
+            <img src={pic01} alt="introduction" />
           </span>
           <p>
-            Aenean ornare velit lacus, ac varius enim ullamcorper eu. Proin
-            aliquam facilisis ante interdum congue. Integer mollis, nisl amet
-            convallis, porttitor magna ullamcorper, amet egestas mauris. Ut
-            magna finibus nisi nec lacinia. Nam maximus erat id euismod egestas.
-            By the way, check out my <a href="#work">awesome work</a>.
+            I am a developer whose skill set lately tends towards React / Node /
+            JAMStack Development, mostly building sites with Gatsby. In the past
+            I have worked with many other stacks and languages and am even
+            fluent in a few. I am also knowlegeable about SQL/NoSQL databases,
+            PHP, and *nix systems. Currently I'm putting a lot of effort into
+            learning more about UI State Machine.
           </p>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis
-            dapibus rutrum facilisis. Class aptent taciti sociosqu ad litora
-            torquent per conubia nostra, per inceptos himenaeos. Etiam tristique
-            libero eu nibh porttitor fermentum. Nullam venenatis erat id
-            vehicula viverra. Nunc ultrices eros ut ultricies condimentum.
-            Mauris risus lacus, blandit sit amet venenatis non, bibendum vitae
-            dolor. Nunc lorem mauris, fringilla in aliquam at, euismod in
-            lectus. Pellentesque habitant morbi tristique senectus et netus et
-            malesuada fames ac turpis egestas. In non lorem sit amet elit
-            placerat maximus. Pellentesque aliquam maximus risus, vel sed
-            vehicula.
+            In the past, my love of all things technological have taken me into
+            forays in business and education as well as development. I co-owned
+            my own Web shop in NYC for a while, and I have worked on the faculty
+            of Parsons School of Design, California College of the Arts, UC
+            Berkeley, and Academy of Art University. I am a good fit for a role
+            as a developer, leader, strategist, or envangelist, with strengths
+            primarily in digital sudio situations.
           </p>
           {close}
         </article>
@@ -71,23 +68,10 @@ class Main extends React.Component {
         >
           <h2 className="major">Portfolio</h2>
           <span className="image main">
-            <img src={pic02} alt="" />
+            <img src={pic02} alt="portfolio" />
           </span>
-          <p>
-            Adipiscing magna sed dolor elit. Praesent eleifend dignissim arcu,
-            at eleifend sapien imperdiet ac. Aliquam erat volutpat. Praesent
-            urna nisi, fringila lorem et vehicula lacinia quam. Integer
-            sollicitudin mauris nec lorem luctus ultrices.
-          </p>
-          <p>
-            Nullam et orci eu lorem consequat tincidunt vivamus et sagittis
-            libero. Mauris aliquet magna magna sed nunc rhoncus pharetra.
-            Pellentesque condimentum sem. In efficitur ligula tate urna.
-            Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor.
-            Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis
-            libero. Mauris aliquet magna magna sed nunc rhoncus amet feugiat
-            tempus.
-          </p>
+          <p>&lt;Dave Kanter's Portfolio Coming Soon&gt;</p>
+          <p>Promise!</p>
           {close}
         </article>
 
@@ -103,13 +87,10 @@ class Main extends React.Component {
             <img src={pic03} alt="" />
           </span>
           <p>
-            Lorem ipsum dolor sit amet, consectetur et adipiscing elit. Praesent
-            eleifend dignissim arcu, at eleifend sapien imperdiet ac. Aliquam
-            erat volutpat. Praesent urna nisi, fringila lorem et vehicula
-            lacinia quam. Integer sollicitudin mauris nec lorem luctus ultrices.
-            Aliquam libero et malesuada fames ac ante ipsum primis in faucibus.
-            Cras viverra ligula sit amet ex mollis mattis lorem ipsum dolor sit
-            amet.
+            Dave lives in Marin County, CA, with his wife, son, two feisty dogs,
+            and one laconic fish. When he can bear to tear himself away from a
+            screen of some kind he can be found reading, cooking, hiking, and
+            playing chess or music. Never any more than two at the same time.
           </p>
           {close}
         </article>
@@ -146,18 +127,26 @@ class Main extends React.Component {
           </form>
           <ul className="icons">
             <li>
-              <a href="" className="icon fa-github">
-                <span className="label">GitHub</span>
+              <a href="mailto:dave@davekanter.com" className="icon fa-envelope">
+                <span className="label">E-mail</span>
               </a>
             </li>
             <li>
-              <a href="#" className="icon fa-twitter">
+              <a
+                href="https://www.linkedin.com/in/kanter/"
+                className="icon fa-linkedin"
+              >
+                <span className="label">Linked In</span>
+              </a>
+            </li>
+            <li>
+              <a href="https://twitter.com/raydot" className="icon fa-twitter">
                 <span className="label">Twitter</span>
               </a>
             </li>
             <li>
-              <a href="`${mailLink}`" className="icon fa-envelope">
-                <span className="label">{}</span>
+              <a href="https://github.com/raydot" className="icon fa-github">
+                <span className="label">GitHub</span>
               </a>
             </li>
           </ul>

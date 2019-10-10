@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import MailLink from './MailLink'
 
 const Header = props => (
   <header id="header" style={props.timeout ? { display: 'none' } : {}}>
@@ -12,9 +11,8 @@ const Header = props => (
         <h1>DaveKanter.Com</h1>
         <p>
           Experienced Front End / React / JAM Stack Developer.{' '}
-          <a href={MailLink}>Contact Me.</a>
+          <a href="#contact">Contact Me.</a>
         </p>
-        <p></p>
       </div>
     </div>
     <nav>

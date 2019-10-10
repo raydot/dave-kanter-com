@@ -9,7 +9,7 @@ const Footer = props => (
       <a href="https://www.netlify.com">Netlify</a>. Template by{' '}
       <a href="https://html5up.net">HTML5 UP</a>.
     </p>
-    <p className="copyright">All photography &copy;2019 Dave Kanter</p>
+    <p className="copyright">All photos &copy;2019 Dave Kanter</p>
   </footer>
 )
 

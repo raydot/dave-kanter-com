@@ -13,6 +13,6 @@ exports.mailLink = () => {
     }
   }
   //return "<a href='mailto:" + link + "'>" + link + '</a>'
-  console.log(link)
+  //console.log(link)
   return link
 }
