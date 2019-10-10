@@ -1,4 +1,4 @@
-const mailLink = () => {
+exports.mailLink = () => {
   let coded = 'i1BI@i1BIs1VDIk.Xcp'
   let key = 'JNhMQHRZroBj1pGTn5WYPeUqA0bkc7SdzyLVgf4tI8wE6OsXuCiK2vlam3DFx9'
   let shift = coded.length
@@ -13,5 +13,6 @@ const mailLink = () => {
     }
   }
   //return "<a href='mailto:" + link + "'>" + link + '</a>'
+  console.log(link)
   return link
 }

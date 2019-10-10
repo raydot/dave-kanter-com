@@ -5,11 +5,11 @@ import pic01 from '../images/pic01.jpg'
 import pic02 from '../images/pic02.jpg'
 import pic03 from '../images/pic03.jpg'
 
-import MailLink from './MailLink'
+//import MailLink from './MailLink'
 
-const mailLink = JSON.stringify(MailLink)
+const mailLink = require('./MailLink.js')
 
-//console.log(mailLink)
+console.log(mailLink)
 
 class Main extends React.Component {
   render() {
@@ -157,7 +157,7 @@ class Main extends React.Component {
             </li>
             <li>
               <a href="`${mailLink}`" className="icon fa-envelope">
-                <span className="label">{mailLink}</span>
+                <span className="label">{}</span>
               </a>
             </li>
           </ul>
