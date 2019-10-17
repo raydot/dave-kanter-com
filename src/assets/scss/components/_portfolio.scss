@@ -1,0 +1,34 @@
+.portfolio-wrapper {
+    margin: 15px;
+    background-color: red;
+}
+
+.porfolio-row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.portfolio-column {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+}
+
+.column {
+    height: 100px;
+}
+
+.one {
+    background-color: salmon;
+}
+
+.two {
+    background-color: royalblue;
+}
+
+.three {
+    background-color: aquamarine;
+}

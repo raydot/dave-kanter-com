@@ -5,6 +5,8 @@ import pic01 from '../images/the_cyber.png'
 import pic02 from '../images/pic02.jpg'
 import pic03 from '../images/that_face.png'
 
+import Portfolio from './Portfolio'
+
 //import MailLink from './MailLink'
 
 //const mailLink = require('./MailLink.js')
@@ -45,7 +47,7 @@ class Main extends React.Component {
             I have worked with many other stacks and languages and am even
             fluent in a few. I am also knowlegeable about SQL/NoSQL databases,
             PHP, and *nix systems. Currently I'm putting a lot of effort into
-            learning more about UI State Machine.
+            learning more about UI state machines.
           </p>
           <p>
             In the past, my love of all things technological have taken me into
@@ -54,7 +56,8 @@ class Main extends React.Component {
             of Parsons School of Design, California College of the Arts, UC
             Berkeley, and Academy of Art University. I am a good fit for a role
             as a developer, leader, strategist, or envangelist, with strengths
-            primarily in digital sudio situations.
+            primarily in digital studios and media- or education-focused
+            companies.
           </p>
           {close}
         </article>
@@ -72,6 +75,7 @@ class Main extends React.Component {
           </span>
           <p>&lt;Dave Kanter's Portfolio Coming Soon&gt;</p>
           <p>Promise!</p>
+          <Portfolio />
           {close}
         </article>
 
