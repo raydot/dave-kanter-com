@@ -10,7 +10,7 @@ import starwars from '../images/starwars.png'
 import trenchless from '../images/trenchless.jpg'
 import urbach from '../images/urbach.jpg'
 
-class Portfolio extends React.component {
+class Portfolio extends React.Component {
   constructor(props) {
     super(props)
     this.state = {}
