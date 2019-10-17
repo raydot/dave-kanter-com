@@ -56,7 +56,7 @@ class Main extends React.Component {
             of Parsons School of Design, California College of the Arts, UC
             Berkeley, and Academy of Art University. I am a good fit for a role
             as a developer, leader, strategist, or envangelist, with strengths
-            primarily in digital studios and media- or education-focused
+            that play well to digital studios and media- or education-focused
             companies.
           </p>
           {close}
