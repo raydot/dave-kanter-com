@@ -5,13 +5,7 @@ import pic01 from '../images/the_cyber.png'
 import pic02 from '../images/pic02.jpg'
 import pic03 from '../images/that_face.png'
 
-import Portfolio from './Portfolio'
-
-//import MailLink from './MailLink'
-
-//const mailLink = require('./MailLink.js')
-
-//console.log(mailLink)
+import { Portfolio } from './Portfolio'
 
 class Main extends React.Component {
   render() {
