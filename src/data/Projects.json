@@ -3,97 +3,94 @@
     "id": "01",
     "img": "urbach.jpg",
     "title": "Henry Urbach Architecture",
-    "description": "Ejection foul relay leather series robbed disabled list. National pastime pinch hitter baseball squeeze batting average run streak win.",
+    "description": "Multimedia piece to display art gallery potfolio.  Ran in gallery kiosk.",
     "alt": "Henry Urback Architecture Multimedia Piece",
-    "lead": "false"
+    "lead": "true"
   },
   {
     "id": "02",
     "img": "null",
     "title": "Intel Interactive House",
-    "description": "Rubber dribbler gold glove nubber ground rule double, batting average alley shutout knuckleball. National pastime moneyball batting average bag steal home arm stretch.",
-    "workdone": "Foo bar baz bait bung buff beach",
+    "description": "Interactive piece to show the Intel processor at the core of the interactive house of the future.  Displayed in the Intel Interactive Museum.",
     "alt": "Intel Interactive House Museum Piece",
-    "lead": "false"
+    "lead": "true"
   },
   {
     "id": "03",
     "img": "coffindaffer.jpg",
     "title": "Michael Coffindaffer Studio",
-    "description": "Hey batter rotation base on balls season airmail base on balls field relief pitcher cycle. Catcher center field club shift helmet can of corn mustard wins inside.",
-    "workdone": "Foo bar baz bait bung buff beach",
+    "description": "E-commerce website built in Magento for New York-based retailer.",
     "alt": "Michael Coffindaffer Studio E-commerce / Magento site",
-    "lead": "false"
+    "lead": "true"
   },
   {
     "id": "04",
     "img": "kaiserCardiacCare.png",
     "title": "Kaiser Permanente Cardiac Care",
-    "description": "Mitt disabled list league rubber corner dodgers manager. Corner tigers designated hitter peanuts corner rake cheese backstop.",
+    "description": "Website featuring doctor and patient stories for a San Francisco based medical provider.",
     "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Kaiser Cardiac Care website",
-    "lead": "false"
+    "lead": "true"
   },
   {
     "id": "05",
     "img": "monsterpoop.jpg",
     "title": "Monster Poop Book",
-    "description": "Walk off pull 4-bagger second base cheese, robbed cookie balk. Stadium center fielder triple-A small ball pickoff rainout bench. ",
+    "description": "Website and marketing for a children's book author.",
     "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Monster Poop Book website",
-    "lead": "false"
+    "lead": "true"
   },
   {
     "id": "06",
     "img": "opsumithcp.png",
     "title": "Opsumit HCP",
-    "description": "Gold glove no decision bandbox grand slam swing run batted in golden sombrero relay losses. Series designated hitter second baseman bush league baltimore chop baseball around the horn.",
+    "description": "Doctor information for a health care provider website.",
     "alt": "OpsumitHCP website",
-    "lead": "false"
+    "lead": "true"
   },
   {
     "id": "07",
     "img": "pahuman.png",
     "title": "PA Human",
-    "description": "Knuckleball world series bullpen slider sabremetrics bunt rubber game second base rope. First baseman cookie petey nubber defensive indifference ground rule double sweep mendoza line shortstop. ",
+    "description": "Redesign/redevelopment for website redeployed from British English to American English.",
     "workdone": "Foo bar baz bait bung buff beach",
     "alt": "PAHuman website",
-    "lead": "false"
+    "lead": "true"
   },
   {
     "id": "08",
     "img": "saxendamoa.png",
     "title": "Saxenda MOA",
-    "description": "Squeeze away breaking ball disabled list disabled list earned run nubber warning track interleague.",
+    "description": "Interactive demonstration of the method-of-action of a weight-loss drug for a healthcare provider website.",
     "workdone": "Foo bar baz bait bung buff beach",
     "alt": "SaxendaMOA web site",
-    "lead": "false"
+    "lead": "true"
   },
   {
     "id": "09",
     "img": "starwars.png",
     "title": "Lucas Arts",
-    "description": "World series take team backstop wrigley sacrifice fly bunt inning squeeze. Leadoff silver slugger forkball defensive indifference shift, dodgers practice. ",
-    "workdone": "Foo bar baz bait bung buff beach",
+    "description": "Lead developer for several Lucas Arts web sites including starwars.com, skysound.com and others.",
     "alt": "Lucas Arts lead web developer",
-    "lead": "false"
+    "lead": "true"
   },
   {
     "id": "10",
     "img": "trenchless.jpg",
     "title": "Trenchless Titan",
-    "description": "Nubber national pastime sacrifice bleeder double play gapper forkball disabled list. Field cork assist strikeout count right field slider disabled list. ",
+    "description": "Website and brand campaign for trenchless sewer repair company.",
     "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Trenchless Titan website and brand campaign",
-    "lead": "false"
+    "lead": "true"
   },
   {
     "id": "11",
     "img": "null",
     "title": "Beyond Napa Valley",
-    "description": "Screwball plunked run batted in starting pitcher shift doubleheader cork slugging. Hall of fame scorecard national pastime ground ball reliever in the hole passed ball.",
+    "description": "Website, React development, server development and marketing for tourism mobile application.",
     "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Beyond Napa Valley website and marketing",
-    "lead": "false"
+    "lead": "true"
   }
 ]
