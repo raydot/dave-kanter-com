@@ -1,97 +1,97 @@
 [
   {
     "id": "01",
-    "url": "http://www.foo.com",
+    "img": "urbach.jpg",
     "title": "Henry Urbach Architecture",
-    "description": "Lorem ipsum your mipsum gypsum",
+    "description": "Ejection foul relay leather series robbed disabled list. National pastime pinch hitter baseball squeeze batting average run streak win.",
     "alt": "Hits",
     "lead": "false"
   },
   {
     "id": "02",
-    "url": "http://www.foo.com",
+    "img": "null",
     "title": "Intel Interactive House",
-    "description": "Lorem ipsum your mipsum gypsum",
+    "description": "Rubber dribbler gold glove nubber ground rule double, batting average alley shutout knuckleball. National pastime moneyball batting average bag steal home arm stretch.",
     "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Hits",
     "lead": "false"
   },
   {
     "id": "03",
-    "url": "http://www.foo.com",
+    "img": "coffindaffer.jpg",
     "title": "Michael Coffindaffer Studio",
-    "description": "Lorem ipsum your mipsum gypsum",
+    "description": "Hey batter rotation base on balls season airmail base on balls field relief pitcher cycle. Catcher center field club shift helmet can of corn mustard wins inside.",
     "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Hits",
     "lead": "false"
   },
   {
     "id": "04",
-    "url": "http://www.foo.com",
+    "img": "kaiserCardiacCare.png",
     "title": "Kaiser Permanente Cardiac Care",
-    "description": "Lorem ipsum your mipsum gypsum",
+    "description": "Mitt disabled list league rubber corner dodgers manager. Corner tigers designated hitter peanuts corner rake cheese backstop.",
     "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Hits",
     "lead": "false"
   },
   {
     "id": "05",
-    "url": "http://www.foo.com",
+    "img": "monsterpoop.jpg",
     "title": "Monster Poop Book",
-    "description": "Lorem ipsum your mipsum gypsum",
+    "description": "Walk off pull 4-bagger second base cheese, robbed cookie balk. Stadium center fielder triple-A small ball pickoff rainout bench. ",
     "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Hits",
     "lead": "false"
   },
   {
     "id": "06",
-    "url": "http://www.foo.com",
+    "img": "opsumithcp.png",
     "title": "Opsumit HCP",
-    "description": "Lorem ipsum your mipsum gypsum",
+    "description": "Gold glove no decision bandbox grand slam swing run batted in golden sombrero relay losses. Series designated hitter second baseman bush league baltimore chop baseball around the horn.",
     "alt": "Hits",
     "lead": "false"
   },
   {
     "id": "07",
-    "url": "http://www.foo.com",
+    "img": "pahuman.png",
     "title": "PA Human",
-    "description": "Lorem ipsum your mipsum gypsum",
+    "description": "Knuckleball world series bullpen slider sabremetrics bunt rubber game second base rope. First baseman cookie petey nubber defensive indifference ground rule double sweep mendoza line shortstop. ",
     "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Hits",
     "lead": "false"
   },
   {
     "id": "08",
-    "url": "http://www.foo.com",
+    "img": "saxendamoa.png",
     "title": "Saxenda MOA",
-    "description": "Lorem ipsum your mipsum gypsum",
+    "description": "Squeeze away breaking ball disabled list disabled list earned run nubber warning track interleague.",
     "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Hits",
     "lead": "false"
   },
   {
     "id": "09",
-    "url": "http://www.foo.com",
+    "img": "starwars.png",
     "title": "Lucas Arts",
-    "description": "Lorem ipsum your mipsum gypsum",
+    "description": "World series take team backstop wrigley sacrifice fly bunt inning squeeze. Leadoff silver slugger forkball defensive indifference shift, dodgers practice. ",
     "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Hits",
     "lead": "false"
   },
   {
     "id": "10",
-    "url": "http://www.foo.com",
+    "img": "trenchless.jpg",
     "title": "Trenchless Titan",
-    "description": "Lorem ipsum your mipsum gypsum",
+    "description": "Nubber national pastime sacrifice bleeder double play gapper forkball disabled list. Field cork assist strikeout count right field slider disabled list. ",
     "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Hits",
     "lead": "false"
   },
   {
     "id": "11",
-    "url": "http://www.foo.com",
+    "img": "null",
     "title": "Beyond Napa Valley",
-    "description": "Lorem ipsum your mipsum gypsum",
+    "description": "Screwball plunked run batted in starting pitcher shift doubleheader cork slugging. Hall of fame scorecard national pastime ground ball reliever in the hole passed ball.",
     "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Hits",
     "lead": "false"

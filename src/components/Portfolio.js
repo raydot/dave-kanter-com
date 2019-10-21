@@ -1,5 +1,6 @@
 import React from 'react'
 import { StaticQuery, graphql } from 'gatsby'
+import Img from 'gatsby-image'
 
 //import Projects from './Projects.json'
 // import coffandaffer from '../images/coffindaffer.jpg'
@@ -27,6 +28,7 @@ export const Portfolio = () => (
               id
               title
               description
+              img
             }
           }
         }
@@ -43,7 +45,16 @@ export const Portfolio = () => (
 function getProjects(data) {
   const projectItemsArray = []
   data.allProjectsJson.edges.forEach(item =>
-    projectItemsArray.push(<li key={item.node.id}>{item.node.description}</li>)
+    projectItemsArray.push(
+      <div key={item.node.id} className="project">
+        {item.node.title}
+        <br />
+        {item.node.description}
+        <br />
+        <Img src={`../images/${item.node.img}`} />
+        <br />
+      </div>
+    )
   )
   return projectItemsArray
 }
