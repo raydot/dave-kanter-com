@@ -1,15 +1,15 @@
 [
   {
     "id": "01",
-    "img": "urbach.jpg",
+    "src": "Urbach",
     "title": "Henry Urbach Architecture",
     "description": "Multimedia piece to display art gallery potfolio.  Ran in gallery kiosk.",
-    "alt": "Henry Urback Architecture Multimedia Piece",
+    "alt": "Henry Urbach Architecture Multimedia Piece",
     "lead": "true"
   },
   {
     "id": "02",
-    "img": "null",
+    "src": "null",
     "title": "Intel Interactive House",
     "description": "Interactive piece to show the Intel processor at the core of the interactive house of the future.  Displayed in the Intel Interactive Museum.",
     "alt": "Intel Interactive House Museum Piece",
@@ -17,7 +17,7 @@
   },
   {
     "id": "03",
-    "img": "coffindaffer.jpg",
+    "src": "Coffindaffer",
     "title": "Michael Coffindaffer Studio",
     "description": "E-commerce website built in Magento for New York-based retailer.",
     "alt": "Michael Coffindaffer Studio E-commerce / Magento site",
@@ -25,25 +25,23 @@
   },
   {
     "id": "04",
-    "img": "kaiserCardiacCare.png",
+    "src": "Kaiser",
     "title": "Kaiser Permanente Cardiac Care",
     "description": "Website featuring doctor and patient stories for a San Francisco based medical provider.",
-    "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Kaiser Cardiac Care website",
     "lead": "true"
   },
   {
     "id": "05",
-    "img": "monsterpoop.jpg",
+    "src": "Monster",
     "title": "Monster Poop Book",
     "description": "Website and marketing for a children's book author.",
-    "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Monster Poop Book website",
     "lead": "true"
   },
   {
     "id": "06",
-    "img": "opsumithcp.png",
+    "src": "Opsumit",
     "title": "Opsumit HCP",
     "description": "Doctor information for a health care provider website.",
     "alt": "OpsumitHCP website",
@@ -51,25 +49,23 @@
   },
   {
     "id": "07",
-    "img": "pahuman.png",
+    "src": "Pahuman",
     "title": "PA Human",
     "description": "Redesign/redevelopment for website redeployed from British English to American English.",
-    "workdone": "Foo bar baz bait bung buff beach",
     "alt": "PAHuman website",
     "lead": "true"
   },
   {
     "id": "08",
-    "img": "saxendamoa.png",
+    "src": "Saxenda",
     "title": "Saxenda MOA",
     "description": "Interactive demonstration of the method-of-action of a weight-loss drug for a healthcare provider website.",
-    "workdone": "Foo bar baz bait bung buff beach",
     "alt": "SaxendaMOA web site",
     "lead": "true"
   },
   {
     "id": "09",
-    "img": "starwars.png",
+    "src": "Starwars",
     "title": "Lucas Arts",
     "description": "Lead developer for several Lucas Arts web sites including starwars.com, skysound.com and others.",
     "alt": "Lucas Arts lead web developer",
@@ -77,19 +73,17 @@
   },
   {
     "id": "10",
-    "img": "trenchless.jpg",
+    "src": "Trenchless",
     "title": "Trenchless Titan",
     "description": "Website and brand campaign for trenchless sewer repair company.",
-    "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Trenchless Titan website and brand campaign",
     "lead": "true"
   },
   {
     "id": "11",
-    "img": "null",
+    "src": "null",
     "title": "Beyond Napa Valley",
     "description": "Website, React development, server development and marketing for tourism mobile application.",
-    "workdone": "Foo bar baz bait bung buff beach",
     "alt": "Beyond Napa Valley website and marketing",
     "lead": "true"
   }

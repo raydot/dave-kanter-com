@@ -1,17 +1,17 @@
 import React from 'react'
-import { StaticQuery, graphql } from 'gatsby'
+import { useStaticQuery, graphql } from 'gatsby'
 import Img from 'gatsby-image'
 
 //import Projects from './Projects.json'
-// import coffandaffer from '../images/coffindaffer.jpg'
-// import kaiser from '../images/kaiserCardiacCare.png'
-// import monster from '../images/monsterpoop.jpg'
-// import opsumit from '../images/opsumithcp.png'
-// import pahuman from '../images/pahuman.png'
-// import saxendamoa from '../images/saxendamoa.png'
-// import starwars from '../images/starwars.png'
-// import trenchless from '../images/trenchless.jpg'
-// import urbach from '../images/urbach.jpg'
+// import Coffindaffer from '../images/coffindaffer.jpg'
+// import Kaiser from '../images/kaiserCardiacCare.png'
+// import Monster from '../images/monsterpoop.jpg'
+// import Opsumit from '../images/opsumithcp.png'
+// import Pahuman from '../images/pahuman.png'
+// import Saxendamoa from '../images/saxendamoa.png'
+// import Starwars from '../images/starwars.png'
+// import Trenchless from '../images/trenchless.jpg'
+import Urbach from '../images/urbach.jpg'
 
 export const Portfolio = () => (
   // constructor(props) {
@@ -19,7 +19,7 @@ export const Portfolio = () => (
   //   this.state = {}
   // }
   //render() {
-  <StaticQuery
+  <useStaticQuery
     query={graphql`
       query ProjectsQuery {
         allProjectsJson {
@@ -28,7 +28,8 @@ export const Portfolio = () => (
               id
               title
               description
-              img
+              src
+              alt
             }
           }
         }
@@ -51,12 +52,15 @@ function getProjects(data) {
         <br />
         {item.node.description}
         <br />
-        <Img src={`../images/${item.node.img}`} />
+        <img src={Urbach} alt={item.node.alt} />
         <br />
       </div>
     )
   )
+  console.log('pIA', projectItemsArray)
   return projectItemsArray
 }
 
 //export default Portfolio
+
+//  {<Img src={`../images/${item.node.img}`} />}
