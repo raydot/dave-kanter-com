@@ -8,54 +8,54 @@ const Header = props => (
     </div>
     <div className="content">
       <div className="inner">
-        <h1>DaveKanter.Com</h1>
+        <h1>DaveKanter.com</h1>
         <p>
-          Experienced Front End / React / JAM Stack Developer.{' '}
-          <a href="#contact">Contact Me.</a>
+          Experienced Front End / React / JAM Stack Developer{' '}
+          <a href="#contact">( Contact Me )</a>
         </p>
       </div>
     </div>
     <nav>
       <ul>
         <li>
-          <a
-            href="javascript:;"
+          <button
+            class="button"
             onClick={() => {
               props.onOpenArticle('intro')
             }}
           >
             Intro
-          </a>
+          </button>
         </li>
         <li>
-          <a
-            href="javascript:;"
+          <button
+            class="button"
             onClick={() => {
               props.onOpenArticle('work')
             }}
           >
             Portfolio
-          </a>
+          </button>
         </li>
         <li>
-          <a
-            href="javascript:;"
+          <button
+            class="button"
             onClick={() => {
               props.onOpenArticle('about')
             }}
           >
             About
-          </a>
+          </button>
         </li>
         <li>
-          <a
-            href="javascript:;"
+          <button
+            class="button"
             onClick={() => {
               props.onOpenArticle('contact')
             }}
           >
             Contact
-          </a>
+          </button>
         </li>
       </ul>
     </nav>

@@ -30,7 +30,7 @@
 		line-height: 1.65;
 	}
 
-	a {
+	button, a {
 		@include vendor('transition', (
 			'color #{_duration(transition)} ease-in-out',
 			'background-color #{_duration(transition)} ease-in-out',

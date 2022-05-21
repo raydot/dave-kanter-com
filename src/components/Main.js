@@ -5,7 +5,7 @@ import pic01 from '../images/the_cyber.png'
 import pic02 from '../images/pic02.jpg'
 import pic03 from '../images/that_face.png'
 
-import { Portfolio } from './Portfolio'
+import Portfolio from './Portfolio'
 
 class Main extends React.Component {
   render() {
@@ -36,12 +36,12 @@ class Main extends React.Component {
             <img src={pic01} alt="introduction" />
           </span>
           <p>
-            I am a developer whose skill set lately tends towards React / Node /
-            JAMStack Development, mostly building sites with Gatsby. In the past
-            I have worked with many other stacks and languages and am even
-            fluent in a few. I am also knowlegeable about SQL/NoSQL databases,
-            PHP, and *nix systems. Currently I'm putting a lot of effort into
-            learning more about UI state machines.
+            I am a front-end developer whose skill set tends towards React /
+            Node / JAMStack Development, mostly building sites with React. In
+            the past I have worked with many other stacks and languages and am
+            even fluent in a few. I am also knowledgeable about SQL/NoSQL
+            databases, PHP, and *nix systems. Currently I'm putting a lot of
+            effort into learning more about UI state machines.
           </p>
           <p>
             In the past, my love of all things technological have taken me into
@@ -50,7 +50,7 @@ class Main extends React.Component {
             worked on the faculty of Parsons School of Design, California
             College of the Arts, UC Berkeley, and Academy of Art University. I
             am a great fit for a role as a developer, leader, strategist, or
-            envangelist, with strengths that play well to digital studios and
+            evangelist, with strengths that play well to digital studios and
             media- or education-focused companies.
           </p>
           {close}
