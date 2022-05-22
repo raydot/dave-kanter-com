@@ -50,14 +50,15 @@ class Main extends React.Component {
             effort into learning more about UI state machines.
           </p>
           <p>
-            In the past, my love of all things technological have taken me into
-            forays in business and education as well as development. I co-owned
-            a fantastic Web shop in NYC for a while, and I am honored to have
-            worked on the faculty of Parsons School of Design, California
-            College of the Arts, UC Berkeley, and Academy of Art University. I
-            am a great fit for a role as a developer, leader, strategist, or
-            evangelist, with strengths that play well to digital studios and
-            media- or education-focused companies.
+            In the past, my love of all things technological has led me to a
+            rewarding career spanning business strategy, education, development.
+            I co-owned a fantastic web shop in NYC for a while, have built web
+            and multimedia properties for companies spanning in scale from
+            mom-and-pop to Fortune 50, and I am honored to have worked on the
+            faculties of several great universities. I am a great fit for a role
+            as a developer, leader, strategist, or evangelist, with strengths
+            that play well to digital studios and media- or education-focused
+            companies.
           </p>
           {close}
         </article>
