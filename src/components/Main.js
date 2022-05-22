@@ -11,7 +11,13 @@ class Main extends React.Component {
   render() {
     let close = (
       <div
+        role="button"
+        aria-label="close"
         className="close"
+        tabIndex="0"
+        onKeyDown={() => {
+          this.props.onCloseArticle()
+        }}
         onClick={() => {
           this.props.onCloseArticle()
         }}

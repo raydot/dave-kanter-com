@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+const year = new Date().getFullYear()
+
 const Footer = props => (
   <footer id="footer" style={props.timeout ? { display: 'none' } : {}}>
     <p className="copyright">
@@ -9,7 +11,7 @@ const Footer = props => (
       <a href="https://www.netlify.com">Netlify</a>. Template by{' '}
       <a href="https://html5up.net">HTML5 UP</a>.
     </p>
-    <p className="copyright">All photos &copy;2019 Dave Kanter</p>
+    <p className="copyright">All photos &copy;{year} Dave Kanter</p>
   </footer>
 )
 

@@ -11,7 +11,24 @@ const Header = props => (
         <h1>DaveKanter.com</h1>
         <p>
           Experienced Front End / React / JAM Stack Developer{' '}
-          <a href="#contact">( Contact Me )</a>
+          <button
+            style={{
+              boxShadow: 'none',
+              fontSize: '0.8rem',
+
+              padding: 0,
+            }}
+            onClick={() => {
+              props.onOpenArticle('contact')
+            }}
+          >
+            |{' '}
+            <span
+              style={{ borderBottom: '1px dotted rgba(255, 255, 255, 0.5)' }}
+            >
+              Contact Me
+            </span>
+          </button>
         </p>
       </div>
     </div>
@@ -19,7 +36,6 @@ const Header = props => (
       <ul>
         <li>
           <button
-            class="button"
             onClick={() => {
               props.onOpenArticle('intro')
             }}
@@ -29,7 +45,6 @@ const Header = props => (
         </li>
         <li>
           <button
-            class="button"
             onClick={() => {
               props.onOpenArticle('work')
             }}
@@ -39,7 +54,6 @@ const Header = props => (
         </li>
         <li>
           <button
-            class="button"
             onClick={() => {
               props.onOpenArticle('about')
             }}
@@ -49,7 +63,6 @@ const Header = props => (
         </li>
         <li>
           <button
-            class="button"
             onClick={() => {
               props.onOpenArticle('contact')
             }}
