@@ -5,3 +5,6 @@
  */
 
 // You can delete this file if you're not using it
+const sharp = require('sharp')
+sharp.cache(false)
+sharp.simd(false)

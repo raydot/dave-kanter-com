@@ -1,20 +1,56 @@
 import React from 'react'
-// import { useStaticQuery, graphql } from 'gatsby'
 import Img from 'gatsby-image'
-
-import Projects from '../data/Projects.json'
-import Coffindaffer from '../images/coffindaffer.jpg'
-import Kaiser from '../images/kaiserCardiacCare.png'
-import Monster from '../images/monsterpoop.jpg'
-import Opsumit from '../images/opsumithcp.png'
-import Pahuman from '../images/pahuman.png'
-import Saxendamoa from '../images/saxendamoa.png'
-import Starwars from '../images/starwars.png'
-import Trenchless from '../images/trenchless.jpg'
-import Urbach from '../images/urbach.jpg'
+import { StaticQuery, graphql } from 'gatsby'
 
 const Portfolio = () => {
-  return <Img fixed={Coffindaffer} />
+  return (
+    <StaticQuery
+      query={graphql`
+        query {
+          coffindaffer: file(relativePath: { eq: "coffindaffer.jpg" }) {
+            ...fluidImage
+          }
+          kaiser: file(relativePath: { eq: "kaiserCardiacCare.png" }) {
+            ...fluidImage
+          }
+          monster: file(relativePath: { eq: "monsterpoop.jpg" }) {
+            ...fluidImage
+          }
+          opsumit: file(relativePath: { eq: "opsumithcp.png" }) {
+            ...fluidImage
+          }
+          pahuman: file(relativePath: { eq: "pahuman.png" }) {
+            ...fluidImage
+          }
+          saxenda: file(relativePath: { eq: "saxendamoa.png" }) {
+            ...fluidImage
+          }
+          starwars: file(relativePath: { eq: "starwars.png" }) {
+            ...fluidImage
+          }
+          trenchless: file(relativePath: { eq: "trenchless.jpg" }) {
+            ...fluidImage
+          }
+          urbach: file(relativePath: { eq: "urbach.jpg" }) {
+            ...fluidImage
+          }
+        }
+      `}
+      render={data => (
+        <div>
+          <Img fluid={data.coffindaffer.childImageSharp.fluid} />
+          <Img fluid={data.starwars.childImageSharp.fluid} />
+          <Img fluid={data.kaiser.childImageSharp.fluid} />
+          <Img fluid={data.monster.childImageSharp.fluid} />
+          <Img fluid={data.opsumit.childImageSharp.fluid} />
+          <Img fluid={data.pahuman.childImageSharp.fluid} />
+          <Img fluid={data.saxenda.childImageSharp.fluid} />
+          <Img fluid={data.trenchless.childImageSharp.fluid} />
+          <Img fluid={data.urbach.childImageSharp.fluid} />
+        </div>
+      )}
+    />
+  )
 }
 
 export default Portfolio
