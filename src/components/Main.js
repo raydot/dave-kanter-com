@@ -70,11 +70,6 @@ class Main extends React.Component {
           style={{ display: 'none' }}
         >
           <h2 className="major">Portfolio</h2>
-          <span className="image main">
-            <img src={pic02} alt="portfolio" />
-          </span>
-          <p>&lt;Dave Kanter's Portfolio Coming Soon&gt;</p>
-          <p>Promise!</p>
           <Portfolio />
           {close}
         </article>

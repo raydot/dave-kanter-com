@@ -1,6 +1,7 @@
 import React from 'react'
 import Img from 'gatsby-image'
 import { StaticQuery, graphql } from 'gatsby'
+import '../scss/portfolio.scss'
 
 const Portfolio = () => {
   return (
