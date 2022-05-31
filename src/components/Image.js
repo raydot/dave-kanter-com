@@ -3,7 +3,7 @@ import Img from 'gatsby-image'
 import { graphql, useStaticQuery } from 'gatsby'
 
 const Image = ({ fileName, alt, style }) => {
-  console.log(fileName, alt, style)
+  // console.log(fileName, alt, style)
   const { allImageSharp } = useStaticQuery(graphql`
     query {
       allImageSharp {
@@ -30,3 +30,10 @@ const Image = ({ fileName, alt, style }) => {
 }
 
 export default Image
+
+/*
+https://stackoverflow.com/questions/56437205/how-do-i-query-multiple-images-with-gatsby-image
+
+Usage:
+<Image fileName="yourImage.jpg" style={{ width: '100%' }} alt="" />
+*/

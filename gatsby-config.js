@@ -4,7 +4,7 @@ module.exports = {
   siteMetadata: {
     title: 'Dave Kanter | Front End Developer',
     author: 'Dave Kanter',
-    description: 'Dave Kanter, Frond End Developer, portfolio site.',
+    description: 'Dave Kanter, Front End Developer, portfolio site.',
   },
   plugins: [
     'gatsby-plugin-react-helmet',

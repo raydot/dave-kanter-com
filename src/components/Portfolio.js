@@ -1,69 +1,42 @@
 import React from 'react'
-// import Img from 'gatsby-image'
-// import { /*StaticQuery,*/ graphql, useStaticQuery } from 'gatsby'
+import { useStaticQuery } from 'gatsby'
 import Image from './Image'
 import '../scss/portfolio.scss'
 
 const Portfolio = () => {
-  return (
-    <Image
-      fileName="coffindaffer.jpg"
-      style={{ width: '100%' }}
-      alt="Coffindaffer"
-    />
+  const gql = useStaticQuery(graphql`
+    {
+      allProjectsJson {
+        nodes {
+          id
+          description
+          title
+          src
+          lead
+        }
+      }
+    }
+  `)
+
+  const data = gql.allProjectsJson.nodes
+  // console.log(data)
+
+  return data.map(data =>
+    data.src !== 'null' ? (
+      <>
+        <div id={data.id} className="portfolioItem">
+          <h4 style={{ marginBottom: '0' }}>{data.title}</h4>
+          <Image
+            fileName={data.src}
+            style={{ width: '100%' }}
+            alt={data.title}
+          />
+          <div style={{ paddingTop: '1rem' }}>{data.description}</div>
+          <hr />
+        </div>
+      </>
+    ) : null
   )
 }
 
 export default Portfolio
-// return (
-//   <StaticQuery
-//     query={graphql`
-//       query {
-//         coffindaffer: file(relativePath: { eq: "coffindaffer.jpg" }) {
-//           ...fluidImage
-//         }
-//         kaiser: file(relativePath: { eq: "kaiserCardiacCare.png" }) {
-//           ...fluidImage
-//         }
-//         monster: file(relativePath: { eq: "monsterpoop.jpg" }) {
-//           ...fluidImage
-//         }
-//         opsumit: file(relativePath: { eq: "opsumithcp.png" }) {
-//           ...fluidImage
-//         }
-//         pahuman: file(relativePath: { eq: "pahuman.png" }) {
-//           ...fluidImage
-//         }
-//         saxenda: file(relativePath: { eq: "saxendamoa.png" }) {
-//           ...fluidImage
-//         }
-//         starwars: file(relativePath: { eq: "starwars.png" }) {
-//           ...fluidImage
-//         }
-//         trenchless: file(relativePath: { eq: "trenchless.jpg" }) {
-//           ...fluidImage
-//         }
-//         urbach: file(relativePath: { eq: "urbach.jpg" }) {
-//           ...fluidImage
-//         }
-//       }
-//     `}
-//     render={data => (
-//       <div>
-//         <Img fluid={data.coffindaffer.childImageSharp.fluid} />
-//         <div>Lorem ipsum dolor est</div>
-//         <Img fluid={data.starwars.childImageSharp.fluid} />
-//         <Img fluid={data.kaiser.childImageSharp.fluid} />
-//         <Img fluid={data.monster.childImageSharp.fluid} />
-//         <Img fluid={data.opsumit.childImageSharp.fluid} />
-//         <Img fluid={data.pahuman.childImageSharp.fluid} />
-//         <Img fluid={data.saxenda.childImageSharp.fluid} />
-//         <Img fluid={data.trenchless.childImageSharp.fluid} />
-//         <Img fluid={data.urbach.childImageSharp.fluid} />
-//       </div>
-//     )}
-//   />
-// )
-//}
-
-// export default Portfolio
