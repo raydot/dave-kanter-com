@@ -41,7 +41,7 @@ const Layout = ({ children, location }) => {
               {
                 name: 'keywords',
                 content:
-                  'dave, kanter, david, javascript, frontend, web, developer, html, html5, css3, react, node, gatsby',
+                  'dave, kanter, david, dave kanter, javascript, frontend, web, developer, html, html5, css3, react, node, gatsby',
               },
             ]}
           >

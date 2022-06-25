@@ -1,7 +1,7 @@
 import React from 'react'
 import { useStaticQuery } from 'gatsby'
 import Image from './Image'
-import '../scss/portfolio.scss'
+import '../assets/scss/components/_portfolio.scss'
 
 const Portfolio = () => {
   const gql = useStaticQuery(graphql`

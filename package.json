@@ -15,7 +15,6 @@
     "gatsby-source-filesystem": "^2.1.33",
     "gatsby-transformer-json": "^2.2.15",
     "gatsby-transformer-sharp": "^2.1.1",
-    "node-sass": "^4.11.0",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
     "react-helmet": "^5.2.0",
@@ -35,6 +34,7 @@
     "eslint": "^7.1.0",
     "eslint-plugin-flowtype": "^5.2.0",
     "eslint-plugin-react": "^7.16.0",
+    "node-sass": "^4.14.1",
     "prettier": "^1.14.2"
   },
   "repository": {

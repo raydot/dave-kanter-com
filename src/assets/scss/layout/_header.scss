@@ -217,6 +217,15 @@
 					line-height: 1.875;
 				}
 			}
+			#header {
+				nav {
+					ul {
+						button {
+							border: 0px;
+						}
+					}
+				}
+			}
 		}
 
 		@include breakpoint(xsmall) {
@@ -233,10 +242,12 @@
 					@include vendor('flex-direction', 'column');
 					min-width: 10rem;
 					max-width: 100%;
+					
 
 					li {
 						border-left: 0;
-						border-top: solid _size(border-width) _palette(border);
+						// border-top: solid _size(border-width) _palette(border);
+						border-top:0;
 
 						&:first-child {
 							border-top: 0;
@@ -247,6 +258,10 @@
 							line-height: 3rem;
 							min-width: 0;
 							width: 100%;
+						}
+
+						button {
+							border: 0;
 						}
 					}
 				}

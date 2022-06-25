@@ -17,9 +17,21 @@ What this has meant is I've had to _unlearn_ a ton of best practices to go back 
 
 ## Punch List (left to do)
 
-  * More stylized treatment of Portfolio
-  * Last `<hr>` in Portfolio needs to be removed through CSS psuedo-selector (or something)
-  * Haven't checked the bundle size or done any kind of optimization other than what ships with Gatsby 2
-  * Unit tests
-  * Check A11y
-  * Contact form not working
+* More stylized treatment of Portfolio
+* Last `<hr>` in Portfolio needs to be removed through CSS psuedo-selector (or something)
+* Haven't checked the bundle size or done any kind of optimization other than what ships with Gatsby 2
+* Unit tests
+* Check A11y
+* Contact form not working
+* Display "Lead" info in Portfolio
+
+--
+
+** Random Notes:
+
+/*
+https://stackoverflow.com/questions/56437205/how-do-i-query-multiple-images-with-gatsby-image
+
+Usage:
+<Image fileName="yourImage.jpg" style={{ width: '100%' }} alt="" />
+*/
