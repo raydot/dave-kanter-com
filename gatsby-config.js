@@ -2,9 +2,9 @@ const path = require(`path`)
 
 module.exports = {
   siteMetadata: {
-    title: 'Dave Kanter | Front End Developer',
+    title: 'Dave Kanter | Frontend Developer',
     author: 'Dave Kanter',
-    description: 'Dave Kanter, Front End Developer, portfolio site.',
+    description: 'Dave Kanter, Frontend Developer, portfolio site.',
   },
   plugins: [
     'gatsby-plugin-react-helmet',
@@ -30,6 +30,7 @@ module.exports = {
       },
     },
     'gatsby-plugin-sass',
+    `gatsby-plugin-fontawesome-css`,
     'gatsby-plugin-offline',
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
@@ -46,5 +47,6 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
+    `gatsby-plugin-preact`,
   ],
 }
