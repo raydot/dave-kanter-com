@@ -34,6 +34,12 @@ module.exports = {
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
     {
+      resolve: 'gatsby-plugin-preconnect',
+      options: {
+        domains: ['https://fonts.gstatic.com'],
+      },
+    },
+    {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `images`,
