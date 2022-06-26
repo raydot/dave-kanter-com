@@ -24,7 +24,7 @@ const Portfolio = () => {
   return data.map(data =>
     data.src !== 'null' ? (
       <>
-        <div id={data.id} className="portfolioItem">
+        <div key={data.id} className="portfolioItem">
           <h4 style={{ marginBottom: '0' }}>{data.title}</h4>
           <Image
             fileName={data.src}

@@ -2,10 +2,17 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import pic01 from '../images/the_cyber.webp'
-// import pic02 from '../images/pic02.jpg'
 import pic03 from '../images/that_face.webp'
 
 import Portfolio from './Portfolio'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faTwitter,
+  faGithub,
+  faLinkedin,
+} from '@fortawesome/free-brands-svg-icons'
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 
 class Main extends React.Component {
   render() {
@@ -42,22 +49,23 @@ class Main extends React.Component {
             <img src={pic01} alt="introduction" />
           </span>
           <p>
-            I am a front-end developer whose skill set tends towards React /
-            Node / JAMStack Development, mostly building sites with React. In
-            the past I have worked with many other stacks and languages and am
-            even fluent in a few. I am also knowledgeable about SQL/NoSQL
-            databases, PHP, and *nix systems. Currently I'm putting a lot of
-            effort into learning more about UI state machines.
+            I am a frontend developer whose skill set includes React, Node, CSS,
+            and JAMStack development, which mostly building sites with React. In
+            the past I have worked with many other stacks and languages and for
+            companies sizes from mom-and-pop to Fortune 50. I am also
+            knowledgeable about SQL/NoSQL databases, PHP, and *nix systems.
+            Currently I'm putting a lot of effort into learning more about
+            artificial intelligence.
           </p>
           <p>
-            In the past, my love of all things technological have taken me into
-            forays in business and education as well as development. I co-owned
-            a fantastic Web shop in NYC for a while, and I am honored to have
-            worked on the faculty of Parsons School of Design, California
-            College of the Arts, UC Berkeley, and Academy of Art University. I
-            am a great fit for a role as a developer, leader, strategist, or
-            evangelist, with strengths that play well to digital studios and
-            media- or education-focused companies.
+            I've had a rewarding career that has taken me into development and
+            strategies roles in business and education as well as pure
+            development teams. I co-owned a fantastic Web shop in NYC for a
+            while, and I am honored to have worked on the faculty of Parsons
+            School of Design, California College of the Arts, UC Berkeley, and
+            Academy of Art University. I am a great fit for a role as a
+            developer, leader, or strategist, with strengths that play well to
+            digital studios and media- or education-focused companies.
           </p>
           {close}
         </article>
@@ -126,26 +134,31 @@ class Main extends React.Component {
           </form>
           <ul className="icons">
             <li>
-              <a href="mailto:dave@davekanter.com" className="icon fa-envelope">
-                <span className="label">E-mail</span>
+              <a href="mailto:dave@davekanter.com">
+                <span className="label">
+                  <FontAwesomeIcon className="icon" icon={faEnvelope} />
+                </span>
               </a>
             </li>
             <li>
-              <a
-                href="https://www.linkedin.com/in/kanter/"
-                className="icon fa-linkedin"
-              >
-                <span className="label">Linked In</span>
+              <a href="https://www.linkedin.com/in/kanter/">
+                <span className="label">
+                  <FontAwesomeIcon className="icon" icon={faLinkedin} />
+                </span>
               </a>
             </li>
             <li>
-              <a href="https://twitter.com/raydot" className="icon fa-twitter">
-                <span className="label">Twitter</span>
+              <a href="https://twitter.com/raydot">
+                <span className="label">
+                  <FontAwesomeIcon className="icon" icon={faTwitter} />
+                </span>
               </a>
             </li>
             <li>
-              <a href="https://github.com/raydot" className="icon fa-github">
-                <span className="label">GitHub</span>
+              <a href="https://github.com/raydot">
+                <span className="label">
+                  <FontAwesomeIcon className="icon" icon={faGithub} />
+                </span>
               </a>
             </li>
           </ul>
