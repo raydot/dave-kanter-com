@@ -10,7 +10,7 @@ const Header = props => (
       <div className="inner">
         <h1>DaveKanter.com</h1>
         <p>
-          Experienced Front End / React / JAM Stack Developer{' '}
+          Experienced Frontend / React / JAM Stack Developer{' '}
           <button
             style={{
               boxShadow: 'none',
