@@ -26,9 +26,7 @@ What this has meant is I've had to _unlearn_ a ton of best practices to go back 
 - Contact form not working
 - Display "Lead" info in Portfolio
 
---
-
-\*\* Random Notes:
+## Random Notes
 
 [Querying multiple images with Gatsby Image](https://stackoverflow.com/questions/56437205/how-do-i-query-multiple-images-with-gatsby-image)
 
