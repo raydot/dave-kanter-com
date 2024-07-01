@@ -49,19 +49,17 @@ class Main extends React.Component {
             <img src={pic01} alt="introduction" />
           </span>
           <p>
-            I am a frontend developer whose skill set includes React, Node, CSS,
-            and JAMStack development, which mostly building sites with React. In
-            the past I have worked with many other stacks and languages and for
-            companies sizes from mom-and-pop to Fortune 50. I am also
+            I am a senior frontend developer who loves working with React, Node, CSS,
+            and JAMStack development. In the past I have worked for
+            companies ranging in size from the local mom-and-pop to the Global Fortune 50. I am also
             knowledgeable about SQL/NoSQL databases, PHP, and *nix systems.
             Currently I'm putting a lot of effort into learning more about
             artificial intelligence.
           </p>
           <p>
-            I've had a rewarding career that has taken me into development and
-            strategies roles in business and education as well as pure
-            development teams. I co-owned a fantastic Web shop in NYC for a
-            while, and I am honored to have worked on the faculty of Parsons
+            My rewarding career has included not only development but also
+            strategic roles in marketing, business and education.  
+            I am also honored to have worked on the faculty of the Parsons
             School of Design, California College of the Arts, UC Berkeley, and
             Academy of Art University. I am a great fit for a role as a
             developer, leader, or strategist, with strengths that play well to
