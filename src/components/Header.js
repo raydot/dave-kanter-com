@@ -1,16 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faComment } from '@fortawesome/free-solid-svg-icons'
 
 const Header = props => (
   <header id="header" style={props.timeout ? { display: 'none' } : {}}>
     <div className="logo">
-      <span className="icon fa-comment"></span>
+      <FontAwesomeIcon className="icon" icon={faComment} />
     </div>
     <div className="content">
       <div className="inner">
         <h1>DaveKanter.com</h1>
         <p>
-          Experienced Front End / React / JAM Stack Developer{' '}
+          Experienced Frontend / React / JAM Stack Developer{' '}
           <button
             style={{
               boxShadow: 'none',

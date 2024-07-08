@@ -2,8 +2,8 @@
 .cache
 node_modules
 yarn-error.log
-package-lock.json
-yarn.lock
+# package-lock.json
+# yarn.lock
 
 # Build directory
 /public
@@ -12,4 +12,20 @@ yarn.lock
 # My stuff 
 /content
 
+<<<<<<< HEAD
+#vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+=======
 .vscode/
+>>>>>>> d06b6c4b727e8805fa9f895db680d127e6839a24

@@ -12,7 +12,5 @@ exports.mailLink = () => {
       link += key.charAt(ltr)
     }
   }
-  //return "<a href='mailto:" + link + "'>" + link + '</a>'
-  //console.log(link)
   return link
 }

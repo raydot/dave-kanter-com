@@ -2,9 +2,9 @@ const path = require(`path`)
 
 module.exports = {
   siteMetadata: {
-    title: 'Dave Kanter | Front End Developer',
+    title: 'Dave Kanter | Frontend Developer',
     author: 'Dave Kanter',
-    description: 'Dave Kanter, Frond End Developer, portfolio site.',
+    description: 'Dave Kanter, Frontend Developer, portfolio site.',
   },
   plugins: [
     'gatsby-plugin-react-helmet',
@@ -18,6 +18,7 @@ module.exports = {
         theme_color: '#663399',
         display: 'minimal-ui',
         icon: 'src/images/favicon.png', // This path is relative to the root of the site.
+        purpose: 'any maskable',
       },
     },
     'gatsby-transformer-json',
@@ -32,6 +33,12 @@ module.exports = {
     'gatsby-plugin-offline',
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
+    {
+      resolve: 'gatsby-plugin-preconnect',
+      options: {
+        domains: ['https://fonts.gstatic.com'],
+      },
+    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
