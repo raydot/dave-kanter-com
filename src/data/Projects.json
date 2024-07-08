@@ -3,7 +3,11 @@
     "id": "01",
     "src": "urbach.jpg",
     "title": "Henry Urbach Architecture",
+<<<<<<< HEAD
     "description": "Multimedia piece to display Chelsea art gallery portfolio.  Ran in gallery kiosk.",
+=======
+    "description": "Multimedia piece to display art gallery portfolio.  Ran in gallery kiosk.",
+>>>>>>> d06b6c4b727e8805fa9f895db680d127e6839a24
     "alt": "Henry Urbach Architecture Multimedia Piece",
     "lead": "true"
   },

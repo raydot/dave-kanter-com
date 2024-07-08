@@ -12,6 +12,7 @@ yarn-error.log
 # My stuff 
 /content
 
+<<<<<<< HEAD
 #vscode
 .vscode/*
 !.vscode/settings.json
@@ -25,3 +26,6 @@ yarn-error.log
 
 # Built Visual Studio Code Extensions
 *.vsix
+=======
+.vscode/
+>>>>>>> d06b6c4b727e8805fa9f895db680d127e6839a24

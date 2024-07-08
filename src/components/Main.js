@@ -57,6 +57,7 @@ class Main extends React.Component {
             artificial intelligence.
           </p>
           <p>
+<<<<<<< HEAD
             My rewarding career has included not only development but also
             strategic roles in marketing, business and education.  
             I am also honored to have worked on the faculty of the Parsons
@@ -64,6 +65,17 @@ class Main extends React.Component {
             Academy of Art University. I am a great fit for a role as a
             developer, leader, or strategist, with strengths that play well to
             digital studios and media- or education-focused companies.
+=======
+            In the past, my love of all things technological has led me to a
+            rewarding career spanning business strategy, education, development.
+            I co-owned a fantastic web shop in NYC for a while, have built web
+            and multimedia properties for companies spanning in scale from
+            mom-and-pop to Fortune 50, and I am honored to have worked on the
+            faculties of several great universities. I am a great fit for a role
+            as a developer, leader, strategist, or evangelist, with strengths
+            that play well to digital studios and media- or education-focused
+            companies.
+>>>>>>> d06b6c4b727e8805fa9f895db680d127e6839a24
           </p>
           {close}
         </article>
