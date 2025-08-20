@@ -4,37 +4,57 @@
 /// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 ///
 
+@use '../libs/vars' as *;
+@use '../libs/mixins' as m;
+
 /* Wrapper */
 
-	#wrapper {
-		@include vendor('display', 'flex');
-		@include vendor('flex-direction', 'column');
-		@include vendor('align-items', 'center');
-		@include vendor('justify-content', 'space-between');
-		position: relative;
-		min-height: 100vh;
-		width: 100%;
-		padding: 4rem 2rem;
-		z-index: 3;
+#wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 100vh;
+    height: 100vh;
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    width: 100%;
+    overflow: hidden;
 
-		&:before {
-			content: '';
-			display: block;
-		}
+    > * {
+        z-index: 1;
+    }
 
-		@include breakpoint(xlarge) {
-			padding: 3rem 2rem;
-		}
+    &:before {
+        content: '';
+        display: block;
+    }
 
-		@include breakpoint(small) {
-			padding: 2rem 1rem;
-		}
+    @include m.breakpoint(xlarge) {
+        padding: 3rem 2rem;
+    }
 
-		@include breakpoint(xsmall) {
-			padding: 1rem;
-		}
+    @include m.breakpoint(small) {
+        padding: 2rem 1rem;
+    }
 
-		&.page {
-			@include vendor('justify-content', 'flex-start');
-		}
-	}
+    @include m.breakpoint(xsmall) {
+        padding: 1rem;
+    }
+
+    &.page {
+        justify-content: flex-start;
+        padding: 2.5rem 2rem;
+    }
+
+    &.fade-in {
+        animation: none;
+    }
+
+    .body.is-loading & {
+        &:before {
+            opacity: 0;
+        }
+    }
+}

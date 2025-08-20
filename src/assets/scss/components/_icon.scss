@@ -4,14 +4,25 @@
 /// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 ///
 
+@use '../libs/vars' as *;
+@use '../libs/mixins' as m;
+
 /* Icon */
 
-	.icon {
-		@include icon;
-		border-bottom: none;
-		position: relative;
+.icon {
+    @include m.icon;
+    border-bottom: none;
+    position: relative;
 
-		> .label {
-			display: none;
-		}
-	}
+    > .label {
+        display: none;
+    }
+
+    &.solid {
+        @include m.icon(false, solid);
+    }
+
+    &.brands {
+        @include m.icon(false, brands);
+    }
+}

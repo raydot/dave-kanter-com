@@ -1,35 +1,36 @@
-# DaveKanter.com
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-This is a portfolio website for [DaveKanter.com](http://www.davekanter.com).
+## Getting Started
 
-It's built in [Gatsby](https://gatsby.js) V2 using [gatsby-starter-dimension](https://github.com/codebushi/gatsby-starter-dimension) as a template.
+First, run the development server:
 
-The front-end world changes fast! You will need to `nvm use 12` to run this repo.
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-## Lessons (Un)Learned Building this Site
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-It's not the most uncommon thing for people who work in web development to put their own development needs last. I started this portfolio site in September 2019 because I wanted to represent myself with a React / Netlify presence online. I chose to use [Gatsby](https://www.gatsbyjs.com/) because I had used it in another project and it looked promising, and picked a an [HTML5 UP](https://html5up.net/) Gatsby template that looked like it could be easily modified to come up with a decent design.
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-I put the site together slowly over the process of a few months, taking time to add custom photos, but got really stuck on the Portfolio section. It required me to take a deeper dive into Gatsby's `gatsby-image` than I was able to commit to at the time, and so I put up a "Portfolio Coming Soon Page" instead. Sure! I'll get right back to it!
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-Two-and-a-half years have passed and I'm just now getting back to it. Over the last two-and-a-half years I've learned a **LOT** more React and Javascript, and Gatsby, Node, React have each jumped 2-3 major semantic versions in both scale and scope.
+## Learn More
 
-What this has meant is I've had to _unlearn_ a ton of best practices to go back to a point where I can develop with this out-of-date environment.
+To learn more about Next.js, take a look at the following resources:
 
-## Punch List (left to do)
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-- More stylized treatment of Portfolio
-- Last `<hr>` in Portfolio needs to be removed through CSS psuedo-selector (or something)
-- Haven't checked the bundle size or done any kind of optimization other than what ships with Gatsby 2
-- Unit tests
-- Check A11y
-- Contact form not working
-- Display "Lead" info in Portfolio
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Random Notes
+## Deploy on Vercel
 
-[Querying multiple images with Gatsby Image](https://stackoverflow.com/questions/56437205/how-do-i-query-multiple-images-with-gatsby-image)
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Usage:
-
-`<Image fileName="yourImage.jpg" style={{ width: '100%' }} alt="" />`
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

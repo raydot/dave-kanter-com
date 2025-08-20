@@ -1,34 +1,52 @@
+@use 'vars' as v;
+
+/// Gets a value from a map using one or more keys.
+/// @param {Map} $map - Map.
+/// @param {Arglist} $keys - Keys.
+/// @return {*} Value.
+@function val($map, $keys...) {
+    @if length($keys) == 1 {
+        $keys: nth($keys, 1);
+    }
+
+    @each $key in $keys {
+        $map: map-get($map, $key);
+    }
+
+    @return $map;
+}
+
 /// Gets a duration value.
 /// @param {string} $keys Key(s).
 /// @return {string} Value.
 @function _duration($keys...) {
-	@return val($duration, $keys...);
+    @return val(v.$duration, $keys...);
 }
 
 /// Gets a font value.
 /// @param {string} $keys Key(s).
 /// @return {string} Value.
 @function _font($keys...) {
-	@return val($font, $keys...);
+    @return val(v.$font, $keys...);
 }
 
 /// Gets a misc value.
 /// @param {string} $keys Key(s).
 /// @return {string} Value.
 @function _misc($keys...) {
-	@return val($misc, $keys...);
+    @return val(v.$misc, $keys...);
 }
 
 /// Gets a palette value.
 /// @param {string} $keys Key(s).
 /// @return {string} Value.
 @function _palette($keys...) {
-	@return val($palette, $keys...);
+    @return val(v.$palette, $keys...);
 }
 
 /// Gets a size value.
 /// @param {string} $keys Key(s).
 /// @return {string} Value.
 @function _size($keys...) {
-	@return val($size, $keys...);
+    @return val(v.$size, $keys...);
 }

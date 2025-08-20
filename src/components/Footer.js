@@ -11,16 +11,12 @@ const Footer = props => (
         React
       </a>{' '}
       and{' '}
-      <a href="https://www.gatsbyjs.org/" target="_new">
-        Gatsby
+      <a href="https://nextjs.org" target="_new">
+        Next.js
       </a>
       . Hosted with{' '}
       <a href="https://www.netlify.com" target="_new">
         Netlify
-      </a>
-      . Template by{' '}
-      <a href="https://html5up.net" target="_new">
-        HTML5 UP
       </a>
       .
     </p>

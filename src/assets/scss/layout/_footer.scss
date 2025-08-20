@@ -4,34 +4,49 @@
 /// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 ///
 
+@use '../libs/vars' as *;
+@use '../libs/mixins' as m;
+
 /* Footer */
 
-	#footer {
-		@include vendor('transition', (
-			'transform #{_duration(article)} ease-in-out',
-			'filter #{_duration(article)} ease-in-out',
-			'opacity #{_duration(article)} ease-in-out',
-		));
-		width: 100%;
-		max-width: 100%;
-		margin-top: 2rem;
-		text-align: center;
+#footer {
+    transition: opacity #{$duration-transition} ease-in-out;
+    width: 100%;
+    max-width: 100%;
+    margin-top: 3rem;
+    text-align: center;
+    opacity: 1;
 
-		.copyright {
-			letter-spacing: _font(letter-spacing);
-			font-size: 1.0rem;
-			opacity: 0.75;
-			margin-bottom: 0;
-			text-transform: uppercase;
-		}
+    .copyright {
+        letter-spacing: 0.2rem;
+        font-size: 0.8rem;
+        opacity: 0.85;
+        margin-bottom: 0;
+        text-transform: uppercase;
+        color: rgba($palette-fg, 0.95);
 
-		.body.is-article-visible & {
-			@include vendor('transform', 'scale(0.95)');
-			@include vendor('filter', 'blur(0.1rem)');
-			opacity: 0;
-		}
+        &:not(:last-child) {
+            margin-bottom: 0.4rem;
+        }
 
-		.body.is-loading & {
-			opacity: 0;
-		}
-	}
+        a {
+            color: inherit;
+            text-decoration: none;
+            border-bottom: 1px dotted rgba($palette-fg, 0.5);
+
+            &:hover {
+                border-bottom-color: transparent;
+            }
+        }
+    }
+
+    .body.is-article-visible & {
+        transform: scale(0.95);
+        filter: blur(0.1rem);
+        opacity: 0;
+    }
+
+    .body.is-loading & {
+        opacity: 0;
+    }
+}

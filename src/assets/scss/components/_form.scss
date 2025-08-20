@@ -4,250 +4,208 @@
 /// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 ///
 
+@use '../libs/vars' as *;
+@use '../libs/mixins' as m;
+
 /* Form */
 
-	form {
-		$gutter: _size(element-margin) * 0.75;
+form {
+    margin: 0 0 $size-element-margin 0;
 
-		margin: 0 0 (_size(element-margin) * 1.25) 0;
+    > :last-child {
+        margin-bottom: 0;
+    }
 
-		.field {
-			margin: 0 0 ($gutter * 1) 0;
+    > .fields {
+        $gutter: ($size-element-margin * 0.75);
 
-			&.half {
-				width: 50%;
-				float: left;
-				padding: 0 0 0 ($gutter * 1 * 0.5);
+        display: flex;
+        flex-wrap: wrap;
+        width: calc(100% + #{$gutter * 2});
+        margin: ($gutter * -1) 0 $size-element-margin ($gutter * -1);
 
-				&.first {
-					padding: 0 ($gutter * 1 * 0.5) 0 0;
-				}
-			}
-		}
+        > .field {
+            flex-grow: 0;
+            flex-shrink: 0;
+            padding: $gutter 0 0 $gutter;
+            width: calc(100% - #{$gutter * 1});
 
-		> .actions {
-			margin: ($gutter * 1.25) 0 0 0 !important;
-		}
+            &.half {
+                width: calc(50% - #{$gutter * 0.5});
+            }
 
-		@include breakpoint(small) {
-			.field {
-				margin: 0 0 ($gutter * 0.75) 0;
+            &.third {
+                width: calc(#{100% / 3} - #{$gutter * 0.66667});
+            }
 
-				&.half {
-					padding: 0 0 0 ($gutter * 0.75 * 0.5);
+            &.quarter {
+                width: calc(25% - #{$gutter * 0.75});
+            }
+        }
+    }
+}
 
-					&.first {
-						padding: 0 ($gutter * 0.75 * 0.5) 0 0;
-					}
-				}
-			}
+label {
+    color: $palette-fg-bold;
+    display: block;
+    font-size: 0.8rem;
+    font-weight: $font-weight-bold;
+    letter-spacing: $font-letter-spacing;
+    line-height: 1.5;
+    margin: 0 0 ($size-element-margin * 0.5) 0;
+    text-transform: uppercase;
+}
 
-			> .actions {
-				margin: ($gutter * 1) 0 0 0 !important;
-			}
-		}
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="tel"],
+select,
+textarea {
+    appearance: none;
+    background-color: transparent;
+    border-radius: $size-border-radius;
+    border: solid 1px $palette-border;
+    color: inherit;
+    display: block;
+    outline: 0;
+    padding: 0 1rem;
+    text-decoration: none;
+    width: 100%;
 
-		@include breakpoint(xsmall) {
-			.field {
-				&.half {
-					width: 100%;
-					float: none;
-					padding: 0;
+    &:invalid {
+        box-shadow: none;
+    }
 
-					&.first {
-						padding: 0;
-					}
-				}
-			}
-		}
-	}
+    &:focus {
+        border-color: $palette-fg-bold;
+        box-shadow: 0 0 0 1px $palette-fg-bold;
+    }
+}
 
-	label {
-		color: _palette(fg-bold);
-		display: block;
-		font-size: 0.8rem;
-		font-weight: _font(weight);
-		letter-spacing: _font(letter-spacing);
-		line-height: 1.5;
-		margin: 0 0 (_size(element-margin) * 0.5) 0;
-		text-transform: uppercase;
-	}
+select {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' preserveAspectRatio='none' viewBox='0 0 40 40'%3E%3Cpath d='M9.4,12.3l10.4,10.4l10.4-10.4c0.2-0.2,0.5-0.4,0.9-0.4c0.3,0,0.6,0.1,0.9,0.4l3.3,3.3c0.2,0.2,0.4,0.5,0.4,0.9 c0,0.4-0.1,0.6-0.4,0.9L20.7,31.9c-0.2,0.2-0.5,0.4-0.9,0.4c-0.3,0-0.6-0.1-0.9-0.4L4.3,17.3c-0.2-0.2-0.4-0.5-0.4-0.9 c0-0.4,0.1-0.6,0.4-0.9l3.3-3.3c0.2-0.2,0.5-0.4,0.9-0.4S9.1,12.1,9.4,12.3z' fill='#{$palette-border}' /%3E%3C/svg%3E");
+    background-size: 1.25rem;
+    background-repeat: no-repeat;
+    background-position: calc(100% - 1rem) center;
+    height: $size-element-height;
+    padding-right: 2.75rem;
+    text-overflow: ellipsis;
 
-	input[type="text"],
-	input[type="password"],
-	input[type="email"],
-	input[type="tel"],
-	select,
-	textarea {
-		@include vendor('appearance', 'none');
-		@include vendor('transition', (
-			'border-color #{_duration(transition)} ease-in-out',
-			'box-shadow #{_duration(transition)} ease-in-out',
-			'background-color #{_duration(transition)} ease-in-out'
-		));
-		background: transparent;
-		border-radius: _size(border-radius);
-		border: solid _size(border-width) _palette(border);
-		color: inherit;
-		display: block;
-		outline: 0;
-		padding: 0 1rem;
-		text-decoration: none;
-		width: 100%;
+    option {
+        color: $palette-fg-bold;
+        background: $palette-bg;
+    }
 
-		&:invalid {
-			box-shadow: none;
-		}
+    &:focus {
+        &::-ms-value {
+            background-color: transparent;
+        }
+    }
 
-		&:focus {
-			background: _palette(border-bg);
-			border-color: _palette(fg-bold);
-			box-shadow: 0 0 0 _size(border-width) _palette(fg-bold);
-		}
-	}
+    &::-ms-expand {
+        display: none;
+    }
+}
 
-	select {
-		option {
-			background: _palette(bg);
-			color: _palette(fg);
-		}
-	}
+input[type="text"],
+input[type="password"],
+input[type="email"],
+select {
+    height: $size-element-height;
+}
 
-	.select-wrapper {
-		@include icon;
-		display: block;
-		position: relative;
+textarea {
+    padding: 0.75rem 1rem;
+}
 
-		&:before {
-			color: _palette(border);
-			content: '\f107';
-			display: block;
-			height: _size(element-height);
-			//line-height: _size(element-height);
-			line-height: calc(#{_size(element-height)} + 0em);
-			pointer-events: none;
-			position: absolute;
-			right: 0;
-			text-align: center;
-			top: 0;
-			width: _size(element-height);
-		}
+input[type="checkbox"],
+input[type="radio"] {
+    appearance: none;
+    display: block;
+    float: left;
+    margin-right: -2rem;
+    opacity: 0;
+    width: 1rem;
+    z-index: -1;
 
-		select::-ms-expand {
-			display: none;
-		}
-	}
+    & + label {
+        @include m.icon(false, regular);
+        color: $palette-fg;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 0.8rem;
+        font-weight: $font-weight;
+        padding-left: 2.4rem;
+        padding-right: 0.75rem;
+        position: relative;
+        text-transform: none;
 
-	input[type="text"],
-	input[type="password"],
-	input[type="email"],
-	select {
-		height: _size(element-height);
-	}
+        &:before {
+            background: transparent;
+            border-radius: $size-border-radius;
+            border: solid 1px $palette-border;
+            content: '';
+            display: inline-block;
+            height: 1.65rem;
+            left: 0;
+            line-height: 1.65rem;
+            position: absolute;
+            text-align: center;
+            top: 0;
+            width: 1.65rem;
+        }
+    }
 
-	textarea {
-		padding: 0.75rem 1rem;
-	}
+    &:checked + label {
+        &:before {
+            content: '\f00c';
+            background-color: $palette-fg-bold;
+            border-color: $palette-fg-bold;
+            color: $palette-bg;
+        }
+    }
 
-	input[type="checkbox"],
-	input[type="radio"] {
-		@include vendor('appearance', 'none');
-		display: block;
-		float: left;
-		margin-right: -2rem;
-		opacity: 0;
-		width: 1rem;
-		z-index: -1;
+    &:focus + label {
+        &:before {
+            border-color: $palette-fg-bold;
+            box-shadow: 0 0 0 1px $palette-fg-bold;
+        }
+    }
+}
 
-		& + label {
-			@include icon;
-			@include vendor('user-select', 'none');
-			color: _palette(fg);
-			cursor: pointer;
-			display: inline-block;
-			font-size: 0.8rem;
-			font-weight: _font(weight);
-			margin: 0 0 (_size(element-margin) * 0.25) 0;
-			padding-left: (_size(element-height) * 0.6) + 1rem;
-			padding-right: 0.75rem;
-			position: relative;
+input[type="checkbox"] {
+    & + label {
+        &:before {
+            border-radius: $size-border-radius;
+        }
+    }
+}
 
-			&:before {
-				@include vendor('transition', (
-					'border-color #{_duration(transition)} ease-in-out',
-					'box-shadow #{_duration(transition)} ease-in-out',
-					'background-color #{_duration(transition)} ease-in-out'
-				));
-				border-radius: _size(border-radius);
-				border: solid _size(border-width) _palette(border);
-				content: '';
-				display: inline-block;
-				height: (_size(element-height) * 0.6);
-				left: 0;
-				//line-height: (_size(element-height) * 0.575);
-				line-height: calc(#{_size(element-height) * 0.575} + 0em);
-				position: absolute;
-				text-align: center;
-				top: -0.125rem;
-				width: (_size(element-height) * 0.6);
-			}
-		}
+input[type="radio"] {
+    & + label {
+        &:before {
+            border-radius: 100%;
+        }
+    }
+}
 
-		&:checked + label {
-			&:before {
-				background: _palette(fg-bold) !important;
-				border-color: _palette(fg-bold) !important;
-				color: _palette(bg);
-				content: '\f00c';
-			}
-		}
+::-webkit-input-placeholder {
+    color: $palette-fg-light !important;
+    opacity: 1.0;
+}
 
-		&:focus + label {
-			&:before {
-				background: _palette(border-bg);
-				border-color: _palette(fg-bold);
-				box-shadow: 0 0 0 _size(border-width) _palette(fg-bold);
-			}
-		}
-	}
+:-moz-placeholder {
+    color: $palette-fg-light !important;
+    opacity: 1.0;
+}
 
-	input[type="checkbox"] {
-		& + label {
-			&:before {
-				border-radius: _size(border-radius);
-			}
-		}
-	}
+::-moz-placeholder {
+    color: $palette-fg-light !important;
+    opacity: 1.0;
+}
 
-	input[type="radio"] {
-		& + label {
-			&:before {
-				border-radius: 100%;
-			}
-		}
-	}
-
-	::-webkit-input-placeholder {
-		color: _palette(fg-light) !important;
-		opacity: 1.0;
-	}
-
-	:-moz-placeholder {
-		color: _palette(fg-light) !important;
-		opacity: 1.0;
-	}
-
-	::-moz-placeholder {
-		color: _palette(fg-light) !important;
-		opacity: 1.0;
-	}
-
-	:-ms-input-placeholder {
-		color: _palette(fg-light) !important;
-		opacity: 1.0;
-	}
-
-	.formerize-placeholder {
-		color: _palette(fg-light) !important;
-		opacity: 1.0;
-	}
+:-ms-input-placeholder {
+    color: $palette-fg-light !important;
+    opacity: 1.0;
+}
