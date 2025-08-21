@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Header from '@/components/Header'
 import Main from '@/components/Main'
 import Footer from '@/components/Footer'
@@ -15,7 +15,7 @@ export default function Home() {
   
   const wrapperRef = useRef<HTMLDivElement | null>(null)
 
-  const handleCloseArticle = () => {
+  const handleCloseArticle = useCallback(() => {
     if (!isAnimating) {
       setIsAnimating(true)
       setArticleTimeout(!articleTimeout)
@@ -29,7 +29,7 @@ export default function Home() {
         setIsAnimating(false) // Animation complete
       }, 350)
     }
-  }
+  }, [isAnimating, articleTimeout, timeout])
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {

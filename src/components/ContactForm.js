@@ -9,6 +9,7 @@ const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState(null)
   const [recaptchaToken, setRecaptchaToken] = useState(null)
+  const [formStartTime] = useState(Date.now())
 
   // Load reCAPTCHA v3
   useEffect(() => {
@@ -64,6 +65,19 @@ const ContactForm = () => {
     const messageText = message.toLowerCase()
     if (spamKeywords.some(keyword => messageText.includes(keyword))) {
       setSubmitStatus({ type: 'error', message: 'Message contains prohibited content.' })
+      return false
+    }
+
+    // Advanced spam detection
+    const formDuration = Date.now() - formStartTime
+    if (formDuration < 5000) {
+      setSubmitStatus({ type: 'error', message: 'Form submitted too quickly. Please try again.' })
+      return false
+    }
+
+    // Additional spam detection using reCAPTCHA
+    if (!recaptchaToken) {
+      setSubmitStatus({ type: 'error', message: 'reCAPTCHA verification failed. Please try again.' })
       return false
     }
 
@@ -128,14 +142,8 @@ const ContactForm = () => {
       </form>
 
       <form onSubmit={handleSubmit}>
-        {/* Honeypot field - hidden from users but visible to bots */}
-        <div style={{ display: 'none' }}>
-          <label>
-            Don&apos;t fill this out if you&apos;re human: 
-            <input name="bot-field" />
-          </label>
-        </div>
-
+        {/* No honeypot field - instead, we're using advanced spam detection */}
+        
         {submitStatus && (
           <div className={`status-message ${submitStatus.type}`}>
             {submitStatus.message}
