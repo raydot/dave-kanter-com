@@ -131,11 +131,12 @@ const ContactForm = () => {
         <input type="text" name="name" />
         <input type="email" name="email" />
         <textarea name="message"></textarea>
+        <input type="hidden" name="bot-field" />
         <input type="hidden" name="g-recaptcha-response" />
         <input type="hidden" name="timestamp" />
       </form>
 
-      <form onSubmit={handleSubmit}>
+      <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={handleSubmit}>
         {/* No honeypot field - instead, we're using advanced spam detection */}
         
         {submitStatus && (
