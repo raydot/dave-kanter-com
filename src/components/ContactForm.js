@@ -79,10 +79,9 @@ const ContactForm = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault() // Always prevent default first
-    
     // Validate form first
     if (!validateForm()) {
+      e.preventDefault()
       return
     }
     
@@ -96,7 +95,7 @@ const ContactForm = () => {
         token = await window.grecaptcha.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, { action: 'contact_form' })
       }
       
-      // Update hidden fields with current values
+      // Update hidden fields with current values before natural submission
       const form = e.target
       const recaptchaInput = form.querySelector('input[name="g-recaptcha-response"]')
       const timestampInput = form.querySelector('input[name="timestamp"]')
@@ -104,26 +103,15 @@ const ContactForm = () => {
       if (recaptchaInput) recaptchaInput.value = token || ''
       if (timestampInput) timestampInput.value = Date.now().toString()
       
-      // Submit form programmatically to Netlify
-      const formData = new FormData(form)
+      // Show success message but let form submit naturally to Netlify
+      setSubmitStatus({ type: 'success', message: 'Thank you! Your message is being sent...' })
       
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData).toString()
-      })
-
-      if (response.ok) {
-        setSubmitStatus({ type: 'success', message: 'Thank you! Your message has been sent successfully.' })
-        setFormData({ name: '', email: '', message: '' })
-      } else {
-        throw new Error('Network response was not ok')
-      }
+      // Don't prevent default - let the form submit naturally to Netlify
       
     } catch (error) {
+      e.preventDefault()
       console.error('Form submission error:', error)
       setSubmitStatus({ type: 'error', message: 'Sorry, there was an error sending your message. Please try again.' })
-    } finally {
       setIsSubmitting(false)
     }
   }
