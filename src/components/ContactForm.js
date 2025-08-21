@@ -124,16 +124,6 @@ const ContactForm = () => {
 
   return (
     <>
-      {/* Hidden form for Netlify detection */}
-      <form name="contact" netlify netlify-honeypot="bot-field" hidden>
-        <input type="text" name="name" />
-        <input type="email" name="email" />
-        <textarea name="message"></textarea>
-        <input type="hidden" name="bot-field" />
-        <input type="hidden" name="g-recaptcha-response" />
-        <input type="hidden" name="timestamp" />
-      </form>
-
       <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={handleSubmit}>
         {/* No honeypot field - instead, we're using advanced spam detection */}
         
