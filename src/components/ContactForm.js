@@ -78,58 +78,30 @@ const ContactForm = () => {
     return true
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault() // Always prevent default to handle with JavaScript
-    
-    // Validate form first
+  const handleSubmit = useCallback(async (e) => {
     if (!validateForm()) {
+      e.preventDefault()
       return
     }
-    
-    setIsSubmitting(true)
-    setSubmitStatus(null)
 
-    try {
-      // Get fresh reCAPTCHA token
-      let token = recaptchaToken
-      if (window.grecaptcha) {
-        token = await window.grecaptcha.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, { action: 'contact_form' })
+    // Get fresh reCAPTCHA token before form submission
+    if (window.grecaptcha) {
+      const token = await window.grecaptcha.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, { action: 'contact_form' })
+      // Update the hidden reCAPTCHA field
+      const recaptchaField = e.target.querySelector('input[name="g-recaptcha-response"]')
+      if (recaptchaField) {
+        recaptchaField.value = token
       }
-      
-      // Prepare form data following Netlify's exact AJAX pattern
-      const formDataToSubmit = new FormData()
-      formDataToSubmit.append('form-name', 'contact')
-      formDataToSubmit.append('name', formData.name)
-      formDataToSubmit.append('email', formData.email)
-      formDataToSubmit.append('message', formData.message)
-      formDataToSubmit.append('g-recaptcha-response', token || '')
-      formDataToSubmit.append('timestamp', Date.now().toString())
-      
-      // Submit to Netlify using their recommended pattern
-      const response = await fetch('/favicon.ico', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formDataToSubmit).toString()
-      })
-
-      if (response.ok) {
-        setSubmitStatus({ type: 'success', message: 'Thank you! Your message has been sent successfully.' })
-        setFormData({ name: '', email: '', message: '' })
-      } else {
-        throw new Error('Network response was not ok')
-      }
-      
-    } catch (error) {
-      console.error('Form submission error:', error)
-      setSubmitStatus({ type: 'error', message: 'Sorry, there was an error sending your message. Please try again.' })
-    } finally {
-      setIsSubmitting(false)
     }
-  }
+
+    // Let the native form submission proceed
+    setIsSubmitting(true)
+    setSubmitStatus({ type: 'success', message: 'Submitting your message...' })
+  }, [validateForm])
 
   return (
     <>
-      <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={handleSubmit}>
+      <form name="contact" method="POST" action="/success" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={handleSubmit}>
         {/* Hidden fields for Netlify */}
         <input type="hidden" name="form-name" value="contact" />
         <input type="hidden" name="g-recaptcha-response" value="" />
