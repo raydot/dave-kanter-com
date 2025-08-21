@@ -89,16 +89,6 @@ export default function Home() {
 
   return (
     <div className={`body ${loading} ${isArticleVisible ? 'is-article-visible' : ''}`}>
-      {/* Hidden form for Netlify detection */}
-      <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field" style={{display: 'none'}}>
-        <input type="hidden" name="form-name" value="contact" />
-        <input type="text" name="name" />
-        <input type="email" name="email" />
-        <textarea name="message"></textarea>
-        <input type="hidden" name="bot-field" />
-        <input type="hidden" name="g-recaptcha-response" />
-        <input type="hidden" name="timestamp" />
-      </form>
       
       <div id="wrapper">
         <Header
