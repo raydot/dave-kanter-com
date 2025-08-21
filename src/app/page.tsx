@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import Header from '@/components/header'
-import Main from '@/components/Main'
-import Footer from '@/components/Footer'
+import Header from '../components/header'
+import Main from '../components/Main'
+import Footer from '../components/Footer'
 
 export default function Home() {
   const [isArticleVisible, setIsArticleVisible] = useState(false)
