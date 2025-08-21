@@ -118,7 +118,7 @@ const ContactForm = () => {
 
   return (
     <>
-      <form name="contact" method="POST" action="/success" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={handleSubmit}>
+      <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={handleSubmit}>
         {/* Hidden fields for Netlify */}
         <input type="hidden" name="form-name" value="contact" />
         <input type="hidden" name="g-recaptcha-response" value="" />
