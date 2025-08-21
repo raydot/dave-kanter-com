@@ -75,12 +75,6 @@ const ContactForm = () => {
       return false
     }
 
-    // Additional spam detection using reCAPTCHA
-    if (!recaptchaToken) {
-      setSubmitStatus({ type: 'error', message: 'reCAPTCHA verification failed. Please try again.' })
-      return false
-    }
-
     return true
   }
 
