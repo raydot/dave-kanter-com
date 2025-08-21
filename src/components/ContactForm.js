@@ -96,20 +96,19 @@ const ContactForm = () => {
         token = await window.grecaptcha.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, { action: 'contact_form' })
       }
       
-      // Prepare form data for Netlify (use URLSearchParams directly)
-      const formDataToSubmit = new URLSearchParams()
-      formDataToSubmit.append('form-name', 'contact')
-      formDataToSubmit.append('name', formData.name)
-      formDataToSubmit.append('email', formData.email)
-      formDataToSubmit.append('message', formData.message)
-      formDataToSubmit.append('g-recaptcha-response', token || '')
-      formDataToSubmit.append('timestamp', Date.now().toString())
+      // Prepare form data following Netlify's exact AJAX pattern
+      const myForm = e.target
+      const formDataToSubmit = new FormData(myForm)
       
-      // Submit to Netlify
+      // Add the reCAPTCHA token and timestamp to the FormData
+      formDataToSubmit.set('g-recaptcha-response', token || '')
+      formDataToSubmit.set('timestamp', Date.now().toString())
+      
+      // Submit to Netlify using their recommended pattern
       const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formDataToSubmit.toString()
+        body: new URLSearchParams(formDataToSubmit).toString()
       })
 
       if (response.ok) {
