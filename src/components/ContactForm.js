@@ -97,12 +97,13 @@ const ContactForm = () => {
       }
       
       // Prepare form data following Netlify's exact AJAX pattern
-      const myForm = e.target
-      const formDataToSubmit = new FormData(myForm)
-      
-      // Add the reCAPTCHA token and timestamp to the FormData
-      formDataToSubmit.set('g-recaptcha-response', token || '')
-      formDataToSubmit.set('timestamp', Date.now().toString())
+      const formDataToSubmit = new FormData()
+      formDataToSubmit.append('form-name', 'contact')
+      formDataToSubmit.append('name', formData.name)
+      formDataToSubmit.append('email', formData.email)
+      formDataToSubmit.append('message', formData.message)
+      formDataToSubmit.append('g-recaptcha-response', token || '')
+      formDataToSubmit.append('timestamp', Date.now().toString())
       
       // Submit to Netlify using their recommended pattern
       const response = await fetch('/', {
