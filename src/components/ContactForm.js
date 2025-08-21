@@ -28,9 +28,6 @@ const ContactForm = (props) => {
       body: new URLSearchParams(formData).toString(),
     })
       .then(() => {
-        if (window.grecaptcha) {
-          window.grecaptcha.reset();
-        }
         setSubmitStatus({ type: 'success', message: 'Thank you! Your message has been sent.' });
         setFormData({ name: '', email: '', message: '' });
       })
@@ -124,6 +121,9 @@ const ContactForm = (props) => {
                 type="button"
                 value="Reset"
                 onClick={() => {
+                  if (window.grecaptcha) {
+                    window.grecaptcha.reset();
+                  }
                   setFormData({ name: '', email: '', message: '' });
                   setSubmitStatus(null);
                 }}
