@@ -106,7 +106,7 @@ const ContactForm = () => {
       formDataToSubmit.append('timestamp', Date.now().toString())
       
       // Submit to Netlify using their recommended pattern
-      const response = await fetch('/', {
+      const response = await fetch('/form-submit.html', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(formDataToSubmit).toString()
