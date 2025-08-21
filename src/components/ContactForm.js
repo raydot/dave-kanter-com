@@ -1,149 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React from 'react'
 
 const ContactForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState(null)
-  const [formStartTime] = useState(Date.now())
-
-  // Load reCAPTCHA v3
-  useEffect(() => {
-    const loadRecaptcha = () => {
-      if (typeof window !== 'undefined' && window.grecaptcha) {
-        window.grecaptcha.ready(() => {
-          window.grecaptcha.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, { action: 'contact_form' })
-            .then((token) => {
-              // Token will be generated fresh on each submission
-            })
-        })
-      }
-    }
-
-    // Load reCAPTCHA script if not already loaded
-    if (typeof window !== 'undefined' && !window.grecaptcha) {
-      const script = document.createElement('script')
-      script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`
-      script.onload = loadRecaptcha
-      document.head.appendChild(script)
-    } else {
-      loadRecaptcha()
-    }
-  }, [])
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
-  }
-
-  const validateForm = useCallback(() => {
-    const { name, email, message } = formData
-    
-    if (!name.trim() || name.length < 2) {
-      setSubmitStatus({ type: 'error', message: 'Name must be at least 2 characters long.' })
-      return false
-    }
-    
-    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setSubmitStatus({ type: 'error', message: 'Please enter a valid email address.' })
-      return false
-    }
-    
-    if (!message.trim() || message.length < 10) {
-      setSubmitStatus({ type: 'error', message: 'Message must be at least 10 characters long.' })
-      return false
-    }
-
-    // Spam keyword detection
-    const spamKeywords = ['viagra', 'casino', 'lottery', 'winner', 'congratulations', 'click here', 'free money']
-    const messageText = message.toLowerCase()
-    if (spamKeywords.some(keyword => messageText.includes(keyword))) {
-      setSubmitStatus({ type: 'error', message: 'Message contains prohibited content.' })
-      return false
-    }
-
-    // Advanced spam detection
-    const formDuration = Date.now() - formStartTime
-    if (formDuration < 5000) {
-      setSubmitStatus({ type: 'error', message: 'Form submitted too quickly. Please try again.' })
-      return false
-    }
-
-    return true
-  }, [formData, formStartTime])
-
-  const encode = (data) => {
-    return Object.keys(data)
-      .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-      .join('&')
-  }
-
-  const handleSubmit = useCallback(async (e) => {
-    e.preventDefault()
-    
-    if (!validateForm()) {
-      return
-    }
-
-    setIsSubmitting(true)
-    setSubmitStatus({ type: 'success', message: 'Submitting your message...' })
-
-    try {
-      // Get fresh reCAPTCHA token
-      let recaptchaToken = ''
-      if (window.grecaptcha) {
-        recaptchaToken = await window.grecaptcha.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, { action: 'contact_form' })
-      }
-
-      const data = {
-        'form-name': 'contact',
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
-        timestamp: Date.now().toString()
-      }
-
-      if (recaptchaToken) {
-        data['g-recaptcha-response'] = recaptchaToken
-      }
-
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: encode(data)
-      })
-
-      if (response.ok) {
-        setSubmitStatus({ type: 'success', message: 'Thank you! Your message has been sent successfully.' })
-        setFormData({ name: '', email: '', message: '' })
-      } else {
-        throw new Error('Form submission failed')
-      }
-    } catch (error) {
-      setSubmitStatus({ type: 'error', message: 'Sorry, there was an error sending your message. Please try again.' })
-    } finally {
-      setIsSubmitting(false)
-    }
-  }, [validateForm, formData])
-
   return (
     <>
-      <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={handleSubmit}>
-        {/* Hidden fields for Netlify */}
+      <form name="contact" method="POST" action="/success" data-netlify="true" data-netlify-recaptcha="true" data-netlify-honeypot="bot-field">
         <input type="hidden" name="form-name" value="contact" />
-        <input type="hidden" name="g-recaptcha-response" value="" />
-        <input type="hidden" name="timestamp" value="" />
-        
-        {submitStatus && (
-          <div className={`status-message ${submitStatus.type}`}>
-            {submitStatus.message}
-          </div>
-        )}
         
         <div className="field half first">
           <label htmlFor="name">Name *</label>
@@ -151,10 +12,7 @@ const ContactForm = () => {
             type="text" 
             name="name" 
             id="name" 
-            value={formData.name}
-            onChange={handleChange}
             required 
-            disabled={isSubmitting}
             maxLength="100"
           />
         </div>
@@ -164,10 +22,7 @@ const ContactForm = () => {
             type="email" 
             name="email" 
             id="email" 
-            value={formData.email}
-            onChange={handleChange}
             required 
-            disabled={isSubmitting}
             maxLength="100"
           />
         </div>
@@ -177,57 +32,30 @@ const ContactForm = () => {
             name="message" 
             id="message" 
             rows="4"
-            value={formData.message}
-            onChange={handleChange}
             required
-            disabled={isSubmitting}
             maxLength="1000"
             placeholder="Please share your message here..."
           ></textarea>
         </div>
+        <div data-netlify-recaptcha="true"></div>
         <ul className="actions">
           <li>
             <input 
               type="submit" 
-              value={isSubmitting ? "Sending..." : "Send Message"} 
+              value="Send Message" 
               className="special" 
-              disabled={isSubmitting}
             />
           </li>
           <li>
             <input 
-              type="button" 
+              type="reset" 
               value="Reset" 
-              onClick={() => {
-                setFormData({ name: '', email: '', message: '' })
-                setSubmitStatus(null)
-              }}
-              disabled={isSubmitting}
             />
           </li>
         </ul>
       </form>
 
       <style jsx>{`
-        .status-message {
-          padding: 1rem;
-          margin-bottom: 1rem;
-          border-radius: 4px;
-          font-weight: 500;
-        }
-
-        .status-message.success {
-          background: rgba(76, 205, 196, 0.1);
-          border: 1px solid #4ECDC4;
-          color: #4ECDC4;
-        }
-
-        .status-message.error {
-          background: rgba(255, 107, 107, 0.1);
-          border: 1px solid #ff6b6b;
-          color: #ff6b6b;
-        }
-
         .field {
           margin-bottom: 1rem;
         }
@@ -248,12 +76,6 @@ const ContactForm = () => {
           border-radius: 4px;
           font-size: 1rem;
           transition: all 0.3s ease;
-        }
-
-        .field input:disabled,
-        .field textarea:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
         }
 
         .field textarea {
@@ -290,7 +112,7 @@ const ContactForm = () => {
         }
 
         .actions input[type="submit"],
-        .actions input[type="button"] {
+        .actions input[type="reset"] {
           padding: 0.75rem 2rem;
           border: none;
           border-radius: 4px;
@@ -305,28 +127,22 @@ const ContactForm = () => {
           line-height: 1;
         }
 
-        .actions input[type="submit"]:disabled,
-        .actions input[type="button"]:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
-        }
-
         .actions input[type="submit"].special {
           background: #4ECDC4;
           color: white;
         }
 
-        .actions input[type="submit"].special:hover:not(:disabled) {
+        .actions input[type="submit"].special:hover {
           background: #45b7aa;
         }
 
-        .actions input[type="button"] {
+        .actions input[type="reset"] {
           background: transparent;
           color: #ffffff;
           border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .actions input[type="button"]:hover:not(:disabled) {
+        .actions input[type="reset"]:hover {
           background: rgba(255, 255, 255, 0.1);
         }
 
