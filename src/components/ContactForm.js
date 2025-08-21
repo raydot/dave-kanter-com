@@ -121,7 +121,7 @@ const ContactForm = (props) => {
                 type="button"
                 value="Reset"
                 onClick={() => {
-                  if (window.grecaptcha) {
+                  if (typeof window !== 'undefined' && window.grecaptcha) {
                     window.grecaptcha.reset();
                   }
                   setFormData({ name: '', email: '', message: '' });
