@@ -1,15 +1,15 @@
-import react, {component} from React;
+import React, { Component } from 'react';
 
-class Photo extends component {
+class Photo extends Component {
     
     render() {
-
+        return(
+            <div>
+                <p></p>
+            </div>
+        )
     }
-
-    return(
-        <div>
-            <p></p>
-        </div>
-    )
     
 }
+
+export default Photo;

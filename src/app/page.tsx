@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import Header from '@/components/header'
+import Header from '@/components/header.js'
 import Main from '@/components/Main'
 import Footer from '@/components/Footer'
 
@@ -11,16 +11,17 @@ export default function Home() {
   const [articleTimeout, setArticleTimeout] = useState(false)
   const [article, setArticle] = useState('')
   const [loading, setLoading] = useState('is-loading')
+  const [isAnimating, setIsAnimating] = useState(false)
   
-  const wrapperRef = useRef(null)
+  const wrapperRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setLoading('')
     }, 100)
 
-    const handleClickOutside = (event) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         if (isArticleVisible) {
           handleCloseArticle()
         }
@@ -35,40 +36,49 @@ export default function Home() {
     }
   }, [isArticleVisible])
 
-  const handleOpenArticle = (articleName: string) => {
+  const handleOpenArticle = (articleName: string | Event) => {
     // Ensure articleName is a string, not an event object
-    const article = typeof articleName === 'string' ? articleName : articleName.target?.dataset?.article || '';
+    const article = typeof articleName === 'string' ? articleName : (articleName.target as HTMLElement)?.dataset?.article || '';
     // console.log('handleOpenArticle called with:', article, typeof article);
 
-    setIsArticleVisible(!isArticleVisible)
-    setArticle(article)
+    // Prevent double-click issues by checking if already animating or visible
+    if (!isArticleVisible && !isAnimating) {
+      setIsAnimating(true)
+      setIsArticleVisible(true)
+      setArticle(article)
 
-    setTimeout(() => {
-      setTimeoutState(!timeout)
-    }, 325)
+      setTimeout(() => {
+        setTimeoutState(!timeout)
+      }, 325)
 
-    setTimeout(() => {
-      setArticleTimeout(!articleTimeout)
-    }, 350)
+      setTimeout(() => {
+        setArticleTimeout(!articleTimeout)
+        setIsAnimating(false) // Animation complete
+      }, 350)
+    }
   }
 
   const handleCloseArticle = () => {
-    setArticleTimeout(!articleTimeout)
+    if (!isAnimating) {
+      setIsAnimating(true)
+      setArticleTimeout(!articleTimeout)
 
-    setTimeout(() => {
-      setTimeoutState(!timeout)
-    }, 325)
+      setTimeout(() => {
+        setTimeoutState(!timeout)
+      }, 325)
 
-    setTimeout(() => {
-      setIsArticleVisible(!isArticleVisible)
-    }, 350)
+      setTimeout(() => {
+        setIsArticleVisible(false)
+      }, 350)
 
-    setTimeout(() => {
-      setArticle('')
-    }, 375)
+      setTimeout(() => {
+        setArticle('')
+        setIsAnimating(false) // Animation complete
+      }, 375)
+    }
   }
 
-  const setWrapperRef = (node) => {
+  const setWrapperRef = (node: HTMLDivElement | null) => {
     wrapperRef.current = node
   }
 

@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Image from 'next/image'
-import cyberImage from '../../public/images/the_cyber.png'
-import portraitImage from '../../public/images/that_face.png'
+// Using string paths for Next.js public folder
+// import cyberImage from '../../public/images/the_cyber.png'
+// import portraitImage from '../../public/images/that_face.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import { faLinkedin, faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons'
@@ -39,21 +40,21 @@ const Main = (props) => {
         >
           <h2 className="major">Dave Kanter Intro</h2>
           <span className="image main">
-            <Image src={cyberImage} alt="introduction" width={480} height={160} />
+            <Image src="/images/the_cyber.png" alt="introduction" width={480} height={160} style={{ maxWidth: '100%', height: 'auto' }} />
           </span>
           <p>
-            I'm a full-stack developer who enjoys tackling complex problems across 
-            different industries. Over the past 20+ years, I've worked on everything 
+            I&apos;m a full-stack developer who enjoys tackling complex problems across 
+            different industries. Over the past 20+ years, I&apos;ve worked on everything 
             from high-traffic sites like starwars.com to enterprise Next.js applications 
-            for Fortune 500 clients. Currently I'm putting a lot of effort into learning 
+            for Fortune 500 clients. Currently I&apos;m putting a lot of effort into learning 
             more about artificial intelligence.
           </p>
           <p>
             What makes my background a bit different is the mix of hands-on development 
-            with teaching and leadership roles. I've spent about 20 years teaching at 
+            with teaching and leadership roles. I&apos;ve spent about 20 years teaching at 
             places like Parsons School of Design, Academy of Art University, and UC Berkeley, which has 
             really sharpened my ability to communicate complex technical ideas clearly 
-            and work effectively with diverse teams. I've also run my own consulting 
+            and work effectively with diverse teams. I&apos;ve also run my own consulting 
             business and managed technical teams, so I understand both the code and the 
             business side of things.
           </p>
@@ -79,11 +80,11 @@ const Main = (props) => {
         >
           <h2 className="major">About</h2>
           <span className="image main">
-            <Image src={portraitImage} alt="" width={625} height={208} />
+            <Image src="/images/that_face.png" alt="" width={625} height={208} style={{ maxWidth: '100%', height: 'auto' }} />
           </span>
           <p>
 Dave lives in Marin County with his family and pets. Away from the computer, he likes 
-to cook, read, hike, play music and lose at chess. Over the past several years he's even gotten pretty good at not trying to do all of those things at exact same time.
+to cook, read, hike, play music and lose at chess. Over the past several years he&apos;s even gotten pretty good at not trying to do all of those things at exact same time.
           </p>
           {close}
         </article>

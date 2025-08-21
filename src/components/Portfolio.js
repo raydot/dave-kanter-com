@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import Image from './Image'
 import projectsData from '../data/Projects.json'
 
@@ -18,10 +18,16 @@ const Portfolio = () => {
     'Enterprise': '#8E44AD'
   }
 
-  const projects = projectsData.filter(project => project.lead === "true")
-  const categories = ['All', ...new Set(projects.flatMap(project => 
-    Array.isArray(project.category) ? project.category : [project.category]
-  ))]
+  // Memoize projects to prevent recreation on every render
+  const projects = useMemo(() => 
+    projectsData.filter(project => project.lead === "true"), []
+  )
+  
+  const categories = useMemo(() => 
+    ['All', ...new Set(projects.flatMap(project => 
+      Array.isArray(project.category) ? project.category : [project.category]
+    ))], [projects]
+  )
 
   useEffect(() => {
     const filtered = activeFilter === 'All' 
@@ -36,7 +42,7 @@ const Portfolio = () => {
     
     // Trigger entrance animation
     setTimeout(() => setIsLoaded(true), 100)
-  }, [activeFilter])
+  }, [activeFilter, projects])
 
   const handleFilterChange = (category) => {
     setIsLoaded(false)
@@ -125,7 +131,7 @@ const Portfolio = () => {
                   
                   <div className="project-meta">
                     {Array.isArray(project.category) ? (
-                      project.category.map((cat, index) => (
+                      project.category.map((cat) => (
                         <span 
                           key={cat}
                           className="project-category" 
@@ -186,7 +192,7 @@ const Portfolio = () => {
                   
                   <div className="project-meta">
                     {Array.isArray(project.category) ? (
-                      project.category.map((cat, index) => (
+                      project.category.map((cat) => (
                         <span 
                           key={cat}
                           className="project-category" 
