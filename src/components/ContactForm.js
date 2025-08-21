@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -8,7 +8,6 @@ const ContactForm = () => {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState(null)
-  const [recaptchaToken, setRecaptchaToken] = useState(null)
   const [formStartTime] = useState(Date.now())
 
   // Load reCAPTCHA v3
@@ -18,7 +17,7 @@ const ContactForm = () => {
         window.grecaptcha.ready(() => {
           window.grecaptcha.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, { action: 'contact_form' })
             .then((token) => {
-              setRecaptchaToken(token)
+              // Token will be generated fresh on each submission
             })
         })
       }
@@ -42,7 +41,7 @@ const ContactForm = () => {
     })
   }
 
-  const validateForm = () => {
+  const validateForm = useCallback(() => {
     const { name, email, message } = formData
     
     if (!name.trim() || name.length < 2) {
@@ -60,7 +59,7 @@ const ContactForm = () => {
       return false
     }
 
-    // Basic spam detection
+    // Spam keyword detection
     const spamKeywords = ['viagra', 'casino', 'lottery', 'winner', 'congratulations', 'click here', 'free money']
     const messageText = message.toLowerCase()
     if (spamKeywords.some(keyword => messageText.includes(keyword))) {
@@ -76,7 +75,7 @@ const ContactForm = () => {
     }
 
     return true
-  }
+  }, [formData, formStartTime])
 
   const handleSubmit = useCallback(async (e) => {
     if (!validateForm()) {
