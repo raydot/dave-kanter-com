@@ -96,8 +96,8 @@ const ContactForm = () => {
         token = await window.grecaptcha.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, { action: 'contact_form' })
       }
       
-      // Prepare form data for Netlify
-      const formDataToSubmit = new FormData()
+      // Prepare form data for Netlify (use URLSearchParams directly)
+      const formDataToSubmit = new URLSearchParams()
       formDataToSubmit.append('form-name', 'contact')
       formDataToSubmit.append('name', formData.name)
       formDataToSubmit.append('email', formData.email)
@@ -109,7 +109,7 @@ const ContactForm = () => {
       const response = await fetch('/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formDataToSubmit).toString()
+        body: formDataToSubmit.toString()
       })
 
       if (response.ok) {
