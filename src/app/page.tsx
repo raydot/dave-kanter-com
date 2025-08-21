@@ -31,28 +31,7 @@ export default function Home() {
     }
   }, [isAnimating, articleTimeout, timeout])
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setLoading('')
-    }, 100)
-
-    const handleClickOutside = (event: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-        if (isArticleVisible) {
-          handleCloseArticle()
-        }
-      }
-    }
-
-    document.addEventListener('mousedown', handleClickOutside)
-
-    return () => {
-      clearTimeout(timeoutId)
-      document.removeEventListener('mousedown', handleClickOutside)
-    }
-  }, [isArticleVisible, handleCloseArticle])
-
-  const handleOpenArticle = (articleName: string | Event) => {
+  const handleOpenArticle = useCallback((articleName: string | Event) => {
     // Ensure articleName is a string, not an event object
     const article = typeof articleName === 'string' ? articleName : (articleName.target as HTMLElement)?.dataset?.article || '';
     // console.log('handleOpenArticle called with:', article, typeof article);
@@ -72,7 +51,37 @@ export default function Home() {
         setIsAnimating(false) // Animation complete
       }, 350)
     }
-  }
+  }, [isArticleVisible, isAnimating, timeout, articleTimeout])
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setLoading('')
+    }, 100)
+
+    // Check for form submission success
+    const urlParams = new URLSearchParams(window.location.search)
+    if (urlParams.get('submitted') === 'true') {
+      // Open contact article and show success message
+      handleOpenArticle('contact')
+      // Clean up URL
+      window.history.replaceState({}, document.title, window.location.pathname)
+    }
+
+    const handleClickOutside = (event: MouseEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        if (isArticleVisible) {
+          handleCloseArticle()
+        }
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+
+    return () => {
+      clearTimeout(timeoutId)
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [isArticleVisible, handleCloseArticle, handleOpenArticle])
 
   const setWrapperRef = (node: HTMLDivElement | null) => {
     wrapperRef.current = node

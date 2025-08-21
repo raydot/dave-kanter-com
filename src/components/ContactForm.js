@@ -79,9 +79,10 @@ const ContactForm = () => {
   }
 
   const handleSubmit = async (e) => {
+    e.preventDefault() // Always prevent default first
+    
     // Validate form first
     if (!validateForm()) {
-      e.preventDefault()
       return
     }
     
@@ -89,41 +90,40 @@ const ContactForm = () => {
     setSubmitStatus(null)
 
     try {
-      // Get fresh reCAPTCHA token and add to form
+      // Get fresh reCAPTCHA token
       let token = recaptchaToken
       if (window.grecaptcha) {
         token = await window.grecaptcha.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, { action: 'contact_form' })
       }
       
-      // Add reCAPTCHA token to form before submission
+      // Update hidden fields with current values
       const form = e.target
-      let recaptchaInput = form.querySelector('input[name="g-recaptcha-response"]')
-      if (!recaptchaInput) {
-        recaptchaInput = document.createElement('input')
-        recaptchaInput.type = 'hidden'
-        recaptchaInput.name = 'g-recaptcha-response'
-        form.appendChild(recaptchaInput)
-      }
-      recaptchaInput.value = token || ''
+      const recaptchaInput = form.querySelector('input[name="g-recaptcha-response"]')
+      const timestampInput = form.querySelector('input[name="timestamp"]')
       
-      // Add timestamp
-      let timestampInput = form.querySelector('input[name="timestamp"]')
-      if (!timestampInput) {
-        timestampInput = document.createElement('input')
-        timestampInput.type = 'hidden'
-        timestampInput.name = 'timestamp'
-        form.appendChild(timestampInput)
-      }
-      timestampInput.value = Date.now().toString()
+      if (recaptchaInput) recaptchaInput.value = token || ''
+      if (timestampInput) timestampInput.value = Date.now().toString()
       
-      // Let the form submit naturally to Netlify
-      // Don't prevent default - let Netlify handle it
-      setSubmitStatus({ type: 'success', message: 'Thank you! Your message is being sent...' })
+      // Submit form programmatically to Netlify
+      const formData = new FormData(form)
+      
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData).toString()
+      })
+
+      if (response.ok) {
+        setSubmitStatus({ type: 'success', message: 'Thank you! Your message has been sent successfully.' })
+        setFormData({ name: '', email: '', message: '' })
+      } else {
+        throw new Error('Network response was not ok')
+      }
       
     } catch (error) {
-      e.preventDefault()
       console.error('Form submission error:', error)
       setSubmitStatus({ type: 'error', message: 'Sorry, there was an error sending your message. Please try again.' })
+    } finally {
       setIsSubmitting(false)
     }
   }
@@ -131,7 +131,10 @@ const ContactForm = () => {
   return (
     <>
       <form name="contact" method="POST" action="/success" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={handleSubmit}>
-        {/* No honeypot field - instead, we're using advanced spam detection */}
+        {/* Hidden fields for Netlify */}
+        <input type="hidden" name="form-name" value="contact" />
+        <input type="hidden" name="g-recaptcha-response" value="" />
+        <input type="hidden" name="timestamp" value="" />
         
         {submitStatus && (
           <div className={`status-message ${submitStatus.type}`}>

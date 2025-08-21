@@ -11,5 +11,5 @@ skip_processing = false
 [[redirects]]
 from = "/success"
 to = "/?submitted=true"
-status = 200
-force = false
+status = 302
+force = true
