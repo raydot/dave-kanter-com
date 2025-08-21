@@ -2,3 +2,11 @@
 command = "npm run build"
 publish = "out"
 environment = { SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_RECAPTCHA_SITE_KEY" }
+
+# Enable form processing
+[build.processing]
+skip_processing = false
+
+# Form settings
+[[forms]]
+name = "contact"
