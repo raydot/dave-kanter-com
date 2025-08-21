@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Link from 'next/link';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -13,11 +14,6 @@ const ContactForm = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const encode = (data) => {
-    return Object.keys(data)
-      .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
-      .join('&');
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -35,7 +31,7 @@ const ContactForm = () => {
         setSubmitStatus({ type: 'success', message: 'Thank you! Your message has been sent.' });
         setFormData({ name: '', email: '', message: '' });
       })
-      .catch((error) => {
+      .catch(() => {
         setSubmitStatus({ type: 'error', message: 'Sorry, there was an error. Please try again.' });
       })
       .finally(() => {
@@ -48,10 +44,10 @@ const ContactForm = () => {
       {submitStatus?.type === 'success' ? (
         <div className="status-message success">
           <h3>Thank You!</h3>
-          <p>Your message has been sent successfully. I'll get back to you as soon as possible.</p>
+          <p>Your message has been sent successfully. I&apos;ll get back to you as soon as possible.</p>
           <ul className="actions">
             <li>
-              <a href="/" className="button special">Back to Home</a>
+              <Link href="/" className="button special">Back to Home</Link>
             </li>
           </ul>
         </div>
