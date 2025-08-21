@@ -15,6 +15,22 @@ export default function Home() {
   
   const wrapperRef = useRef<HTMLDivElement | null>(null)
 
+  const handleCloseArticle = () => {
+    if (!isAnimating) {
+      setIsAnimating(true)
+      setArticleTimeout(!articleTimeout)
+
+      setTimeout(() => {
+        setTimeoutState(!timeout)
+      }, 325)
+
+      setTimeout(() => {
+        setIsArticleVisible(false)
+        setIsAnimating(false) // Animation complete
+      }, 350)
+    }
+  }
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setLoading('')
@@ -34,7 +50,7 @@ export default function Home() {
       clearTimeout(timeoutId)
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [isArticleVisible])
+  }, [isArticleVisible, handleCloseArticle])
 
   const handleOpenArticle = (articleName: string | Event) => {
     // Ensure articleName is a string, not an event object
@@ -55,26 +71,6 @@ export default function Home() {
         setArticleTimeout(!articleTimeout)
         setIsAnimating(false) // Animation complete
       }, 350)
-    }
-  }
-
-  const handleCloseArticle = () => {
-    if (!isAnimating) {
-      setIsAnimating(true)
-      setArticleTimeout(!articleTimeout)
-
-      setTimeout(() => {
-        setTimeoutState(!timeout)
-      }, 325)
-
-      setTimeout(() => {
-        setIsArticleVisible(false)
-      }, 350)
-
-      setTimeout(() => {
-        setArticle('')
-        setIsAnimating(false) // Animation complete
-      }, 375)
     }
   }
 
