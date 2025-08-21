@@ -91,6 +91,7 @@ export default function Home() {
     <div className={`body ${loading} ${isArticleVisible ? 'is-article-visible' : ''}`}>
       {/* Hidden form for Netlify detection */}
       <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field" style={{display: 'none'}}>
+        <input type="hidden" name="form-name" value="contact" />
         <input type="text" name="name" />
         <input type="email" name="email" />
         <textarea name="message"></textarea>

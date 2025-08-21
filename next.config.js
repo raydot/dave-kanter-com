@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // output: 'export', // Temporarily disabled to test Netlify Forms
   images: {
     unoptimized: true
   },
