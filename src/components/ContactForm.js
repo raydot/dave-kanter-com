@@ -79,9 +79,10 @@ const ContactForm = () => {
   }
 
   const handleSubmit = async (e) => {
+    e.preventDefault() // Always prevent default to handle with JavaScript
+    
     // Validate form first
     if (!validateForm()) {
-      e.preventDefault()
       return
     }
     
@@ -95,23 +96,33 @@ const ContactForm = () => {
         token = await window.grecaptcha.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, { action: 'contact_form' })
       }
       
-      // Update hidden fields with current values before natural submission
-      const form = e.target
-      const recaptchaInput = form.querySelector('input[name="g-recaptcha-response"]')
-      const timestampInput = form.querySelector('input[name="timestamp"]')
+      // Prepare form data for Netlify
+      const formDataToSubmit = new FormData()
+      formDataToSubmit.append('form-name', 'contact')
+      formDataToSubmit.append('name', formData.name)
+      formDataToSubmit.append('email', formData.email)
+      formDataToSubmit.append('message', formData.message)
+      formDataToSubmit.append('g-recaptcha-response', token || '')
+      formDataToSubmit.append('timestamp', Date.now().toString())
       
-      if (recaptchaInput) recaptchaInput.value = token || ''
-      if (timestampInput) timestampInput.value = Date.now().toString()
-      
-      // Show success message but let form submit naturally to Netlify
-      setSubmitStatus({ type: 'success', message: 'Thank you! Your message is being sent...' })
-      
-      // Don't prevent default - let the form submit naturally to Netlify
+      // Submit to Netlify
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formDataToSubmit).toString()
+      })
+
+      if (response.ok) {
+        setSubmitStatus({ type: 'success', message: 'Thank you! Your message has been sent successfully.' })
+        setFormData({ name: '', email: '', message: '' })
+      } else {
+        throw new Error('Network response was not ok')
+      }
       
     } catch (error) {
-      e.preventDefault()
       console.error('Form submission error:', error)
       setSubmitStatus({ type: 'error', message: 'Sorry, there was an error sending your message. Please try again.' })
+    } finally {
       setIsSubmitting(false)
     }
   }
