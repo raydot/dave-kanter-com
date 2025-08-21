@@ -9,6 +9,9 @@ yarn-error.log
 /public
 .DS_Store
 
+# Next.js build output
+.next/
+
 # My stuff 
 /content
 
