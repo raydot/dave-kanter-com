@@ -6,10 +6,3 @@ environment = { SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_RECAPTCHA_SITE_KEY" }
 # Enable form processing
 [build.processing]
 skip_processing = false
-
-# Form submission success redirect
-[[redirects]]
-from = "/success"
-to = "/?submitted=true"
-status = 302
-force = true
