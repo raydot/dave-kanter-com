@@ -1,38 +1,104 @@
-import React from 'react'
+import React, { useState } from 'react';
 
 const ContactForm = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const encode = (data) => {
+    return Object.keys(data)
+      .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+      .join('&');
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    const form = e.target;
+    const recaptchaResponse = form.elements['g-recaptcha-response'].value;
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: encode({ 
+        'form-name': 'contact', 
+        'g-recaptcha-response': recaptchaResponse,
+        ...formData 
+      }),
+    })
+      .then(() => {
+        setSubmitStatus({ type: 'success', message: 'Thank you! Your message has been sent.' });
+        setFormData({ name: '', email: '', message: '' });
+      })
+      .catch((error) => {
+        setSubmitStatus({ type: 'error', message: 'Sorry, there was an error. Please try again.' });
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+      });
+  };
+
   return (
     <>
-      <form name="contact" method="POST" action="/success" data-netlify="true" data-netlify-recaptcha="true" data-netlify-honeypot="bot-field">
+      <form
+        name="contact"
+        method="POST"
+        data-netlify="true"
+        data-netlify-recaptcha="true"
+        data-netlify-honeypot="bot-field"
+        onSubmit={handleSubmit}
+      >
         <input type="hidden" name="form-name" value="contact" />
-        
+        {submitStatus && (
+          <div className={`status-message ${submitStatus.type}`}>
+            {submitStatus.message}
+          </div>
+        )}
         <div className="field half first">
           <label htmlFor="name">Name *</label>
-          <input 
-            type="text" 
-            name="name" 
-            id="name" 
-            required 
+          <input
+            type="text"
+            name="name"
+            id="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            disabled={isSubmitting}
             maxLength="100"
           />
         </div>
         <div className="field half">
           <label htmlFor="email">Email *</label>
-          <input 
-            type="email" 
-            name="email" 
-            id="email" 
-            required 
+          <input
+            type="email"
+            name="email"
+            id="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            disabled={isSubmitting}
             maxLength="100"
           />
         </div>
         <div className="field">
           <label htmlFor="message">Message *</label>
-          <textarea 
-            name="message" 
-            id="message" 
+          <textarea
+            name="message"
+            id="message"
             rows="4"
+            value={formData.message}
+            onChange={handleChange}
             required
+            disabled={isSubmitting}
             maxLength="1000"
             placeholder="Please share your message here..."
           ></textarea>
@@ -40,22 +106,47 @@ const ContactForm = () => {
         <div data-netlify-recaptcha="true"></div>
         <ul className="actions">
           <li>
-            <input 
-              type="submit" 
-              value="Send Message" 
-              className="special" 
+            <input
+              type="submit"
+              value={isSubmitting ? 'Sending...' : 'Send Message'}
+              className="special"
+              disabled={isSubmitting}
             />
           </li>
           <li>
-            <input 
-              type="reset" 
-              value="Reset" 
+            <input
+              type="button"
+              value="Reset"
+              onClick={() => {
+                setFormData({ name: '', email: '', message: '' });
+                setSubmitStatus(null);
+              }}
+              disabled={isSubmitting}
             />
           </li>
         </ul>
       </form>
 
       <style jsx>{`
+        .status-message {
+          padding: 1rem;
+          margin-bottom: 1rem;
+          border-radius: 4px;
+          font-weight: 500;
+        }
+
+        .status-message.success {
+          background: rgba(76, 205, 196, 0.1);
+          border: 1px solid #4ECDC4;
+          color: #4ECDC4;
+        }
+
+        .status-message.error {
+          background: rgba(255, 107, 107, 0.1);
+          border: 1px solid #ff6b6b;
+          color: #ff6b6b;
+        }
+
         .field {
           margin-bottom: 1rem;
         }
@@ -76,6 +167,12 @@ const ContactForm = () => {
           border-radius: 4px;
           font-size: 1rem;
           transition: all 0.3s ease;
+        }
+
+        .field input:disabled,
+        .field textarea:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
         }
 
         .field textarea {
@@ -112,7 +209,7 @@ const ContactForm = () => {
         }
 
         .actions input[type="submit"],
-        .actions input[type="reset"] {
+        .actions input[type="button"] {
           padding: 0.75rem 2rem;
           border: none;
           border-radius: 4px;
@@ -127,22 +224,28 @@ const ContactForm = () => {
           line-height: 1;
         }
 
+        .actions input[type="submit"]:disabled,
+        .actions input[type="button"]:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+
         .actions input[type="submit"].special {
           background: #4ECDC4;
           color: white;
         }
 
-        .actions input[type="submit"].special:hover {
+        .actions input[type="submit"].special:hover:not(:disabled) {
           background: #45b7aa;
         }
 
-        .actions input[type="reset"] {
+        .actions input[type="button"] {
           background: transparent;
           color: #ffffff;
           border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .actions input[type="reset"]:hover {
+        .actions input[type="button"]:hover:not(:disabled) {
           background: rgba(255, 255, 255, 0.1);
         }
 
@@ -159,7 +262,7 @@ const ContactForm = () => {
         }
       `}</style>
     </>
-  )
-}
+  );
+};
 
-export default ContactForm
+export default ContactForm;
