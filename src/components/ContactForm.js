@@ -79,52 +79,58 @@ const ContactForm = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    
-    if (!validateForm()) return
+    // Validate form first
+    if (!validateForm()) {
+      e.preventDefault()
+      return
+    }
     
     setIsSubmitting(true)
     setSubmitStatus(null)
 
     try {
-      // Get fresh reCAPTCHA token
+      // Get fresh reCAPTCHA token and add to form
       let token = recaptchaToken
       if (window.grecaptcha) {
         token = await window.grecaptcha.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, { action: 'contact_form' })
       }
-
-      // Prepare form data for Netlify Forms
-      const formDataToSubmit = new URLSearchParams()
-      formDataToSubmit.append('form-name', 'contact')
-      formDataToSubmit.append('name', formData.name)
-      formDataToSubmit.append('email', formData.email)
-      formDataToSubmit.append('message', formData.message)
-      formDataToSubmit.append('g-recaptcha-response', token || '')
-      formDataToSubmit.append('timestamp', Date.now().toString())
-
-      const response = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formDataToSubmit.toString()
-      })
-
-      if (response.ok) {
-        setSubmitStatus({ type: 'success', message: 'Thank you! Your message has been sent successfully.' })
-        setFormData({ name: '', email: '', message: '' })
-      } else {
-        throw new Error('Network response was not ok')
+      
+      // Add reCAPTCHA token to form before submission
+      const form = e.target
+      let recaptchaInput = form.querySelector('input[name="g-recaptcha-response"]')
+      if (!recaptchaInput) {
+        recaptchaInput = document.createElement('input')
+        recaptchaInput.type = 'hidden'
+        recaptchaInput.name = 'g-recaptcha-response'
+        form.appendChild(recaptchaInput)
       }
+      recaptchaInput.value = token || ''
+      
+      // Add timestamp
+      let timestampInput = form.querySelector('input[name="timestamp"]')
+      if (!timestampInput) {
+        timestampInput = document.createElement('input')
+        timestampInput.type = 'hidden'
+        timestampInput.name = 'timestamp'
+        form.appendChild(timestampInput)
+      }
+      timestampInput.value = Date.now().toString()
+      
+      // Let the form submit naturally to Netlify
+      // Don't prevent default - let Netlify handle it
+      setSubmitStatus({ type: 'success', message: 'Thank you! Your message is being sent...' })
+      
     } catch (error) {
+      e.preventDefault()
       console.error('Form submission error:', error)
       setSubmitStatus({ type: 'error', message: 'Sorry, there was an error sending your message. Please try again.' })
-    } finally {
       setIsSubmitting(false)
     }
   }
 
   return (
     <>
-      <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={handleSubmit}>
+      <form name="contact" method="POST" action="/success" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={handleSubmit}>
         {/* No honeypot field - instead, we're using advanced spam detection */}
         
         {submitStatus && (
