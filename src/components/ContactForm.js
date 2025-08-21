@@ -28,6 +28,9 @@ const ContactForm = (props) => {
       body: new URLSearchParams(formData).toString(),
     })
       .then(() => {
+        if (window.grecaptcha) {
+          window.grecaptcha.reset();
+        }
         setSubmitStatus({ type: 'success', message: 'Thank you! Your message has been sent.' });
         setFormData({ name: '', email: '', message: '' });
       })
