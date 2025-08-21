@@ -23,17 +23,13 @@ const ContactForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const form = e.target;
-    const recaptchaResponse = form.elements['g-recaptcha-response'].value;
+    const myForm = e.target;
+    const formData = new FormData(myForm);
 
     fetch('/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: encode({ 
-        'form-name': 'contact', 
-        'g-recaptcha-response': recaptchaResponse,
-        ...formData 
-      }),
+      body: new URLSearchParams(formData).toString(),
     })
       .then(() => {
         setSubmitStatus({ type: 'success', message: 'Thank you! Your message has been sent.' });
