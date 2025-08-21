@@ -45,83 +45,95 @@ const ContactForm = () => {
 
   return (
     <>
-      <form
-        name="contact"
-        method="POST"
-        data-netlify="true"
-        data-netlify-recaptcha="true"
-        data-netlify-honeypot="bot-field"
-        onSubmit={handleSubmit}
-      >
-        <input type="hidden" name="form-name" value="contact" />
-        {submitStatus && (
-          <div className={`status-message ${submitStatus.type}`}>
-            {submitStatus.message}
+      {submitStatus?.type === 'success' ? (
+        <div className="status-message success">
+          <h3>Thank You!</h3>
+          <p>Your message has been sent successfully. I'll get back to you as soon as possible.</p>
+          <ul className="actions">
+            <li>
+              <a href="/" className="button special">Back to Home</a>
+            </li>
+          </ul>
+        </div>
+      ) : (
+        <form
+          name="contact"
+          method="POST"
+          data-netlify="true"
+          data-netlify-recaptcha="true"
+          data-netlify-honeypot="bot-field"
+          onSubmit={handleSubmit}
+        >
+          <input type="hidden" name="form-name" value="contact" />
+          {submitStatus?.type === 'error' && (
+            <div className={`status-message ${submitStatus.type}`}>
+              {submitStatus.message}
+            </div>
+          )}
+          <div className="field half first">
+            <label htmlFor="name">Name *</label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              disabled={isSubmitting}
+              maxLength="100"
+            />
           </div>
-        )}
-        <div className="field half first">
-          <label htmlFor="name">Name *</label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            disabled={isSubmitting}
-            maxLength="100"
-          />
-        </div>
-        <div className="field half">
-          <label htmlFor="email">Email *</label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            disabled={isSubmitting}
-            maxLength="100"
-          />
-        </div>
-        <div className="field">
-          <label htmlFor="message">Message *</label>
-          <textarea
-            name="message"
-            id="message"
-            rows="4"
-            value={formData.message}
-            onChange={handleChange}
-            required
-            disabled={isSubmitting}
-            maxLength="1000"
-            placeholder="Please share your message here..."
-          ></textarea>
-        </div>
-        <div data-netlify-recaptcha="true"></div>
-        <ul className="actions">
-          <li>
+          <div className="field half">
+            <label htmlFor="email">Email *</label>
             <input
-              type="submit"
-              value={isSubmitting ? 'Sending...' : 'Send Message'}
-              className="special"
+              type="email"
+              name="email"
+              id="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
               disabled={isSubmitting}
+              maxLength="100"
             />
-          </li>
-          <li>
-            <input
-              type="button"
-              value="Reset"
-              onClick={() => {
-                setFormData({ name: '', email: '', message: '' });
-                setSubmitStatus(null);
-              }}
+          </div>
+          <div className="field">
+            <label htmlFor="message">Message *</label>
+            <textarea
+              name="message"
+              id="message"
+              rows="4"
+              value={formData.message}
+              onChange={handleChange}
+              required
               disabled={isSubmitting}
-            />
-          </li>
-        </ul>
-      </form>
+              maxLength="1000"
+              placeholder="Please share your message here..."
+            ></textarea>
+          </div>
+          <div data-netlify-recaptcha="true"></div>
+          <ul className="actions">
+            <li>
+              <input
+                type="submit"
+                value={isSubmitting ? 'Sending...' : 'Send Message'}
+                className="special"
+                disabled={isSubmitting}
+              />
+            </li>
+            <li>
+              <input
+                type="button"
+                value="Reset"
+                onClick={() => {
+                  setFormData({ name: '', email: '', message: '' });
+                  setSubmitStatus(null);
+                }}
+                disabled={isSubmitting}
+              />
+            </li>
+          </ul>
+        </form>
+      )}
 
       <style jsx>{`
         .status-message {
