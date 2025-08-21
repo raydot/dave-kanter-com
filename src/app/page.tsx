@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
-import Header from '@/components/header.js'
+import Header from '@/components/header'
 import Main from '@/components/Main'
 import Footer from '@/components/Footer'
 
