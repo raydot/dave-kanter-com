@@ -96,7 +96,7 @@ to cook, read, hike, play music and lose at chess. Over the past several years h
           }`}
         >
           <h2 className="major">Contact</h2>
-          <ContactForm />
+          <ContactForm onCloseArticle={props.onCloseArticle} />
           <ul className="icons">
             <li>
               <a href="mailto:dave@davekanter.com">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 
-const ContactForm = () => {
+const ContactForm = (props) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -47,7 +47,7 @@ const ContactForm = () => {
           <p>Your message has been sent successfully. I&apos;ll get back to you as soon as possible.</p>
           <ul className="actions">
             <li>
-              <Link href="/" className="button special">Back to Home</Link>
+              <button onClick={props.onCloseArticle} className="button special">Back to Home</button>
             </li>
           </ul>
         </div>
