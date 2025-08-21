@@ -77,30 +77,63 @@ const ContactForm = () => {
     return true
   }, [formData, formStartTime])
 
+  const encode = (data) => {
+    return Object.keys(data)
+      .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+      .join('&')
+  }
+
   const handleSubmit = useCallback(async (e) => {
+    e.preventDefault()
+    
     if (!validateForm()) {
-      e.preventDefault()
       return
     }
 
-    // Get fresh reCAPTCHA token before form submission
-    if (window.grecaptcha) {
-      const token = await window.grecaptcha.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, { action: 'contact_form' })
-      // Update the hidden reCAPTCHA field
-      const recaptchaField = e.target.querySelector('input[name="g-recaptcha-response"]')
-      if (recaptchaField) {
-        recaptchaField.value = token
-      }
-    }
-
-    // Let the native form submission proceed
     setIsSubmitting(true)
     setSubmitStatus({ type: 'success', message: 'Submitting your message...' })
-  }, [validateForm])
+
+    try {
+      // Get fresh reCAPTCHA token
+      let recaptchaToken = ''
+      if (window.grecaptcha) {
+        recaptchaToken = await window.grecaptcha.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, { action: 'contact_form' })
+      }
+
+      const data = {
+        'form-name': 'contact',
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+        timestamp: Date.now().toString()
+      }
+
+      if (recaptchaToken) {
+        data['g-recaptcha-response'] = recaptchaToken
+      }
+
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encode(data)
+      })
+
+      if (response.ok) {
+        setSubmitStatus({ type: 'success', message: 'Thank you! Your message has been sent successfully.' })
+        setFormData({ name: '', email: '', message: '' })
+      } else {
+        throw new Error('Form submission failed')
+      }
+    } catch (error) {
+      setSubmitStatus({ type: 'error', message: 'Sorry, there was an error sending your message. Please try again.' })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }, [validateForm, formData])
 
   return (
     <>
-      <form name="contact" method="POST" action="/success" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={handleSubmit}>
+      <form name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onSubmit={handleSubmit}>
         {/* Hidden fields for Netlify */}
         <input type="hidden" name="form-name" value="contact" />
         <input type="hidden" name="g-recaptcha-response" value="" />
