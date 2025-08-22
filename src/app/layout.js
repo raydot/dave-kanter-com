@@ -1,7 +1,7 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'Dave Kanter - Full-Stack Developer & Educator',
+  title: 'Dave Kanter - Technical Strategist, Team leader, Full-Stack Developer & Educator',
   description: 'Full-stack developer with 20+ years experience in enterprise applications, teaching at UC Berkeley, Parsons, and Academy of Art University. Specializing in Next.js, React, and AI.',
   keywords: 'full-stack developer, Next.js, React, JavaScript, web development, educator, UC Berkeley, AI, enterprise applications',
   authors: [{ name: 'Dave Kanter' }],
@@ -37,6 +37,11 @@ export default function RootLayout({ children }) {
         {/* Preconnect to Google Fonts */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        
+        {/* Preload critical background images for LCP optimization */}
+        <link rel="preload" href="/images/dhalia.webp" as="image" type="image/webp" />
+        <link rel="preload" href="/images/dhalia-1024.webp" as="image" type="image/webp" media="(min-width: 769px) and (max-width: 1199px)" />
+        <link rel="preload" href="/images/dhalia-768.webp" as="image" type="image/webp" media="(max-width: 768px)" />
         
         {/* Inline critical CSS for immediate render */}
         <style dangerouslySetInnerHTML={{
