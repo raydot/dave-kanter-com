@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300italic,600italic,300,600&display=swap");
+/* Google Fonts now loaded via preload in layout.js for better performance */
 /* Basic */
 @-ms-viewport {
   width: device-width;
@@ -878,7 +878,7 @@ table.alt tfoot {
 #bg:after {
   transform: scale(1.125);
   transition: transform 0.5s ease-in-out, filter 0.5s ease-in-out;
-  background-image: url("/images/dhalia.jpg");
+  background-image: url("/images/dhalia.webp");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

@@ -1,9 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Image from 'next/image'
-// Using string paths for Next.js public folder
-// import cyberImage from '../../public/images/the_cyber.png'
-// import portraitImage from '../../public/images/that_face.png'
+import OptimizedImage from './OptimizedImage'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
 import { faLinkedin, faGithub, faTwitter } from '@fortawesome/free-brands-svg-icons'
@@ -40,7 +37,7 @@ const Main = (props) => {
         >
           <h2 className="major">Dave Kanter Intro</h2>
           <span className="image main">
-            <Image src="/images/the_cyber.png" alt="introduction" width={480} height={160} style={{ maxWidth: '100%', height: 'auto' }} />
+            <OptimizedImage src="/images/the_cyber.png" alt="introduction" width={480} height={160} priority={true} />
           </span>
           <p>
             I&apos;m a full-stack developer who enjoys tackling complex problems across 
@@ -80,7 +77,7 @@ const Main = (props) => {
         >
           <h2 className="major">About</h2>
           <span className="image main">
-            <Image src="/images/that_face.png" alt="" width={625} height={208} style={{ maxWidth: '100%', height: 'auto' }} />
+            <OptimizedImage src="/images/that_face.png" alt="" width={625} height={208} loading="lazy" />
           </span>
           <p>
 Dave lives in Marin County with his family and pets. Away from the computer, he likes 
