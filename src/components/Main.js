@@ -42,10 +42,10 @@ const Main = (props) => {
             I&apos;m a full-stack developer who enjoys tackling complex problems across 
             different industries. Over the past 20+ years, I&apos;ve worked on everything 
             from high-traffic sites like starwars.com to enterprise Next.js applications 
-            for Fortune 500 clients. Lately I've been dedicating considerable effort to mastering AI fundamentals and Python, leveraging my programming background to develop comprehensive AI capabilities.
+            for Fortune 500 clients. Lately I&apos;ve been dedicating considerable effort to mastering AI fundamentals and Python, leveraging my programming background to develop comprehensive AI capabilities.
           </p>
           <p>
-            What makes my background distinctive is combining hands-on development with tech leadership and strategic consulting experience. Through running consulting businesses, I've worked closely with traditional businesses to understand their operations and guide their adoption of transformative technologies. In addition to programming I have taught others how to program, and my teaching experience at institutions like Parsons, Academy of Art University, and UC Berkeley has sharpened my ability to communicate complex technical concepts in a variety of contexts and lead diverse teams effectively.
+            What makes my background distinctive is combining hands-on development with tech leadership and strategic consulting experience. Through running consulting businesses, I&apos;ve worked closely with traditional businesses to understand their operations and guide their adoption of transformative technologies. In addition to programming I have taught others how to program, and my teaching experience at institutions like Parsons School of Design, Academy of Art University, and University of California Berkeley has sharpened my ability to communicate complex technical concepts in a variety of contexts and lead diverse teams effectively.
           </p>
           {close}
         </article>
