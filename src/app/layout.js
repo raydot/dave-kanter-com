@@ -28,7 +28,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" >
       <head>
         {/* DNS prefetch for external resources */}
         <link rel="dns-prefetch" href="//fonts.googleapis.com" />
@@ -75,7 +75,7 @@ export default function RootLayout({ children }) {
         <meta name="format-detection" content="telephone=no" />
         <meta httpEquiv="x-ua-compatible" content="ie=edge" />
       </head>
-      <body>{children}</body>
+      <body suppressHydrationWarning={true}>{children}</body>
     </html>
   )
 }
