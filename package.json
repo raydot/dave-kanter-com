@@ -22,9 +22,5 @@
     "eslint": "^9",
     "eslint-config-next": "15.4.6",
     "typescript": "^5"
-  },
-  "browserslist": [
-    "defaults and supports es6-module",
-    "maintained node versions"
-  ]
+  }
 }
