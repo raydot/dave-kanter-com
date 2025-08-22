@@ -39,8 +39,10 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
-        {/* Preload critical resources */}
-        <link rel="preload" href="/images/the_cyber.webp" as="image" type="image/webp" />
+        {/* Preload critical background image - responsive */}
+        <link rel="preload" href="/images/dhalia-768.webp" as="image" type="image/webp" media="(max-width: 768px)" />
+        <link rel="preload" href="/images/dhalia-1024.webp" as="image" type="image/webp" media="(min-width: 769px) and (max-width: 1199px)" />
+        <link rel="preload" href="/images/dhalia.webp" as="image" type="image/webp" media="(min-width: 1200px)" />
         
         {/* Preload critical Google Fonts */}
         <link
