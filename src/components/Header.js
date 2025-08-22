@@ -22,7 +22,7 @@ const Header = props => {
         <div className="inner">
           <h1>Dave Kanter</h1>
           <p>
-            Fullstack web platform developer & technical&nbsp;strategist & team&nbsp;leader
+             Technical&nbsp;Strategist, Team&nbsp;Leader & Fullstack web developer
           </p>
           {/* <p>
             <button

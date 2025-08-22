@@ -162,10 +162,10 @@
   {
     "src": "ps.png",
     "title": "Publicis Sapient",
-    "description": "Technical consultant deployed to Fortune 500 clients including Wawa, Tapestry, Albertsons, Sonepar, and Capital Group for fullstack development and team leadership engagements. Built enterprise React applications and led development teams.",
+    "description": "Technical consultant delivering fullstack development and team leadership to Fortune 500 clients including Wawa, Tapestry, Albertsons, Sonepar, and Capital Group. Built enterprise React applications and led development teams across desktop and mobile platforms.",
     "alt": "Publicis Sapient Fortune 500 consulting",
     "lead": "true",
-    "category": ["Enterprise", "Fullstack", "Retail"],
+    "category": ["Enterprise", "Fullstack", "Retail", "Mobile"],
     "technologies": ["React", "Next.js", "JavaScript", "Team Leadership", "Enterprise Applications"],
     "year": "2020",
     "bgColor": "#fff"

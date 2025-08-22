@@ -45,6 +45,8 @@ const Portfolio = () => {
   }, [activeFilter, projects])
 
   const handleFilterChange = (category) => {
+    if (category === activeFilter) return
+    
     setIsLoaded(false)
     setTimeout(() => {
       setActiveFilter(category)
