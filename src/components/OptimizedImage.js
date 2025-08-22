@@ -17,7 +17,7 @@ const OptimizedImage = ({
   // When priority is true, don't set loading prop (Next.js handles it automatically)
   const imageProps = {
     src,
-    alt,
+    alt: alt || '',
     width,
     height,
     priority,

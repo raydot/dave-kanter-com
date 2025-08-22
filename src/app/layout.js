@@ -76,45 +76,14 @@ export default function RootLayout({ children }) {
           `
         }} />
         
-        {/* Preload Google Fonts CSS and key font files to reduce chain depth */}
+        {/* Google Fonts with proper preconnect */}
         <link
-          rel="preload"
+          rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,600;1,300;1,600&display=swap"
-          as="style"
-          onLoad="this.onload=null;this.rel='stylesheet'"
         />
-        {/* Preload critical font files to eliminate additional requests */}
-        <link
-          rel="preload"
-          href="https://fonts.gstatic.com/s/sourcesanspro/v22/6xK3dSBYKcSV-LCoeQqfX1RYOo3qOK7lujVj9w.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="https://fonts.gstatic.com/s/sourcesanspro/v22/6xKydSBYKcSV-LCoeQqfX1RYOo3ik4zwlxdu3cOWxw.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <noscript>
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,600;1,300;1,600&display=swap"
-          />
-        </noscript>
         
-        {/* Load non-critical CSS asynchronously */}
-        <link
-          rel="preload"
-          href="/globals-non-critical.css"
-          as="style"
-          onLoad="this.onload=null;this.rel='stylesheet'"
-        />
-        <noscript>
-          <link rel="stylesheet" href="/globals-non-critical.css" />
-        </noscript>
+        {/* Load non-critical CSS */}
+        <link rel="stylesheet" href="/globals-non-critical.css" />
         
         {/* Performance hints */}
         <meta name="format-detection" content="telephone=no" />

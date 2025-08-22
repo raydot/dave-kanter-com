@@ -2,10 +2,6 @@
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
-  // Target modern browsers only - reduces legacy JavaScript
-  experimental: {
-    browsersListForSwc: true,
-  },
   compiler: {
     // Remove console.log in production
     removeConsole: process.env.NODE_ENV === 'production',
@@ -63,8 +59,7 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   generateEtags: false,
-  // Reduce polyfills for modern browsers
-  swcMinify: true,
+  // SWC minification is now default in Next.js 15+
 }
 
 module.exports = nextConfig

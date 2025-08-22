@@ -136,7 +136,7 @@ const ContactForm = (props) => {
                   if (typeof window !== 'undefined' && window.grecaptcha && window.grecaptcha.getResponse) {
                     try {
                       window.grecaptcha.reset();
-                    } catch (error) {
+                    } catch {
                       console.log('reCAPTCHA not ready for reset');
                     }
                   }
