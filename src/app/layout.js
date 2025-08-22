@@ -39,24 +39,13 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         
-        {/* Preload critical background image - responsive */}
-        <link rel="preload" href="/images/dhalia-768.webp" as="image" type="image/webp" media="(max-width: 768px)" />
-        <link rel="preload" href="/images/dhalia-1024.webp" as="image" type="image/webp" media="(min-width: 769px) and (max-width: 1199px)" />
-        <link rel="preload" href="/images/dhalia.webp" as="image" type="image/webp" media="(min-width: 1200px)" />
+        {/* Background image now handled by <picture> element with fetchpriority="high" */}
         
-        {/* Preload critical Google Fonts */}
+        {/* Load critical Google Fonts with optimized display strategy */}
         <link
-          rel="preload"
+          rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,600;1,300;1,600&display=swap"
-          as="style"
-          onLoad="this.onload=null;this.rel='stylesheet'"
         />
-        <noscript>
-          <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,300;0,600;1,300;1,600&display=swap"
-          />
-        </noscript>
         
         {/* Performance hints */}
         <meta name="format-detection" content="telephone=no" />

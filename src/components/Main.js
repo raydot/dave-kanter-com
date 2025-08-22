@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import OptimizedImage from './OptimizedImage'
 import Portfolio from './Portfolio'
-import ContactForm from './ContactForm'
+
+// Lazy load ContactForm to defer reCAPTCHA loading
+const ContactForm = lazy(() => import('./ContactForm'))
 
 const Main = (props) => {
   const close = (
@@ -90,7 +92,9 @@ to cook, read, hike, play music and lose at chess. Over the past several years h
           }`}
         >
           <h2 className="major">Contact</h2>
-          <ContactForm onCloseArticle={props.onCloseArticle} />
+          <Suspense fallback={<div>Loading contact form...</div>}>
+            <ContactForm onCloseArticle={props.onCloseArticle} />
+          </Suspense>
           <ul className="icons">
             <li>
               <a href="mailto:dave@davekanter.com" aria-label="Email">

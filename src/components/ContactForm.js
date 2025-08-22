@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Link from 'next/link';
 
 const ContactForm = (props) => {
   const [formData, setFormData] = useState({

@@ -105,7 +105,25 @@ export default function Home() {
         />
         <Footer timeout={timeout} />
       </div>
-      <div id="bg"></div>
+      <picture id="bg">
+        <source media="(max-width: 768px)" srcSet="/images/dhalia-768.webp" type="image/webp" />
+        <source media="(min-width: 769px) and (max-width: 1199px)" srcSet="/images/dhalia-1024.webp" type="image/webp" />
+        <source media="(min-width: 1200px)" srcSet="/images/dhalia.webp" type="image/webp" />
+        <img 
+          src="/images/dhalia.webp" 
+          alt="Background" 
+          fetchPriority="high"
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            zIndex: 1
+          }}
+        />
+      </picture>
     </div>
   )
 }

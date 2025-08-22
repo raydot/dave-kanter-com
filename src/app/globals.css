@@ -877,27 +877,8 @@ table.alt tfoot {
 }
 #bg:after {
   transform: scale(1.125);
-  transition: transform 0.5s ease-in-out, filter 0.5s ease-in-out;
-  background-image: url("/images/dhalia-768.webp");
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  z-index: 1;
-}
-
-/* Tablet and larger screens */
-@media (min-width: 769px) {
-  #bg:after {
-    background-image: url("/images/dhalia-1024.webp");
-  }
-}
-
-/* Desktop and larger screens */
-@media (min-width: 1200px) {
-  #bg:after {
-    background-image: url("/images/dhalia.webp");
-  }
+  transition: transform 0.5s;
+  /* Background now handled by <picture> element with fetchpriority="high" */
 }
 .body.is-article-visible #bg {
   transform: scale(1.05);
