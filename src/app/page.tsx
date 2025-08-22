@@ -89,22 +89,7 @@ export default function Home() {
 
   return (
     <div className={`body ${loading} ${isArticleVisible ? 'is-article-visible' : ''}`}>
-      
-      <div id="wrapper">
-        <Header
-          onOpenArticle={handleOpenArticle}
-          timeout={timeout}
-        />
-        <Main
-          isArticleVisible={isArticleVisible}
-          timeout={timeout}
-          articleTimeout={articleTimeout}
-          article={article}
-          onCloseArticle={handleCloseArticle}
-          setWrapperRef={setWrapperRef}
-        />
-        <Footer timeout={timeout} />
-      </div>
+      {/* Background image moved to top for immediate render */}
       <picture id="bg">
         <source media="(max-width: 768px)" srcSet="/images/dhalia-768.webp" type="image/webp" />
         <source media="(min-width: 769px) and (max-width: 1199px)" srcSet="/images/dhalia-1024.webp" type="image/webp" />
@@ -124,6 +109,22 @@ export default function Home() {
           }}
         />
       </picture>
+      
+      <div id="wrapper">
+        <Header
+          onOpenArticle={handleOpenArticle}
+          timeout={timeout}
+        />
+        <Main
+          isArticleVisible={isArticleVisible}
+          timeout={timeout}
+          articleTimeout={articleTimeout}
+          article={article}
+          onCloseArticle={handleCloseArticle}
+          setWrapperRef={setWrapperRef}
+        />
+        <Footer timeout={timeout} />
+      </div>
     </div>
   )
 }
