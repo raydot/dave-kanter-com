@@ -1,5 +1,4 @@
 import React from 'react'
-import Image from 'next/image'
 
 const CustomImage = ({ fileName, alt, width = 800, height = 600, className, style }) => {
   // Handle null/empty filenames
@@ -22,14 +21,23 @@ const CustomImage = ({ fileName, alt, width = 800, height = 600, className, styl
     )
   }
 
+  // Check if WebP version exists, fallback to original
+  const webpSrc = `/images/${fileName.replace(/\.(png|jpg|jpeg)$/i, '.webp')}`
+  const originalSrc = `/images/${fileName}`
+
   return (
     <figure className={className} style={style}>
-      <Image 
-        src={`/images/${fileName}`} 
-        alt={alt || ''} 
-        width={width}
-        height={height}
-      />
+      <picture>
+        <source srcSet={webpSrc} type="image/webp" />
+        <img 
+          src={originalSrc}
+          alt={alt || ''} 
+          width={width}
+          height={height}
+          loading="lazy"
+          style={{ maxWidth: '100%', height: 'auto' }}
+        />
+      </picture>
     </figure>
   )
 }
