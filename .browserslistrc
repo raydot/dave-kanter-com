@@ -1,0 +1,24 @@
+# Modern browsers only - eliminates legacy JavaScript polyfills
+# This targets browsers that support ES2020+ features natively
+
+# Chrome 91+ (June 2021)
+Chrome >= 91
+
+# Firefox 89+ (June 2021) 
+Firefox >= 89
+
+# Safari 14.1+ (April 2021)
+Safari >= 14.1
+
+# Edge 91+ (May 2021)
+Edge >= 91
+
+# Mobile browsers
+iOS >= 14.5
+ChromeAndroid >= 91
+FirefoxAndroid >= 89
+
+# Exclude legacy browsers completely
+not IE 11
+not dead
+not < 0.25%

@@ -2,6 +2,14 @@
 const nextConfig = {
   output: 'export',
   trailingSlash: true,
+  // Target modern browsers only - reduces legacy JavaScript
+  experimental: {
+    browsersListForSwc: true,
+  },
+  compiler: {
+    // Remove console.log in production
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
   images: {
     unoptimized: true, // Required for static export
     formats: ['image/webp', 'image/avif'],
@@ -55,6 +63,8 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   generateEtags: false,
+  // Reduce polyfills for modern browsers
+  swcMinify: true,
 }
 
 module.exports = nextConfig
