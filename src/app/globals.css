@@ -1103,6 +1103,10 @@ table.alt tfoot {
 }
 #main article.active {
   display: block !important;
+  overflow-y: auto;
+  max-height: calc(100vh - 8rem);
+  align-self: flex-start;
+  margin-top: 4rem;
 }
 #main article#work.active {
   display: block !important;

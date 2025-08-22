@@ -42,17 +42,10 @@ const Main = (props) => {
             I&apos;m a full-stack developer who enjoys tackling complex problems across 
             different industries. Over the past 20+ years, I&apos;ve worked on everything 
             from high-traffic sites like starwars.com to enterprise Next.js applications 
-            for Fortune 500 clients. Currently I&apos;m putting a lot of effort into learning 
-            more about artificial intelligence.
+            for Fortune 500 clients. Lately I've been dedicating considerable effort to mastering AI fundamentals and Python, leveraging my programming background to develop comprehensive AI capabilities.
           </p>
           <p>
-            What makes my background a bit different is the mix of hands-on development 
-            with teaching and leadership roles. I&apos;ve spent about 20 years teaching at 
-            places like Parsons School of Design, Academy of Art University, and UC Berkeley, which has 
-            really sharpened my ability to communicate complex technical ideas clearly 
-            and work effectively with diverse teams. I&apos;ve also run my own consulting 
-            business and managed technical teams, so I understand both the code and the 
-            business side of things.
+            What makes my background distinctive is combining hands-on development with tech leadership and strategic consulting experience. Through running consulting businesses, I've worked closely with traditional businesses to understand their operations and guide their adoption of transformative technologies. In addition to programming I have taught others how to program, and my teaching experience at institutions like Parsons, Academy of Art University, and UC Berkeley has sharpened my ability to communicate complex technical concepts in a variety of contexts and lead diverse teams effectively.
           </p>
           {close}
         </article>
