@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const ContactForm = (props) => {
   const [formData, setFormData] = useState({
@@ -8,6 +8,19 @@ const ContactForm = (props) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
+  const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
+
+  // Load reCAPTCHA only when ContactForm is rendered
+  useEffect(() => {
+    if (!recaptchaLoaded && typeof window !== 'undefined') {
+      const script = document.createElement('script');
+      script.src = 'https://www.google.com/recaptcha/api.js';
+      script.async = true;
+      script.defer = true;
+      script.onload = () => setRecaptchaLoaded(true);
+      document.head.appendChild(script);
+    }
+  }, [recaptchaLoaded]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -105,7 +118,7 @@ const ContactForm = (props) => {
               placeholder="Please share your message here..."
             ></textarea>
           </div>
-          <div data-netlify-recaptcha="true"></div>
+          {recaptchaLoaded && <div data-netlify-recaptcha="true"></div>}
           <ul className="actions">
             <li>
               <input

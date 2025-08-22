@@ -1,9 +1,9 @@
 import React, { lazy, Suspense } from 'react'
 import PropTypes from 'prop-types'
 import OptimizedImage from './OptimizedImage'
-import Portfolio from './Portfolio'
 
-// Lazy load ContactForm to defer reCAPTCHA loading
+// Lazy load heavy components to improve initial load
+const Portfolio = lazy(() => import('./Portfolio'))
 const ContactForm = lazy(() => import('./ContactForm'))
 
 const Main = (props) => {
@@ -57,7 +57,9 @@ const Main = (props) => {
           }`}
         >
           <h2 className="major">Portfolio</h2>
-          <Portfolio />
+          <Suspense fallback={<div style={{padding: '2rem', textAlign: 'center', color: '#ffffff'}}>Loading portfolio...</div>}>
+            <Portfolio />
+          </Suspense>
           {close}
         </article>
 

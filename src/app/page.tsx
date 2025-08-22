@@ -58,14 +58,16 @@ export default function Home() {
       setLoading('')
     }, 100)
 
-    // Check for form submission success
-    const urlParams = new URLSearchParams(window.location.search)
-    if (urlParams.get('submitted') === 'true') {
-      // Open contact article and show success message
-      handleOpenArticle('contact')
-      // Clean up URL
-      window.history.replaceState({}, document.title, window.location.pathname)
-    }
+    // Defer URL parameter checking to avoid blocking initial render
+    const checkUrlParams = setTimeout(() => {
+      const urlParams = new URLSearchParams(window.location.search)
+      if (urlParams.get('submitted') === 'true') {
+        // Open contact article and show success message
+        handleOpenArticle('contact')
+        // Clean up URL
+        window.history.replaceState({}, document.title, window.location.pathname)
+      }
+    }, 200)
 
     const handleClickOutside = (event: MouseEvent) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
@@ -79,6 +81,7 @@ export default function Home() {
 
     return () => {
       clearTimeout(timeoutId)
+      clearTimeout(checkUrlParams)
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [isArticleVisible, handleCloseArticle, handleOpenArticle])
