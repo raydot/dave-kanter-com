@@ -14,16 +14,31 @@ const nextConfig = {
   webpack: (config) => {
     config.resolve.alias['@'] = require('path').resolve(__dirname, 'src')
     
-    // Optimize bundle splitting
+    // Optimize bundle splitting and reduce critical request chains
     config.optimization = {
       ...config.optimization,
       splitChunks: {
         chunks: 'all',
+        minSize: 20000,
+        maxSize: 244000,
         cacheGroups: {
+          default: {
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true,
+          },
           vendor: {
             test: /[\\/]node_modules[\\/]/,
             name: 'vendors',
             chunks: 'all',
+            priority: -10,
+          },
+          // Separate critical components
+          critical: {
+            test: /[\\/]src[\\/]components[\\/](Header|Footer)[\\/]/,
+            name: 'critical',
+            chunks: 'all',
+            priority: 10,
           },
         },
       },
