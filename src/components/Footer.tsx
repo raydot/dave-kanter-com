@@ -1,10 +1,13 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
 const year = new Date().getFullYear()
 
-const Footer = props => (
-  <footer id="footer" style={props.timeout ? { display: 'none' } : {}}>
+interface FooterProps {
+  timeout?: boolean
+}
+
+const Footer: React.FC<FooterProps> = ({ timeout }) => (
+  <footer id="footer" style={timeout ? { display: 'none' } : {}}>
     <p className="copyright">
       Built with{' '}
       <a href="http://www.reactjs.org" target="_new">
@@ -23,9 +26,5 @@ const Footer = props => (
     <p className="copyright">All photos &copy;{year} Dave Kanter</p>
   </footer>
 )
-
-Footer.propTypes = {
-  timeout: PropTypes.bool,
-}
 
 export default Footer
