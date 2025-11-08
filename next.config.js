@@ -17,7 +17,7 @@ const nextConfig = {
   },
   webpack: (config) => {
     config.resolve.alias['@'] = require('path').resolve(__dirname, 'src')
-    
+
     // Optimize bundle splitting and reduce critical request chains
     config.optimization = {
       ...config.optimization,
@@ -47,7 +47,7 @@ const nextConfig = {
         },
       },
     }
-    
+
     return config
   },
   turbopack: {

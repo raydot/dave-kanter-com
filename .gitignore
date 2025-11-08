@@ -38,3 +38,7 @@ out/
 *.vsix
 # Local Netlify folder
 .netlify
+
+# Extra
+/docs
+.github
