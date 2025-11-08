@@ -1,4 +1,6 @@
 [build]
 command = "npm run build"
-publish = "out"
-environment = { SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_RECAPTCHA_SITE_KEY" }
+publish = ".next"
+
+[[plugins]]
+package = "@netlify/plugin-nextjs"

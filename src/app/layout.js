@@ -1,5 +1,7 @@
 // Critical CSS inlined below, non-critical CSS loaded asynchronously
 
+import { AskDave } from '@/components/AskDave'
+
 export const metadata = {
   title: 'Dave Kanter - Technical Strategist, Team leader, Full-Stack Developer & Educator',
   description: 'Full-stack developer with 20+ years experience in enterprise applications, teaching at UC Berkeley, Parsons, and Academy of Art University. Specializing in Next.js, React, and AI.',
@@ -89,7 +91,10 @@ export default function RootLayout({ children }) {
         <meta name="format-detection" content="telephone=no" />
         <meta httpEquiv="x-ua-compatible" content="ie=edge" />
       </head>
-      <body suppressHydrationWarning={true}>{children}</body>
+      <body suppressHydrationWarning={true}>
+        {children}
+        <AskDave />
+      </body>
     </html>
   )
 }
