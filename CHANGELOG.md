@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/raydot/dave-kanter-com/compare/v2.1.3...v2.2.0) (2025-11-09)
+
+
+### Features
+
+* migrate from static export to Netlify Next.js runtime ([86cd483](https://github.com/raydot/dave-kanter-com/commit/86cd483a8a8e7a79db4cf53433ed519912d27e9e))
+
 ## [2.1.3](https://github.com/raydot/dave-kanter-com/compare/v2.1.2...v2.1.3) (2025-11-09)
 
 
