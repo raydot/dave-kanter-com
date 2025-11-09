@@ -1,3 +1,10 @@
+## [2.1.3](https://github.com/raydot/dave-kanter-com/compare/v2.1.2...v2.1.3) (2025-11-09)
+
+
+### Bug Fixes
+
+* updated the AskDave context page. ([6cff7a1](https://github.com/raydot/dave-kanter-com/commit/6cff7a12187476c75950b0f06b725086bf4470a7))
+
 ## [2.1.2](https://github.com/raydot/dave-kanter-com/compare/v2.1.1...v2.1.2) (2025-11-09)
 
 
