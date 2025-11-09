@@ -71,12 +71,12 @@ export function AskDave() {
             {messages.length === 0 ? (
               <div className={styles.welcome}>
                 <p>
-                  👋 Hi! dave.ask() me anything about Dave's experience,
+                  👋 Hi! dave.ask() me anything about Dave&apos;s experience,
                   projects, or skills.
                 </p>
                 <p className={styles.examples}>
-                  Try: "What experience does Dave have with React?" or "Tell me
-                  about Dave's teaching background."
+                  Try: &quot;What experience does Dave have with React?&quot; or &quot;Tell me
+                  about Dave&apos;s teaching background.&quot;
                 </p>
               </div>
             ) : (
