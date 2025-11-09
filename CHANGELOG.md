@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/raydot/dave-kanter-com/compare/v2.1.0...v2.1.1) (2025-11-09)
+
+
+### Bug Fixes
+
+* escape quites in AskDave component for ESLint ([d79a5ce](https://github.com/raydot/dave-kanter-com/commit/d79a5ce3c4c06f398822607e7ffcf26b32fd58eb))
+
 # [2.1.0](https://github.com/raydot/dave-kanter-com/compare/v2.0.0...v2.1.0) (2025-11-09)
 
 
