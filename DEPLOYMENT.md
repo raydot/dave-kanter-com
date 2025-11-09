@@ -10,14 +10,14 @@ Add these to your **Netlify dashboard** (Site settings → Environment variables
 
 ```bash
 # Anthropic Claude API
-ANTHROPIC_API_KEY=sk-ant-api03-...
+ANTHROPIC_API_KEY=your_anthropic_api_key_here
 
 # Upstash Redis (Rate Limiting)
-UPSTASH_REDIS_REST_URL=https://merry-oryx-12818.upstash.io
-UPSTASH_REDIS_REST_TOKEN=ATISAAIncDI1ZjZmZjBlOGY2MTY0Y2UxOGQ5YjNmNWNlOThiMDcyZHAyMTI4MTg
+UPSTASH_REDIS_REST_URL=your_upstash_redis_url_here
+UPSTASH_REDIS_REST_TOKEN=your_upstash_redis_token_here
 
 # Resend API (Contact Form)
-RESEND_API_KEY=re_...
+RESEND_API_KEY=your_resend_api_key_here
 ```
 
 ## What Changed
