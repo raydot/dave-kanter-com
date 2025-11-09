@@ -11,10 +11,12 @@ const OptimizedImage = ({
   className = '',
   style = {}
 }) => {
-  // Generate WebP path from original src
-  const webpSrc = src.replace(/\.(jpg|jpeg|png)$/i, '.webp')
+  // Next.js Image component automatically handles:
+  // - WebP/AVIF format conversion
+  // - Responsive sizing
+  // - Lazy loading
+  // - CDN optimization via Netlify
   
-  // When priority is true, don't set loading prop (Next.js handles it automatically)
   const imageProps = {
     src,
     alt: alt || '',
@@ -31,12 +33,7 @@ const OptimizedImage = ({
     imageProps.loading = loading
   }
   
-  return (
-    <picture>
-      <source srcSet={webpSrc} type="image/webp" />
-      <Image {...imageProps} />
-    </picture>
-  )
+  return <Image {...imageProps} />
 }
 
 export default OptimizedImage

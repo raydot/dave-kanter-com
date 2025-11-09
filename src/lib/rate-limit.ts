@@ -7,12 +7,20 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN!,
 })
 
-// Create rate limiter: 10 requests per hour per IP
+// Create rate limiter for Ask Dave: 10 requests per hour per IP
 export const ratelimit = new Ratelimit({
   redis,
   limiter: Ratelimit.slidingWindow(10, '1 h'),
   analytics: true,
   prefix: 'ask-dave',
+})
+
+// Create rate limiter for Contact Form: 5 requests per hour per IP
+export const contactRatelimit = new Ratelimit({
+  redis,
+  limiter: Ratelimit.slidingWindow(5, '1 h'),
+  analytics: true,
+  prefix: 'contact-form',
 })
 
 // Helper function to get client IP

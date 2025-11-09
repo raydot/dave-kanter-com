@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { submitContactForm } from '@/app/actions/contact';
 
 const ContactForm = (props) => {
   const [formData, setFormData] = useState({
@@ -8,47 +9,30 @@ const ContactForm = (props) => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState(null);
-  const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
-
-  // Load reCAPTCHA only when ContactForm is rendered
-  useEffect(() => {
-    if (!recaptchaLoaded && typeof window !== 'undefined') {
-      const script = document.createElement('script');
-      script.src = 'https://www.google.com/recaptcha/api.js';
-      script.async = true;
-      script.defer = true;
-      script.onload = () => setRecaptchaLoaded(true);
-      document.head.appendChild(script);
-    }
-  }, [recaptchaLoaded]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitStatus(null);
 
-    const myForm = e.target;
-    const formData = new FormData(myForm);
-
-    fetch('/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams(formData).toString(),
-    })
-      .then(() => {
-        setSubmitStatus({ type: 'success', message: 'Thank you! Your message has been sent.' });
+    try {
+      const result = await submitContactForm(formData);
+      
+      if (result.success) {
+        setSubmitStatus({ type: 'success', message: result.message });
         setFormData({ name: '', email: '', message: '' });
-      })
-      .catch(() => {
-        setSubmitStatus({ type: 'error', message: 'Sorry, there was an error. Please try again.' });
-      })
-      .finally(() => {
-        setIsSubmitting(false);
-      });
+      } else {
+        setSubmitStatus({ type: 'error', message: result.message });
+      }
+    } catch {
+      setSubmitStatus({ type: 'error', message: 'Sorry, there was an error. Please try again.' });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -64,15 +48,7 @@ const ContactForm = (props) => {
           </ul>
         </div>
       ) : (
-        <form
-          name="contact"
-          method="POST"
-          data-netlify="true"
-          data-netlify-recaptcha="true"
-          data-netlify-honeypot="bot-field"
-          onSubmit={handleSubmit}
-        >
-          <input type="hidden" name="form-name" value="contact" />
+        <form onSubmit={handleSubmit}>
           {submitStatus?.type === 'error' && (
             <div className={`status-message ${submitStatus.type}`}>
               {submitStatus.message}
@@ -118,7 +94,6 @@ const ContactForm = (props) => {
               placeholder="Please share your message here..."
             ></textarea>
           </div>
-          {recaptchaLoaded && <div data-netlify-recaptcha="true"></div>}
           <ul className="actions">
             <li>
               <input
@@ -133,13 +108,6 @@ const ContactForm = (props) => {
                 type="button"
                 value="Reset"
                 onClick={() => {
-                  if (typeof window !== 'undefined' && window.grecaptcha && window.grecaptcha.getResponse) {
-                    try {
-                      window.grecaptcha.reset();
-                    } catch {
-                      console.log('reCAPTCHA not ready for reset');
-                    }
-                  }
                   setFormData({ name: '', email: '', message: '' });
                   setSubmitStatus(null);
                 }}

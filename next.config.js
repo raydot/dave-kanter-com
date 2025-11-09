@@ -8,6 +8,19 @@ const nextConfig = {
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Netlify handles image optimization via their CDN
+    unoptimized: false,
+    // Allow Netlify's image CDN domains
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.netlify.app',
+      },
+      {
+        protocol: 'https',
+        hostname: 'davekanter.com',
+      },
+    ],
   },
   sassOptions: {
     includePaths: ['./src/assets/scss'],
