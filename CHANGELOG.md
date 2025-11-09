@@ -1,3 +1,10 @@
+## [2.2.1](https://github.com/raydot/dave-kanter-com/compare/v2.2.0...v2.2.1) (2025-11-09)
+
+
+### Bug Fixes
+
+* remove secret values from deployment documentation ([f3626cd](https://github.com/raydot/dave-kanter-com/commit/f3626cd99e5548f263a453104092877462f208c1))
+
 # [2.2.0](https://github.com/raydot/dave-kanter-com/compare/v2.1.3...v2.2.0) (2025-11-09)
 
 
