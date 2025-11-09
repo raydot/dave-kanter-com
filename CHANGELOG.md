@@ -1,3 +1,10 @@
+## [2.1.2](https://github.com/raydot/dave-kanter-com/compare/v2.1.1...v2.1.2) (2025-11-09)
+
+
+### Bug Fixes
+
+* escape quotes in AskDave and improve SEO metadata ([57a1fd9](https://github.com/raydot/dave-kanter-com/commit/57a1fd9ba2e46a1d527c46f7200bc822b7ca989c))
+
 ## [2.1.1](https://github.com/raydot/dave-kanter-com/compare/v2.1.0...v2.1.1) (2025-11-09)
 
 
