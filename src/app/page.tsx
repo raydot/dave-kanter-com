@@ -71,6 +71,12 @@ export default function Home() {
     }, 200)
 
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement
+      // Ignore clicks on AskDave widget
+      if (target.closest('[class*="AskDave"]')) {
+        return
+      }
+      
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         if (isArticleVisible) {
           handleCloseArticle()

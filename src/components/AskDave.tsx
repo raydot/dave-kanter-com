@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { askDave } from '@/app/actions/ask-dave'
 import styles from './AskDave.module.scss'
+import ReactMarkdown from 'react-markdown'
 
 interface Message {
   role: 'user' | 'assistant'
@@ -10,7 +11,7 @@ interface Message {
 }
 
 export function AskDave() {
-  const [isExpanded, setIsExpanded] = useState(true)
+  const [isExpanded, setIsExpanded] = useState(false)
   const [question, setQuestion] = useState('')
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(false)
@@ -26,17 +27,20 @@ export function AskDave() {
     setLoading(true)
 
     // Add user message
-    setMessages(prev => [...prev, { role: 'user', content: userQuestion }])
+    setMessages((prev) => [...prev, { role: 'user', content: userQuestion }])
 
     // Get response
     const response = await askDave(userQuestion)
-    
+
     // Add assistant response
-    setMessages(prev => [...prev, { 
-      role: 'assistant', 
-      content: response.message 
-    }])
-    
+    setMessages((prev) => [
+      ...prev,
+      {
+        role: 'assistant',
+        content: response.message,
+      },
+    ])
+
     setLoading(false)
   }
 
@@ -50,8 +54,11 @@ export function AskDave() {
       {isExpanded ? (
         <div className={styles.chatWindow}>
           <div className={styles.header}>
-            <h3>Ask Dave</h3>
-            <button 
+            <div className={styles.headerTitle}>
+              <h3>dave.ask()</h3>
+              {loading && <span className={styles.spinner}>⟳</span>}
+            </div>
+            <button
               onClick={() => setIsExpanded(false)}
               className={styles.minimizeBtn}
               aria-label="Minimize chat"
@@ -63,19 +70,27 @@ export function AskDave() {
           <div className={styles.messages}>
             {messages.length === 0 ? (
               <div className={styles.welcome}>
-                <p>👋 Hi! Ask me anything about Dave's experience, projects, or skills.</p>
+                <p>
+                  👋 Hi! dave.ask() me anything about Dave's experience,
+                  projects, or skills.
+                </p>
                 <p className={styles.examples}>
-                  Try: "What experience does Dave have with React?" or "Tell me about Dave's teaching background"
+                  Try: "What experience does Dave have with React?" or "Tell me
+                  about Dave's teaching background."
                 </p>
               </div>
             ) : (
               messages.map((msg, idx) => (
-                <div 
-                  key={idx} 
+                <div
+                  key={idx}
                   className={`${styles.message} ${styles[msg.role]}`}
                 >
                   <div className={styles.messageContent}>
-                    {msg.content}
+                    {msg.role === 'assistant' ? (
+                      <ReactMarkdown>{msg.content}</ReactMarkdown>
+                    ) : (
+                      msg.content
+                    )}
                   </div>
                 </div>
               ))
@@ -100,15 +115,15 @@ export function AskDave() {
               className={styles.input}
             />
             <div className={styles.actions}>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 disabled={loading || !question.trim()}
                 className={styles.sendBtn}
               >
-                {loading ? 'Sending...' : 'Ask'}
+                {loading ? 'Sending...' : 'dave.ask()'}
               </button>
               {messages.length > 0 && (
-                <button 
+                <button
                   type="button"
                   onClick={handleClear}
                   className={styles.clearBtn}
@@ -120,12 +135,12 @@ export function AskDave() {
           </form>
         </div>
       ) : (
-        <button 
+        <button
           onClick={() => setIsExpanded(true)}
           className={styles.expandBtn}
           aria-label="Open chat"
         >
-          💬 Ask Dave
+          💬 dave.ask()
         </button>
       )}
     </div>
