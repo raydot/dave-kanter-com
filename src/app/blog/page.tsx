@@ -4,6 +4,18 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import type { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Blog | Dave Kanter',
+  description: 'Thoughts on AI/ML engineering, web development, and technical leadership from a Staff Frontend Engineer with 20+ years of experience.',
+  openGraph: {
+    title: 'Blog | Dave Kanter',
+    description: 'Thoughts on AI/ML engineering, web development, and technical leadership',
+    url: 'https://davekanter.com/blog',
+    type: 'website',
+  },
+}
 
 export default function BlogPage() {
   const posts = getAllPosts()
@@ -11,6 +23,14 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <nav className="mb-6">
+          <Link href="/">
+            <Button variant="ghost" size="sm">
+              ← Home
+            </Button>
+          </Link>
+        </nav>
+        
         <header className="mb-8 sm:mb-12">
           <h1 className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4">Blog</h1>
           <p className="text-muted-foreground text-base sm:text-lg">

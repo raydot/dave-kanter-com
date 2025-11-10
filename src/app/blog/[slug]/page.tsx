@@ -44,11 +44,18 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
   return (
     <div className="min-h-screen bg-background">
       <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <Link href="/blog">
-          <Button variant="ghost" className="mb-6 sm:mb-8">
-            ← Back to Blog
-          </Button>
-        </Link>
+        <nav className="flex gap-4 mb-6 sm:mb-8">
+          <Link href="/">
+            <Button variant="ghost" size="sm">
+              ← Home
+            </Button>
+          </Link>
+          <Link href="/blog">
+            <Button variant="ghost" size="sm">
+              ← Blog
+            </Button>
+          </Link>
+        </nav>
 
         <header className="mb-6 sm:mb-8">
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">{post.title}</h1>
