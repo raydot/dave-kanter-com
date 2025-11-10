@@ -1,3 +1,13 @@
+# [2.3.0](https://github.com/raydot/dave-kanter-com/compare/v2.2.1...v2.3.0) (2025-11-10)
+
+
+### Features
+
+* add blog infrastructure with MDX and shadcn/ui ([f353b92](https://github.com/raydot/dave-kanter-com/commit/f353b92adc980bd76c227ba028603fc6ac497e63))
+* add blog navigation and SEO metadata ([bbe040d](https://github.com/raydot/dave-kanter-com/commit/bbe040d1a0bc8252e62f5b29ae13124902507eae))
+* enhance blog styling and mobile responsiveness ([2bcbc61](https://github.com/raydot/dave-kanter-com/commit/2bcbc616d3ef37f542b76f115c7d7b128b9500df))
+* implement core blog infrastructure ([57ae30f](https://github.com/raydot/dave-kanter-com/commit/57ae30f86c3c9b2227146e722e6de1f90e82bbb1))
+
 ## [2.2.1](https://github.com/raydot/dave-kanter-com/compare/v2.2.0...v2.2.1) (2025-11-09)
 
 
