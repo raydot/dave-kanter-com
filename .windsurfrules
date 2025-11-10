@@ -1,0 +1,195 @@
+# Cascade Ground Rules for dave-kanter-com
+
+## Communication & Planning
+
+### Always Plan First
+
+- **Present a clear plan** before starting any multi-step work
+- Break down complex tasks into discrete, reviewable steps
+- Update the plan as new information emerges
+- Get explicit approval before proceeding with significant changes
+- Work on only one plan segment at a time, do not "race ahead."
+
+### Certainty Threshold
+
+- **Do not proceed without 95%+ certainty** about what's being asked
+- Ask clarifying questions until you fully understand the request
+- State your understanding explicitly and wait for confirmation
+- If uncertain, say so clearly and ask for specifics
+
+### Token Conservation
+
+- **Suggest commands instead of running them** when possible
+- Present command snippets for user to run manually
+- Only auto-run commands when:
+  - They are completely safe (read-only operations)
+  - Explicitly requested by user
+  - Part of an approved plan
+
+## Code Changes
+
+### Minimal, Focused Edits
+
+- Make the smallest change that solves the problem
+- Don't refactor unrelated code
+- Preserve existing patterns and style
+- Test one thing at a time
+
+### No Speculative Changes
+
+- Don't "improve" things that aren't broken
+- Don't add features that weren't requested
+- Don't reorganize file structure without explicit request
+- Stick to the task at hand
+
+### Verify Before Acting
+
+- Read files before editing them
+- Check current state before making assumptions
+- Confirm dependencies exist before using them
+- Test understanding with user before major changes
+
+## Git Workflow
+
+### Commit Early and Often
+
+- **Suggest git commits at natural breakpoints**
+- After completing each phase of work
+- Before starting a new feature or significant change
+- When a logical unit of work is complete
+
+### Suggested Commit Messages
+
+- Provide clear, conventional commit messages following this format:
+  - `feat: description` for new features
+  - `fix: description` for bug fixes
+  - `refactor: description` for code restructuring
+  - `docs: description` for documentation changes
+  - `style: description` for formatting changes
+  - `test: description` for test additions/changes
+  - `chore: description` for maintenance tasks
+
+### Rebase Workflow
+
+- Suggest `git rebase` to clean up commit history before pushing
+- Recommend interactive rebase (`git rebase -i`) for:
+  - Squashing related commits
+  - Reordering commits logically
+  - Editing commit messages for clarity
+- Always warn before suggesting force-push operations
+
+### Example Flow
+
+At phase completion:
+
+1. Review changed files: `git status`
+2. Stage changes: `git add [files]`
+3. Commit with clear message: `git commit -m "feat: add AI chat interface component"`
+4. If multiple commits exist, suggest: `git rebase -i HEAD~n` to clean up
+
+## Project-Specific Context
+
+### Current Architecture
+
+### Current Architecture
+
+- Next.js 15 with App Router
+- **Netlify Next.js Runtime** (NOT static export - migrated Nov 2025)
+- Server Actions enabled ([ask-dave.ts](cci:7://file:///Users/davekanter/Documents/Dave/dave-kanter-com/src/app/actions/ask-dave.ts:0:0-0:0), [contact.ts](cci:7://file:///Users/davekanter/Documents/Dave/dave-kanter-com/src/app/actions/contact.ts:0:0-0:0))
+- Cloudflare CDN in front of Netlify
+- SCSS for styling
+- Performance-optimized (WebP images, critical CSS, etc.)
+
+### Deployment Constraints
+
+- **Netlify Next.js Runtime** supports Server Actions, API routes, and dynamic features
+- Server Actions work with Netlify Functions automatically
+- Image optimization via Netlify's CDN
+- Environment variables must be set in Netlify dashboard
+- Consider CDN caching implications for dynamic content
+
+### Security Considerations
+
+- API keys in environment variables only
+- Rate limiting for any external API calls
+- NextAuth.js already implemented for protected routes
+- Monitor costs for any paid APIs (OpenAI, Anthropic, etc.)
+
+### Security - CRITICAL
+
+### Security - CRITICAL ⚠️
+
+**NEVER, UNDER ANY CIRCUMSTANCES:**
+
+- Include actual API keys, tokens, or secrets in ANY file that gets committed to git
+- Put real credentials in documentation, examples, or markdown files
+- Expose environment variable values in code comments or logs
+- Commit [.env.local](cci:7://file:///Users/davekanter/Documents/Dave/dave-kanter-com/.env.local:0:0-0:0) or any file containing real secrets
+
+**ALWAYS:**
+
+- Use placeholder text like `your_api_key_here` in documentation
+- Keep real secrets ONLY in [.env.local](cci:7://file:///Users/davekanter/Documents/Dave/dave-kanter-com/.env.local:0:0-0:0) (gitignored) and Netlify dashboard
+- Assume any committed file will be public on GitHub
+- When in doubt, use placeholders - NEVER real values
+- **DO NOT COMMIT API KEYS TO GITHUB**
+
+**VIOLATION OF THESE RULES IS A SECURITY INCIDENT.**
+
+## General Principles
+
+### Don't Be Evil
+
+- No hidden changes or side effects
+- Transparent about limitations and trade-offs
+- Honest about uncertainty or risks
+- Respect user's time and budget
+
+### Respect the Existing Work
+
+- This is a production site with optimizations in place
+- Don't break existing functionality
+- Preserve performance improvements already made
+- Consider impact on Lighthouse scores
+
+### Ask, Don't Assume
+
+- When multiple approaches exist, present options
+- Explain trade-offs clearly
+- Let user make architectural decisions
+- Default to the path of least disruption
+
+## AI Agent Implementation Notes
+
+### For the "Ask Dave" Feature
+
+- Must work with static export OR justify switching to full runtime
+- If using Netlify Functions, explain the architecture
+- If removing static export, explain all implications:
+  - Deployment changes
+  - Performance impact
+  - CDN behavior
+  - Build/deploy time
+  - Cost considerations
+
+### Cost Awareness
+
+- Track and report estimated API costs
+- Implement rate limiting from day one
+- Monitor usage patterns
+- Set up billing alerts
+
+## Questions to Ask Before Proceeding
+
+When starting a new task, consider:
+
+1. Does this require changing the deployment model?
+2. Will this impact performance or Lighthouse scores?
+3. Are there security implications?
+4. What's the estimated cost (time, money, complexity)?
+5. Are there simpler alternatives?
+6. What could go wrong?
+
+## Summary
+
+**Think first, code second. Ask questions. Be transparent. Conserve tokens. Don't break what works.**
