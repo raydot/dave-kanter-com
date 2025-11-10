@@ -16,8 +16,6 @@ export function AskDave() {
   const [messages, setMessages] = useState<Message[]>([])
   const [loading, setLoading] = useState(false)
 
-  console.log('AskDave component mounted, isExpanded:', isExpanded)
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!question.trim() || loading) return

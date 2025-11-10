@@ -1,6 +1,13 @@
+import './globals.css'
 import Link from 'next/link'
 import { getAllPosts } from '@/lib/blog'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -8,10 +15,12 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Blog | Dave Kanter',
-  description: 'Thoughts on AI/ML engineering, web development, and technical leadership from a Staff Frontend Engineer with 20+ years of experience.',
+  description:
+    'Thoughts on AI/ML engineering, web development, and technical leadership from a Staff Frontend Engineer with 20+ years of experience.',
   openGraph: {
     title: 'Blog | Dave Kanter',
-    description: 'Thoughts on AI/ML engineering, web development, and technical leadership',
+    description:
+      'Thoughts on AI/ML engineering, web development, and technical leadership',
     url: 'https://davekanter.com/blog',
     type: 'website',
   },
@@ -21,46 +30,47 @@ export default function BlogPage() {
   const posts = getAllPosts()
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <nav className="mb-6">
+    <div className="tw-min-h-screen tw-bg-background">
+      <div className="tw-max-w-4xl tw-mx-auto tw-px-4 sm:tw-px-6 lg:tw-px-8 tw-py-8 sm:tw-py-12">
+        <nav className="tw-mb-6">
           <Link href="/">
             <Button variant="ghost" size="sm">
               ← Home
             </Button>
           </Link>
         </nav>
-        
-        <header className="mb-8 sm:mb-12">
-          <h1 className="text-3xl sm:text-4xl font-bold mb-3 sm:mb-4">Blog</h1>
-          <p className="text-muted-foreground text-base sm:text-lg">
-            Thoughts on AI/ML engineering, web development, and technical leadership
+
+        <header className="tw-mb-8 sm:tw-mb-12">
+          <h1 className="tw-text-3xl sm:tw-text-4xl tw-font-bold tw-mb-3 sm:tw-mb-4">Blog</h1>
+          <p className="tw-text-muted-foreground tw-text-base sm:tw-text-lg">
+            Thoughts on AI/ML engineering, web development, and technical
+            leadership
           </p>
         </header>
 
         {posts.length === 0 ? (
           <Card>
-            <CardContent className="pt-6">
-              <p className="text-muted-foreground text-center">
+            <CardContent className="tw-pt-6">
+              <p className="tw-text-muted-foreground tw-text-center">
                 No blog posts yet. Check back soon!
               </p>
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-6">
+          <div className="tw-space-y-6">
             {posts.map((post, index) => (
               <div key={post.slug}>
-                <Card className="hover:shadow-lg transition-shadow">
+                <Card className="hover:tw-shadow-lg tw-transition-shadow">
                   <CardHeader>
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1">
+                    <div className="tw-flex tw-items-start tw-justify-between tw-gap-4">
+                      <div className="tw-flex-1">
                         <Link href={`/blog/${post.slug}`}>
-                          <CardTitle className="text-2xl mb-2 hover:text-primary transition-colors cursor-pointer">
+                          <CardTitle className="tw-text-2xl tw-mb-2 hover:tw-text-primary tw-transition-colors tw-cursor-pointer">
                             {post.title}
                           </CardTitle>
                         </Link>
                         <CardDescription>
-                          <time className="text-sm">
+                          <time className="tw-text-sm">
                             {new Date(post.date).toLocaleDateString('en-US', {
                               year: 'numeric',
                               month: 'long',
@@ -71,7 +81,7 @@ export default function BlogPage() {
                       </div>
                     </div>
                     {post.tags && post.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mt-3">
+                      <div className="tw-flex tw-flex-wrap tw-gap-2 tw-mt-3">
                         {post.tags.map((tag) => (
                           <Badge key={tag} variant="secondary">
                             {tag}
@@ -81,15 +91,13 @@ export default function BlogPage() {
                     )}
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted-foreground mb-4">{post.excerpt}</p>
+                    <p className="tw-text-muted-foreground tw-mb-4">{post.excerpt}</p>
                     <Link href={`/blog/${post.slug}`}>
-                      <Button variant="outline">
-                        Read more →
-                      </Button>
+                      <Button variant="outline">Read more →</Button>
                     </Link>
                   </CardContent>
                 </Card>
-                {index < posts.length - 1 && <Separator className="my-6" />}
+                {index < posts.length - 1 && <Separator className="tw-my-6" />}
               </div>
             ))}
           </div>

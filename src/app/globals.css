@@ -684,6 +684,7 @@ input[type='radio'] + label:before {
   justify-content: center;
   width: 100%;
   max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* Portfolio Card */

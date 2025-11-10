@@ -1,3 +1,4 @@
+import '../globals.css'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { getPostBySlug, getAllPosts } from '@/lib/blog'
@@ -42,9 +43,9 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        <nav className="flex gap-4 mb-6 sm:mb-8">
+    <div className="tw-min-h-screen tw-bg-background">
+      <article className="tw-max-w-3xl tw-mx-auto tw-px-4 sm:tw-px-6 lg:tw-px-8 tw-py-8 sm:tw-py-12">
+        <nav className="tw-flex tw-gap-4 tw-mb-6 sm:tw-mb-8">
           <Link href="/">
             <Button variant="ghost" size="sm">
               ← Home
@@ -57,9 +58,9 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           </Link>
         </nav>
 
-        <header className="mb-6 sm:mb-8">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">{post.title}</h1>
-          <time className="text-muted-foreground">
+        <header className="tw-mb-6 sm:tw-mb-8">
+          <h1 className="tw-text-3xl sm:tw-text-4xl lg:tw-text-5xl tw-font-bold tw-mb-3 sm:tw-mb-4">{post.title}</h1>
+          <time className="tw-text-muted-foreground">
             {new Date(post.date).toLocaleDateString('en-US', {
               year: 'numeric',
               month: 'long',
@@ -67,7 +68,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
             })}
           </time>
           {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-4">
+            <div className="tw-flex tw-flex-wrap tw-gap-2 tw-mt-4">
               {post.tags.map((tag) => (
                 <Badge key={tag} variant="secondary">
                   {tag}
@@ -77,13 +78,13 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
           )}
         </header>
 
-        <Separator className="mb-6 sm:mb-8" />
+        <Separator className="tw-mb-6 sm:tw-mb-8" />
 
-        <div className="prose prose-slate dark:prose-invert max-w-none prose-headings:font-bold prose-h1:text-3xl prose-h2:text-2xl prose-h3:text-xl prose-p:text-base prose-p:leading-7 prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-code:text-sm prose-pre:bg-muted">
+        <div className="tw-prose tw-prose-slate dark:tw-prose-invert tw-max-w-none tw-prose-headings:font-bold tw-prose-h1:text-3xl tw-prose-h2:text-2xl tw-prose-h3:text-xl tw-prose-p:text-base tw-prose-p:leading-7 tw-prose-a:text-primary tw-prose-a:no-underline hover:tw-prose-a:underline tw-prose-code:text-sm tw-prose-pre:bg-muted">
           <MDXRemote source={post.content} />
         </div>
 
-        <Separator className="my-8 sm:my-12" />
+        <Separator className="tw-my-8 sm:tw-my-12" />
 
         <footer>
           <Link href="/blog">

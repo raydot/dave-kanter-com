@@ -236,10 +236,13 @@ const Portfolio = () => {
 
       <style jsx>{`
         .portfolio-container {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
           width: 100%;
           max-width: 1200px;
           margin: 0 auto;
-          padding: 2rem 0;
+          padding: 2rem 1rem;
         }
 
         .portfolio-filters {
@@ -302,9 +305,11 @@ const Portfolio = () => {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
           justify-content: center;
+          justify-items: center;
           gap: 1rem;
           perspective: 1000px;
           align-items: start;
+          width: 100%;
         }
 
         @media (min-width: 768px) {
