@@ -1,3 +1,10 @@
+## [2.5.2](https://github.com/raydot/dave-kanter-com/compare/v2.5.1...v2.5.2) (2025-12-14)
+
+
+### Bug Fixes
+
+* simplify robots.txt to work with Cloudflare managed content ([ec644d2](https://github.com/raydot/dave-kanter-com/commit/ec644d200f4daa3edfae6fd11937919e112658ee))
+
 ## [2.5.1](https://github.com/raydot/dave-kanter-com/compare/v2.5.0...v2.5.1) (2025-12-14)
 
 
