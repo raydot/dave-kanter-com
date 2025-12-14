@@ -4,49 +4,59 @@ import projectsData from '../data/Projects.json'
 
 const Portfolio = () => {
   const [activeFilter, setActiveFilter] = useState('All')
-  const [filteredProjects, setFilteredProjects] = useState([])
   const [isLoaded, setIsLoaded] = useState(false)
 
   // Category color mapping
   const categoryColors = {
-    'Multimedia': '#FF6B35',
-    'Retail': '#4ECDC4', 
-    'Frontend': '#3498DB',
+    Multimedia: '#FF6B35',
+    Retail: '#4ECDC4',
+    Frontend: '#3498DB',
     'Small Biz': '#9B59B6',
-    'Mobile': '#E67E22',
-    'Fullstack': '#27AE60',
-    'Enterprise': '#8E44AD'
+    Mobile: '#E67E22',
+    Fullstack: '#27AE60',
+    Enterprise: '#8E44AD',
   }
 
   // Memoize projects to prevent recreation on every render
-  const projects = useMemo(() => 
-    projectsData.filter(project => project.lead === "true"), []
-  )
-  
-  const categories = useMemo(() => 
-    ['All', ...new Set(projects.flatMap(project => 
-      Array.isArray(project.category) ? project.category : [project.category]
-    ))], [projects]
+  const projects = useMemo(
+    () => projectsData.filter((project) => project.lead === 'true'),
+    []
   )
 
+  const categories = useMemo(
+    () => [
+      'All',
+      ...new Set(
+        projects.flatMap((project) =>
+          Array.isArray(project.category)
+            ? project.category
+            : [project.category]
+        )
+      ),
+    ],
+    [projects]
+  )
+
+  // Compute filtered projects directly from state
   useEffect(() => {
-    const filtered = activeFilter === 'All' 
-      ? projects 
-      : projects.filter(project => 
-          Array.isArray(project.category) 
+    // Trigger entrance animation
+    setTimeout(() => setIsLoaded(true), 100)
+  }, [])
+
+  // Derive filtered projects from activeFilter instead of storing in state
+  const computedFilteredProjects = useMemo(() => {
+    return activeFilter === 'All'
+      ? projects
+      : projects.filter((project) =>
+          Array.isArray(project.category)
             ? project.category.includes(activeFilter)
             : project.category === activeFilter
         )
-    
-    setFilteredProjects(filtered)
-    
-    // Trigger entrance animation
-    setTimeout(() => setIsLoaded(true), 100)
   }, [activeFilter, projects])
 
   const handleFilterChange = (category) => {
     if (category === activeFilter) return
-    
+
     setIsLoaded(false)
     setTimeout(() => {
       setActiveFilter(category)
@@ -97,63 +107,73 @@ const Portfolio = () => {
 
       {/* Projects Grid */}
       <div className="portfolio-grid">
-        {filteredProjects.map((project, index) => 
+        {computedFilteredProjects.map((project, index) =>
           project.src !== 'null' ? (
-            <div 
-              key={`${project.title}-${project.year}`} 
-              className={`portfolio-card ${isLoaded ? 'loaded' : ''} ${project.featured ? 'featured' : ''}`}
-              style={{ 
-                animationDelay: `${index * 0.1}s`
+            <div
+              key={`${project.title}-${project.year}`}
+              className={`portfolio-card ${isLoaded ? 'loaded' : ''} ${
+                project.featured ? 'featured' : ''
+              }`}
+              style={{
+                animationDelay: `${index * 0.1}s`,
               }}
             >
               <div className="card-content">
-                <div className="project-image-container" style={{ backgroundColor: project.bgColor || 'black' }}>
-                  <Image 
-                    fileName={project.src} 
-                    width={400} 
-                    height={300} 
-                    style={{ 
+                <div
+                  className="project-image-container"
+                  style={{ backgroundColor: project.bgColor || 'black' }}
+                >
+                  <Image
+                    fileName={project.src}
+                    width={400}
+                    height={300}
+                    style={{
                       maxWidth: '100%',
                       height: 'auto',
                       display: 'block',
                       margin: '0 auto',
-                      verticalAlign: 'top'
-                    }} 
-                    alt={project.alt} 
+                      verticalAlign: 'top',
+                    }}
+                    alt={project.alt}
                   />
                 </div>
-                
+
                 <div className="project-info">
                   <div className="project-header">
                     <h4 className="project-title">{project.title}</h4>
                     <span className="project-year">{project.year}</span>
                   </div>
-                  
+
                   <p className="project-description">{project.description}</p>
-                  
+
                   <div className="project-meta">
                     {Array.isArray(project.category) ? (
                       project.category.map((cat) => (
-                        <span 
+                        <span
                           key={cat}
-                          className="project-category" 
+                          className="project-category"
                           style={{ backgroundColor: categoryColors[cat] }}
                         >
                           {cat}
                         </span>
                       ))
                     ) : (
-                      <span className="project-category" style={{ backgroundColor: categoryColors[project.category] }}>
+                      <span
+                        className="project-category"
+                        style={{
+                          backgroundColor: categoryColors[project.category],
+                        }}
+                      >
                         {project.category}
                       </span>
                     )}
                   </div>
-                  
+
                   <div className="tech-details">
                     <div className="tech-tags">
                       {project.technologies.map((tech, techIndex) => (
                         <React.Fragment key={tech}>
-                          <span 
+                          <span
                             className="tech-tag"
                             style={{ animationDelay: `${techIndex * 0.05}s` }}
                           >
@@ -170,11 +190,13 @@ const Portfolio = () => {
               </div>
             </div>
           ) : (
-            <div 
-              key={`${project.title}-${project.year}`} 
-              className={`portfolio-card no-image ${isLoaded ? 'loaded' : ''} ${project.featured ? 'featured' : ''}`}
-              style={{ 
-                animationDelay: `${index * 0.1}s`
+            <div
+              key={`${project.title}-${project.year}`}
+              className={`portfolio-card no-image ${isLoaded ? 'loaded' : ''} ${
+                project.featured ? 'featured' : ''
+              }`}
+              style={{
+                animationDelay: `${index * 0.1}s`,
               }}
             >
               <div className="card-content">
@@ -183,38 +205,43 @@ const Portfolio = () => {
                     <span>🚀</span>
                   </div>
                 </div>
-                
+
                 <div className="project-info">
                   <div className="project-header">
                     <h4 className="project-title">{project.title}</h4>
                     <span className="project-year">{project.year}</span>
                   </div>
-                  
+
                   <p className="project-description">{project.description}</p>
-                  
+
                   <div className="project-meta">
                     {Array.isArray(project.category) ? (
                       project.category.map((cat) => (
-                        <span 
+                        <span
                           key={cat}
-                          className="project-category" 
+                          className="project-category"
                           style={{ backgroundColor: categoryColors[cat] }}
                         >
                           {cat}
                         </span>
                       ))
                     ) : (
-                      <span className="project-category" style={{ backgroundColor: categoryColors[project.category] }}>
+                      <span
+                        className="project-category"
+                        style={{
+                          backgroundColor: categoryColors[project.category],
+                        }}
+                      >
                         {project.category}
                       </span>
                     )}
                   </div>
-                  
+
                   <div className="tech-details">
                     <div className="tech-tags">
                       {project.technologies.map((tech, techIndex) => (
                         <React.Fragment key={tech}>
-                          <span 
+                          <span
                             className="tech-tag"
                             style={{ animationDelay: `${techIndex * 0.05}s` }}
                           >
@@ -271,7 +298,7 @@ const Portfolio = () => {
           background: transparent;
           color: #ffffff;
           cursor: pointer;
-          font-family: "Source Sans Pro", sans-serif;
+          font-family: 'Source Sans Pro', sans-serif;
           font-size: 1rem;
           font-weight: 300;
           letter-spacing: 0.2rem;
@@ -359,7 +386,6 @@ const Portfolio = () => {
           border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-
         .portfolio-card:hover {
           transform: scale(1.05);
           box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
@@ -376,8 +402,6 @@ const Portfolio = () => {
           margin: 0;
           line-height: 0;
         }
-
-
 
         .no-image-placeholder {
           height: 250px;
@@ -396,7 +420,12 @@ const Portfolio = () => {
           left: -100%;
           width: 100%;
           height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.2),
+            transparent
+          );
           animation: shimmer 2s infinite;
         }
 
@@ -459,7 +488,6 @@ const Portfolio = () => {
           text-transform: uppercase;
           letter-spacing: 0.05rem;
         }
-
 
         .tech-details {
           display: flex;
@@ -546,13 +574,22 @@ const Portfolio = () => {
         }
 
         @keyframes shimmer {
-          0% { left: -100%; }
-          100% { left: 100%; }
+          0% {
+            left: -100%;
+          }
+          100% {
+            left: 100%;
+          }
         }
 
         @keyframes pulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.05); }
+          0%,
+          100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.05);
+          }
         }
 
         @keyframes popIn {
@@ -579,16 +616,16 @@ const Portfolio = () => {
             min-width: 10rem;
             max-width: 100%;
           }
-          
+
           .portfolio-filters > ul li {
             border-left: 0;
             border-top: 0;
           }
-          
+
           .portfolio-filters > ul li:first-child {
             border-top: 0;
           }
-          
+
           .portfolio-filters > ul li button {
             height: 3rem;
             line-height: 3rem;
@@ -603,11 +640,11 @@ const Portfolio = () => {
             grid-template-columns: 1fr;
             gap: 1.5rem;
           }
-          
+
           // .portfolio-card {
           //   height: 400px;
           // }
-          
+
           .project-info {
             padding: 1rem;
           }
