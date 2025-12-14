@@ -1,3 +1,10 @@
+# [2.5.0](https://github.com/raydot/dave-kanter-com/compare/v2.4.0...v2.5.0) (2025-12-14)
+
+
+### Features
+
+* add security headers, fix robots.txt, optimize JavaScript bundle ([ca542eb](https://github.com/raydot/dave-kanter-com/commit/ca542eb85fcaea7db9ad5d59176515f9165ef54d))
+
 # [2.4.0](https://github.com/raydot/dave-kanter-com/compare/v2.3.0...v2.4.0) (2025-12-14)
 
 
