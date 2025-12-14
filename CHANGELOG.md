@@ -1,3 +1,10 @@
+# [2.4.0](https://github.com/raydot/dave-kanter-com/compare/v2.3.0...v2.4.0) (2025-12-14)
+
+
+### Features
+
+* upgrade to Next.js 16 LTS and resolve CVE-2025-66478 ([df53079](https://github.com/raydot/dave-kanter-com/commit/df53079147bc21f903deb5f6e8f9ed740d55def5))
+
 # [2.3.0](https://github.com/raydot/dave-kanter-com/compare/v2.2.1...v2.3.0) (2025-11-10)
 
 
