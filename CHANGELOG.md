@@ -1,3 +1,10 @@
+## [2.5.1](https://github.com/raydot/dave-kanter-com/compare/v2.5.0...v2.5.1) (2025-12-14)
+
+
+### Bug Fixes
+
+* update CSP to allow Cloudflare Insights and remove deprecated swcMinify ([4e95ab2](https://github.com/raydot/dave-kanter-com/commit/4e95ab29d1d202bb71f3ed86b8e8ca9b1fc7b02b))
+
 # [2.5.0](https://github.com/raydot/dave-kanter-com/compare/v2.4.0...v2.5.0) (2025-12-14)
 
 
