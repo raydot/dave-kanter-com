@@ -129,26 +129,42 @@
 
 .message {
   display: flex;
+  flex-direction: column;
+  gap: 4px;
 
   &.user {
-    justify-content: flex-end;
+    align-items: flex-end;
 
     .messageContent {
       background: rgba(66, 135, 245, 0.2);
       border: 1px solid rgba(66, 135, 245, 0.4);
       color: #ffffff;
     }
+
+    .timestamp {
+      text-align: right;
+    }
   }
 
   &.assistant {
-    justify-content: flex-start;
+    align-items: flex-start;
 
     .messageContent {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       color: rgba(255, 255, 255, 0.9);
     }
+
+    .timestamp {
+      text-align: left;
+    }
   }
+}
+
+.timestamp {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+  padding: 0 4px;
 }
 
 .messageContent {
