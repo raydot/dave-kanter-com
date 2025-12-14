@@ -6,7 +6,6 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   // Modern JavaScript output
-  swcMinify: true,
   modularizeImports: {
     '@/components': {
       transform: '@/components/{{member}}',
@@ -119,7 +118,7 @@ const nextConfig = {
           {
             key: 'Content-Security-Policy',
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.anthropic.com; frame-ancestors 'self';",
+              "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://fonts.googleapis.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://api.anthropic.com https://cloudflareinsights.com; frame-ancestors 'self';",
           },
           {
             key: 'Cross-Origin-Opener-Policy',
