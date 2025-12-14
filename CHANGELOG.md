@@ -1,3 +1,10 @@
+# [2.6.0](https://github.com/raydot/dave-kanter-com/compare/v2.5.3...v2.6.0) (2025-12-14)
+
+
+### Features
+
+* comprehensive accessibility improvements for AskDave AI chat ([8b124d4](https://github.com/raydot/dave-kanter-com/commit/8b124d4d0da697a963f4e33761679b617eea3a0c))
+
 ## [2.5.3](https://github.com/raydot/dave-kanter-com/compare/v2.5.2...v2.5.3) (2025-12-14)
 
 
