@@ -1,3 +1,11 @@
+## [2.5.3](https://github.com/raydot/dave-kanter-com/compare/v2.5.2...v2.5.3) (2025-12-14)
+
+
+### Bug Fixes
+
+* improve landing page layout and navigation ([a87659b](https://github.com/raydot/dave-kanter-com/commit/a87659b98e20c6230afc4725a5c20c2ecbd86b99))
+* improve landing page layout and navigation ([3dd7d12](https://github.com/raydot/dave-kanter-com/commit/3dd7d124e3f42f5b9e7f8efbe45ed09b18232317))
+
 ## [2.5.2](https://github.com/raydot/dave-kanter-com/compare/v2.5.1...v2.5.2) (2025-12-14)
 
 
