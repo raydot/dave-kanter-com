@@ -1,3 +1,10 @@
+## [2.6.4](https://github.com/raydot/dave-kanter-com/compare/v2.6.3...v2.6.4) (2025-12-15)
+
+
+### Bug Fixes
+
+* finalize contact form recipient as Gmail address ([090fc39](https://github.com/raydot/dave-kanter-com/commit/090fc397641ba1ab8460d1b60bd14b030f11a0db))
+
 ## [2.6.3](https://github.com/raydot/dave-kanter-com/compare/v2.6.2...v2.6.3) (2025-12-15)
 
 
