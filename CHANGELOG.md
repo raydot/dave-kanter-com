@@ -1,3 +1,10 @@
+## [2.6.1](https://github.com/raydot/dave-kanter-com/compare/v2.6.0...v2.6.1) (2025-12-15)
+
+
+### Bug Fixes
+
+* improve blog color contrast for accessibility ([50ced88](https://github.com/raydot/dave-kanter-com/commit/50ced88bbbbb5058f36a85ebf3c0864ded6b03d6)), closes [#dcdcdc](https://github.com/raydot/dave-kanter-com/issues/dcdcdc)
+
 # [2.6.0](https://github.com/raydot/dave-kanter-com/compare/v2.5.3...v2.6.0) (2025-12-14)
 
 
