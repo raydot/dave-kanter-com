@@ -1,3 +1,10 @@
+## [2.6.2](https://github.com/raydot/dave-kanter-com/compare/v2.6.1...v2.6.2) (2025-12-15)
+
+
+### Bug Fixes
+
+* add detailed error logging for rate limiting and API failures ([2f9d65f](https://github.com/raydot/dave-kanter-com/commit/2f9d65f904a5c6da6dd17033924ae5dce838d553))
+
 ## [2.6.1](https://github.com/raydot/dave-kanter-com/compare/v2.6.0...v2.6.1) (2025-12-15)
 
 
