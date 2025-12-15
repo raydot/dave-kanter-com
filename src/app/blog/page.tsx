@@ -41,7 +41,9 @@ export default function BlogPage() {
         </nav>
 
         <header className="tw-mb-8 sm:tw-mb-12">
-          <h1 className="tw-text-3xl sm:tw-text-4xl tw-font-bold tw-mb-3 sm:tw-mb-4">Blog</h1>
+          <h1 className="tw-text-3xl sm:tw-text-4xl tw-font-bold tw-mb-3 sm:tw-mb-4">
+            Blog
+          </h1>
           <p className="tw-text-muted-foreground tw-text-base sm:tw-text-lg">
             Thoughts on AI/ML engineering, web development, and technical
             leadership
@@ -65,7 +67,7 @@ export default function BlogPage() {
                     <div className="tw-flex tw-items-start tw-justify-between tw-gap-4">
                       <div className="tw-flex-1">
                         <Link href={`/blog/${post.slug}`}>
-                          <CardTitle className="tw-text-2xl tw-mb-2 hover:tw-text-primary tw-transition-colors tw-cursor-pointer">
+                          <CardTitle className="tw-text-2xl tw-mb-2 hover:tw-opacity-70 tw-transition-opacity tw-cursor-pointer">
                             {post.title}
                           </CardTitle>
                         </Link>
@@ -91,7 +93,9 @@ export default function BlogPage() {
                     )}
                   </CardHeader>
                   <CardContent>
-                    <p className="tw-text-muted-foreground tw-mb-4">{post.excerpt}</p>
+                    <p className="tw-text-muted-foreground tw-mb-4">
+                      {post.excerpt}
+                    </p>
                     <Link href={`/blog/${post.slug}`}>
                       <Button variant="outline">Read more →</Button>
                     </Link>
