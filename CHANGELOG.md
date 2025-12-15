@@ -1,3 +1,10 @@
+## [2.7.2](https://github.com/raydot/dave-kanter-com/compare/v2.7.1...v2.7.2) (2025-12-15)
+
+
+### Bug Fixes
+
+* added title to blog. ([853beb0](https://github.com/raydot/dave-kanter-com/commit/853beb0e21d3ca5c68e2957ebb9fd4cfef41f9b3))
+
 ## [2.7.1](https://github.com/raydot/dave-kanter-com/compare/v2.7.0...v2.7.1) (2025-12-15)
 
 
