@@ -34,7 +34,11 @@ export async function generateMetadata({
   }
 }
 
-export default async function BlogPost({ params }: { params: Promise<{ slug: string }> }) {
+export default async function BlogPost({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
   const { slug } = await params
   const post = getPostBySlug(slug)
 
@@ -59,7 +63,9 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
         </nav>
 
         <header className="tw-mb-6 sm:tw-mb-8">
-          <h1 className="tw-text-3xl sm:tw-text-4xl lg:tw-text-5xl tw-font-bold tw-mb-3 sm:tw-mb-4">{post.title}</h1>
+          <h1 className="tw-text-3xl sm:tw-text-4xl lg:tw-text-5xl tw-font-bold tw-mb-3 sm:tw-mb-4">
+            {post.title}
+          </h1>
           <time className="tw-text-muted-foreground">
             {new Date(post.date).toLocaleDateString('en-US', {
               year: 'numeric',
@@ -80,7 +86,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
         <Separator className="tw-mb-6 sm:tw-mb-8" />
 
-        <div className="tw-prose tw-prose-slate dark:tw-prose-invert tw-max-w-none tw-prose-headings:font-bold tw-prose-h1:text-3xl tw-prose-h2:text-2xl tw-prose-h3:text-xl tw-prose-p:text-base tw-prose-p:leading-7 tw-prose-a:text-primary tw-prose-a:no-underline hover:tw-prose-a:underline tw-prose-code:text-sm tw-prose-pre:bg-muted">
+        <div className="tw-prose tw-prose-invert tw-max-w-none tw-prose-headings:tw-text-foreground tw-prose-headings:font-bold tw-prose-h1:text-3xl tw-prose-h2:text-2xl tw-prose-h3:text-xl tw-prose-p:tw-text-foreground tw-prose-p:text-base tw-prose-p:leading-7 tw-prose-strong:tw-text-foreground tw-prose-li:tw-text-foreground tw-prose-a:text-primary tw-prose-a:no-underline hover:tw-prose-a:underline tw-prose-code:text-sm tw-prose-pre:bg-muted">
           <MDXRemote source={post.content} />
         </div>
 
@@ -88,9 +94,7 @@ export default async function BlogPost({ params }: { params: Promise<{ slug: str
 
         <footer>
           <Link href="/blog">
-            <Button variant="outline">
-              ← Back to Blog
-            </Button>
+            <Button variant="outline">← Back to Blog</Button>
           </Link>
         </footer>
       </article>
