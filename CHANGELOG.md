@@ -1,3 +1,10 @@
+## [2.7.1](https://github.com/raydot/dave-kanter-com/compare/v2.7.0...v2.7.1) (2025-12-15)
+
+
+### Bug Fixes
+
+* updated the blog post for the last time. ([84c0bb6](https://github.com/raydot/dave-kanter-com/commit/84c0bb61b8286179e9f9192ba0899fafeb558927))
+
 # [2.7.0](https://github.com/raydot/dave-kanter-com/compare/v2.6.4...v2.7.0) (2025-12-15)
 
 
