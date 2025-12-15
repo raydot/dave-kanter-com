@@ -9,7 +9,7 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 })
 
-export async function askDave(question: string): Promise<{ 
+export async function askDave(question: string): Promise<{
   success: boolean
   message: string
   remaining?: number
@@ -35,11 +35,24 @@ export async function askDave(question: string): Promise<{
     const forwarded = headersList.get('x-forwarded-for')
     const realIP = headersList.get('x-real-ip')
     const cfConnectingIP = headersList.get('cf-connecting-ip')
-    
-    const ip = cfConnectingIP || realIP || forwarded?.split(',')[0].trim() || 'unknown'
-    
-    const { success, remaining } = await ratelimit.limit(ip)
-    
+
+    const ip =
+      cfConnectingIP || realIP || forwarded?.split(',')[0].trim() || 'unknown'
+
+    let rateLimitResult
+    try {
+      rateLimitResult = await ratelimit.limit(ip)
+    } catch (error) {
+      console.error('Rate limit error:', error)
+      return {
+        success: false,
+        message:
+          'Rate limiting service unavailable. Please check Redis configuration.',
+      }
+    }
+
+    const { success, remaining } = rateLimitResult
+
     if (!success) {
       return {
         success: false,
@@ -62,7 +75,7 @@ export async function askDave(question: string): Promise<{
     })
 
     const answer = response.content[0]
-    
+
     if (answer.type === 'text') {
       return {
         success: true,

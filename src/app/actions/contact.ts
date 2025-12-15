@@ -68,9 +68,22 @@ export async function submitContactForm(formData: {
     const realIP = headersList.get('x-real-ip')
     const cfConnectingIP = headersList.get('cf-connecting-ip')
 
-    const ip = cfConnectingIP || realIP || forwarded?.split(',')[0].trim() || 'unknown'
+    const ip =
+      cfConnectingIP || realIP || forwarded?.split(',')[0].trim() || 'unknown'
 
-    const { success, remaining } = await contactRatelimit.limit(ip)
+    let rateLimitResult
+    try {
+      rateLimitResult = await contactRatelimit.limit(ip)
+    } catch (error) {
+      console.error('Rate limit error:', error)
+      return {
+        success: false,
+        message:
+          'Rate limiting service unavailable. Please check Redis configuration.',
+      }
+    }
+
+    const { success, remaining } = rateLimitResult
 
     if (!success) {
       return {
