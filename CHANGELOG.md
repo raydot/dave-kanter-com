@@ -1,3 +1,10 @@
+# [2.7.0](https://github.com/raydot/dave-kanter-com/compare/v2.6.4...v2.7.0) (2025-12-15)
+
+
+### Features
+
+* add blog and accessibility content to chatbot context ([c25475b](https://github.com/raydot/dave-kanter-com/commit/c25475bb7f328bb5f5bdf2a979809c0f70b80e4a))
+
 ## [2.6.4](https://github.com/raydot/dave-kanter-com/compare/v2.6.3...v2.6.4) (2025-12-15)
 
 
