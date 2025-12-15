@@ -1,3 +1,11 @@
+## [2.6.3](https://github.com/raydot/dave-kanter-com/compare/v2.6.2...v2.6.3) (2025-12-15)
+
+
+### Bug Fixes
+
+* improve blog title hover visibility with opacity instead of dark color ([654c12b](https://github.com/raydot/dave-kanter-com/commit/654c12b8c7b707a73cbc05c48df3695aff39cdc8))
+* improve blog title hover visibility with opacity instead of dark color ([e015dc1](https://github.com/raydot/dave-kanter-com/commit/e015dc10920e4ea57d8092516d7f026db4b6c690))
+
 ## [2.6.2](https://github.com/raydot/dave-kanter-com/compare/v2.6.1...v2.6.2) (2025-12-15)
 
 
