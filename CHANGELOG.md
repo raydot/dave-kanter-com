@@ -1,3 +1,10 @@
+## [2.8.4](https://github.com/raydot/dave-kanter-com/compare/v2.8.3...v2.8.4) (2026-01-04)
+
+
+### Bug Fixes
+
+* use double quotes in YAML frontmatter to avoid escape sequence errors ([8d454ad](https://github.com/raydot/dave-kanter-com/commit/8d454ade872265115987c4d87f075a8d2468f43c))
+
 ## [2.8.3](https://github.com/raydot/dave-kanter-com/compare/v2.8.2...v2.8.3) (2026-01-04)
 
 
