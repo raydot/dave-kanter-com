@@ -1,3 +1,10 @@
+## [2.8.3](https://github.com/raydot/dave-kanter-com/compare/v2.8.2...v2.8.3) (2026-01-04)
+
+
+### Bug Fixes
+
+* convert tags to inline YAML syntax ([9c6e9ae](https://github.com/raydot/dave-kanter-com/commit/9c6e9aefbbb3ab3e26c3cd685dc3d9beee42faa5))
+
 ## [2.8.2](https://github.com/raydot/dave-kanter-com/compare/v2.8.1...v2.8.2) (2026-01-04)
 
 
