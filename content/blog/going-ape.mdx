@@ -1,0 +1,355 @@
+---
+title: 'Going APE in the Age of Claude'
+date: '2026-01-03'
+excerpt: 'If any road Claude picks will get you where you're going, you might as well enjoy the ride.'
+tags:
+  - Claude
+  - AI
+  - LLMs
+  - Physics
+  - Agents
+  - Agentic
+  - Research
+  
+---
+
+# Building APE: When Your Physics Engine Teaches You About Research, while Claude Strokes your Ego
+
+**January 2025**
+
+---
+
+## The Original Plan
+
+I wanted to learn how agentic AI systems work. I know what it means, I use them all the time, but I hadn't actually built one myself.
+
+I needed a domain that was:
+
+- Simple enough to prototype quickly
+- Complex enough to be interesting
+- Objectively verifiable (no subjective "good enough")
+
+Physics seemed perfect. Collisions have right answers. Conservation laws are non-negotiable.
+
+So I fired up Claude Sonnet, and together we came up with the idea to build APE (Agentic Physics Engine): a system where LLM-powered agents predict collision outcomes, and a symbolic resolver validates their physics.
+
+**Goal:** Learn about multi-agent architectures.
+
+**Small Surprise:** I accidentally ran a research experiment.
+
+**Big Surprise:** I let Claude talk me into it!
+
+---
+
+## The Architecture
+
+### Core Components
+
+**Agents (LLM-powered)**
+
+- Each ball is an autonomous agent
+- When two balls collide, both agents predict the outcome
+- Agents can retrieve similar past collisions for few-shot learning
+
+**Resolver (Symbolic validation)**
+
+- Receives both agents' proposals
+- Checks conservation of momentum and energy
+- Accepts if error < 5%, otherwise imposes ground truth
+
+**Experience Store (Qdrant vector DB)**
+
+- Stores every collision
+- Enables similarity search for learning
+
+**Flow:**
+
+```
+
+Collision → Agents propose → Resolver validates →
+Apply (if valid) OR impose ground truth (if invalid) → Store experience
+
+```
+
+### Why This Design?
+
+I (Claude)wanted to separate agent capability from system reliability. The resolver ensures the physics is always correct, even when agents are wrong. This let me (us) measure agent accuracy independently. Which seemed like a pretty good idea to me. Except that I failed to notice the Prime Mover had become the moved.
+
+---
+
+## The Implementation
+
+**Tech stack:**
+
+- Python 3.12
+- OpenAI/Anthropic/Google SDKs (for LLMs)
+- Qdrant (vector database)
+- NumPy (physics calculations)
+- MLflow (experiment tracking)
+
+**Development time:** ~24 hours for core system + first experiments
+
+---
+
+## The Experiments
+
+I tested three models on two scenarios:
+
+### Models
+
+- **GPT-4o-mini** (OpenAI, general purpose)
+- **Gemini-2.0-Flash** (Google, scientific training)
+- **Qwen-72B-Turbo** (Alibaba, Chinese physics curriculum)
+
+### Scenarios
+
+**Newton's Cradle (1D)**
+
+- 5 balls in a line
+- First ball moving at 2 m/s, others at rest
+- Head-on elastic collisions
+- Expected: momentum transfers through chain
+
+**Billiards (2D)**
+
+- 6 balls in converging ring
+- Random velocities toward center
+- Angled collisions requiring vector decomposition
+- Expected: multiple 2D collisions
+
+### Conditions
+
+**Baseline:** Agents reason from first principles
+
+**Learning:** Agents retrieve 3 similar past collisions for few-shot examples
+
+---
+
+## The Results
+
+| Model       | 1D Baseline | 1D Learning | 2D Baseline | 2D Learning |
+| ----------- | ----------- | ----------- | ----------- | ----------- |
+| GPT-4o-mini | 47%         | 77% (+30pp) | 5%          | 1% (-4pp)   |
+| Gemini-2.0  | 48%         | 68% (+20pp) | —           | —           |
+| Qwen-72B    | **100%**    | 96% (-4pp)  | **8%**      | 4% (-4pp)   |
+
+**The Qwen surprise:** Perfect accuracy on Newton's Cradle (100%), catastrophic failure on billiards (8%).
+
+**The learning paradox:** Experience retrieval helps simple cases (+30pp for GPT in 1D) but hurts complex cases (-4pp across all models in 2D).
+
+## Which is _interesting,_ but I probably could have figured it out but just taking a closer look at the Qwen-72B training data.
+
+## What I Thought I'd Found
+
+Here's where I really started to defer to Claude, who (which? that?) all of a suddenly convinced me that I'd come across something publishable as research.
+
+**Initial interpretation:** "Training data enables memorization, not reasoning!"
+
+Qwen clearly has Newton's Cradle in its training data (standard Chinese physics curriculum). It recalls the solution perfectly. But that knowledge doesn't transfer to novel 2D scenarios.
+
+**The paper I almost wrote:** "The Dimensionality Barrier in LLM Physics Reasoning"
+
+Focus: Proving LLMs can't do physics, quantifying the 1D→2D performance cliff, showing memorization vs. reasoning.
+
+---
+
+## The Crossroads
+
+Then I asked myself two hard questions:
+
+### Question 1: Am I (are we) Testing Something Obvious?
+
+We already know LLMs are bad at multi-step numerical reasoning. We already know transformers aren't designed for arithmetic precision. We already know that hybrid approaches (LLM + symbolic validation) are necessary.
+
+So what did I actually prove? That Qwen memorized a canonical example? That 2D is harder than 1D? That tools like Wolfram Alpha + ChatGPT exist for a reason?
+
+**The uncomfortable truth:** I quantified known limitations. That's not nothing, but is it a contribution?
+
+**The more uncomfortable truth:** I let Claude pull me down a primrose path. He (it) was SO excited be the results that I too got caught up in the excitement. A bit of arrogance took over too -- I know how to write research papers, so how could I be wrong about this? All I was doing was proving the provable, but Claude's enthusiasm and flowerly approval kept me from seeing this obvious point.
+
+### Question 2: Is 1D vs 2D Too Coarse?
+
+I tested two scenarios:
+
+- Simplest possible case (1D head-on, equal mass, elastic)
+- Complex case (2D random angles, multiple collisions)
+
+What about the gradient between them?
+
+- 1D with different masses?
+- 2D with small angles (5°, 10°, 20°)?
+- Which specific step in the calculation breaks down?
+
+**I jumped from trivial to complex without mapping the space in between.**
+
+And this was the big _aha!_ and true value of the entire experiment. I'd taken an LLM out to a kind of limit that I wouldn't have found via the everyday coding I do with it. But here -- here! -- is an interesting limit. I'd found the question of _where_ exactly the breakdown occurs. This helps me see a bright, sharp, clear edge from both sides of the boundary: where did the system I was building fail, and where did the system I was using to build it fail? Claude had failed to see any of these limitations on its own, and I of course should not have expected it to.
+
+Clearly I was far too willing to surrender my judgment to the LLM. Something I've warned plenty of others about.
+
+---
+
+## The Realization
+
+My original goal was to learn about agentic architectures. I built a working multi-agent system with validation. The physics was just an arbitrary example domain.
+
+**The findings about LLMs:** Expected, coarse-grained, not particularly novel
+
+**The architecture itself:** Working, measurable, extensible, potentially valuable
+
+**I was asking the wrong research question.**
+
+Not: "Can LLMs do physics?" (Answer: Obviously not)
+
+But: "How do we build reliable agentic systems from unreliable components?"
+
+And: "How do we overcome our own unreliability?!"
+
+---
+
+## What Actually Matters
+
+APE demonstrates three architectural patterns:
+
+**1. Multi-agent negotiation**
+
+- Both agents propose (not just one prediction)
+- Could extend to 3+ agents voting
+- Tests whether agents can agree
+
+**2. Objective validation**
+
+- Symbolic layer catches all errors
+- System maintains correctness despite agent failures
+- Agent accuracy: 5-100%, System accuracy: 95-100%
+
+**3. Experience-based learning**
+
+- Semantic similarity for retrieval
+- Measurable impact (helps simple, hurts complex)
+- Could be improved (better similarity metrics, selection strategies)
+
+**The real contribution isn't proving LLMs fail. It's showing that architecture can compensate for those failures.**
+
+---
+
+## What I Haven't Tested
+
+The obvious next experiments:
+
+**Better prompting:**
+
+- Chain-of-thought ("think step-by-step")
+- Self-consistency (sample 5x, vote on answer)
+- Role prompting ("You are a physics PhD...")
+
+**Tool use:**
+
+- Give agents Python/NumPy for calculations
+- LLM reasons about physics, tool does arithmetic
+- Expected: 60-80% accuracy vs. current 5-8%
+
+**Iterative refinement:**
+
+- Validator provides feedback on rejections
+- Agent gets one retry with error message
+- Expected: 15-25% improvement
+
+**Multi-agent variations:**
+
+- 3+ agents vote on outcome
+- Specialist agents (one for 1D, one for 2D)
+- Hierarchical (propose → validate → refine)
+
+**I built the infrastructure to test these. I just haven't run the experiments yet.**
+
+**Better Me**
+
+- Trust your instincts
+- Remember your training
+- The AI is not the boss!
+
+---
+
+## The Question
+
+I'm at a fork in the road:
+
+**Path A: Publish what I have**
+
+- Accept it's a limited study
+- "We quantified LLM physics limitations"
+- Workshop paper, blog post, move on
+
+**Path B: Improve the architecture**
+
+- Test CoT, tool use, iterative refinement
+- "We found patterns that make agents reliable"
+- Focus on engineering insights, not LLM failures
+
+**Path C: Map the space systematically**
+
+- Test complexity gradient (1D → 1.5D → 2D)
+- Find exact threshold where performance cliffs
+- Decompose which specific step breaks
+- Full research paper, 2-3 more weeks
+
+** I'm honestly not at any crossroads here. Clearly the win is improving the architecture and agents that result from that architecture. **
+
+---
+
+## What I'm Leaning Toward
+
+Path B appeals most. My original goal was to learn about agentic systems. The value is in the architecture.
+
+**New focus:** How do architectural choices affect reliability?
+
+**New experiments:** Test 5-10 variations, measure improvements, identify patterns
+
+**New paper:** "Building Reliable Agentic Systems: Architectural Patterns for LLM-Based Physics"
+
+**Even better new paper:** "Don't let Claude talk you into writing a paper!"
+
+**Contribution:** Not "LLMs fail" (obvious) but "Here's how to make them work anyway" (useful)
+
+**Better Contribution** "How humans fail in the age of LLM's"
+
+---
+
+## The Lesson
+
+I thought I was building a toy physics engine. I ended up with:
+
+- A working multi-agent platform
+- 80+ trials across 3 models and 2 scenarios
+- Evidence that training data ≠ reasoning ability
+- A crossroads between research directions
+
+**What started as "learn how agents work" became "accidentally design an experiment" which became "realize the architecture is more interesting than the findings."**
+
+The code is done. The infrastructure is reusable. The question now is what to do with it.
+
+I know what do with it! It's claude that's confused!
+
+---
+
+## Next Steps
+
+This week I'm implementing:
+
+1. Chain-of-thought prompting (2 hours)
+2. Basic tool use for arithmetic (3 hours)
+3. Preliminary comparison (3 hours)
+
+If those show promise, I'll run the full architectural comparison study.
+
+If not, I'll write up what I have and move on.
+
+Either way, I learned what I wanted to learn: how to build an agentic system, measure its behavior, and think critically about what the results actually mean.
+
+**Code:** [github.com/raydot/APE](https://github.com/raydot/APE)
+
+**Status:** Work in progress, crossroads ahead, personal growth likely, but not guaranteed.
+
+---
+
+_This is an engineering blog about building APE, not a research paper. The experiments happened. The data is real. The interpretation is still being figured out._

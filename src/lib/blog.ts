@@ -10,6 +10,7 @@ export interface BlogPost {
   date: string
   excerpt: string
   tags?: string[]
+  publish?: boolean
   content: string
 }
 
@@ -22,16 +23,16 @@ export function getAllPosts(): BlogPost[] {
   const fileNames = fs.readdirSync(postsDirectory)
 
   const allPosts = fileNames
-    .filter(fileName => fileName.endsWith('.mdx'))
-    .map(fileName => {
+    .filter((fileName) => fileName.endsWith('.mdx'))
+    .map((fileName) => {
       const slug = fileName.replace(/\.mdx$/, '')
       const fullPath = path.join(postsDirectory, fileName)
       const fileContents = fs.readFileSync(fullPath, 'utf8')
       const { data, content } = matter(fileContents)
-      
+
       // Get file stats for creation time
       const stats = fs.statSync(fullPath)
-      
+
       // If date doesn't include time, append file creation time
       let postDate = data.date
       if (postDate && !postDate.includes('T')) {
@@ -49,9 +50,11 @@ export function getAllPosts(): BlogPost[] {
         date: postDate,
         excerpt: data.excerpt,
         tags: data.tags || [],
+        publish: data.publish !== false,
         content,
       }
     })
+    .filter((post) => post.publish)
 
   // Sort posts by date with time (newest first)
   return allPosts.sort((a, b) => {
