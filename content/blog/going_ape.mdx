@@ -1,7 +1,7 @@
 ---
 title: 'Going APE in the Age of Claude'
 date: '2026-01-03'
-excerpt: 'If any road Claude picks will get you where you're going, you might as well enjoy the ride.'
+excerpt: "If any road Claude picks will get you where you're going, you might as well enjoy the ride."
 tags:
   - Claude
   - AI
@@ -15,8 +15,6 @@ tags:
 # Building APE: When Your Physics Engine Teaches You About Research, while Claude Strokes your Ego
 
 **January 2025**
-
----
 
 ## The Original Plan
 
@@ -37,8 +35,6 @@ So I fired up Claude Sonnet, and together we came up with the idea to build APE 
 **Small Surprise:** I accidentally ran a research experiment.
 
 **Big Surprise:** I let Claude talk me into it!
-
----
 
 ## The Architecture
 
@@ -74,8 +70,6 @@ Apply (if valid) OR impose ground truth (if invalid) → Store experience
 
 I (Claude)wanted to separate agent capability from system reliability. The resolver ensures the physics is always correct, even when agents are wrong. This let me (us) measure agent accuracy independently. Which seemed like a pretty good idea to me. Except that I failed to notice the Prime Mover had become the moved.
 
----
-
 ## The Implementation
 
 **Tech stack:**
@@ -87,8 +81,6 @@ I (Claude)wanted to separate agent capability from system reliability. The resol
 - MLflow (experiment tracking)
 
 **Development time:** ~24 hours for core system + first experiments
-
----
 
 ## The Experiments
 
@@ -122,8 +114,6 @@ I tested three models on two scenarios:
 
 **Learning:** Agents retrieve 3 similar past collisions for few-shot examples
 
----
-
 ## The Results
 
 | Model       | 1D Baseline | 1D Learning | 2D Baseline | 2D Learning |
@@ -149,8 +139,6 @@ Qwen clearly has Newton's Cradle in its training data (standard Chinese physics 
 **The paper I almost wrote:** "The Dimensionality Barrier in LLM Physics Reasoning"
 
 Focus: Proving LLMs can't do physics, quantifying the 1D→2D performance cliff, showing memorization vs. reasoning.
-
----
 
 ## The Crossroads
 
@@ -185,8 +173,6 @@ And this was the big _aha!_ and true value of the entire experiment. I'd taken a
 
 Clearly I was far too willing to surrender my judgment to the LLM. Something I've warned plenty of others about.
 
----
-
 ## The Realization
 
 My original goal was to learn about agentic architectures. I built a working multi-agent system with validation. The physics was just an arbitrary example domain.
@@ -202,8 +188,6 @@ Not: "Can LLMs do physics?" (Answer: Obviously not)
 But: "How do we build reliable agentic systems from unreliable components?"
 
 And: "How do we overcome our own unreliability?!"
-
----
 
 ## What Actually Matters
 
@@ -228,8 +212,6 @@ APE demonstrates three architectural patterns:
 - Could be improved (better similarity metrics, selection strategies)
 
 **The real contribution isn't proving LLMs fail. It's showing that architecture can compensate for those failures.**
-
----
 
 ## What I Haven't Tested
 
@@ -267,8 +249,6 @@ The obvious next experiments:
 - Remember your training
 - The AI is not the boss!
 
----
-
 ## The Question
 
 I'm at a fork in the road:
@@ -294,8 +274,6 @@ I'm at a fork in the road:
 
 ** I'm honestly not at any crossroads here. Clearly the win is improving the architecture and agents that result from that architecture. **
 
----
-
 ## What I'm Leaning Toward
 
 Path B appeals most. My original goal was to learn about agentic systems. The value is in the architecture.
@@ -312,8 +290,6 @@ Path B appeals most. My original goal was to learn about agentic systems. The va
 
 **Better Contribution** "How humans fail in the age of LLM's"
 
----
-
 ## The Lesson
 
 I thought I was building a toy physics engine. I ended up with:
@@ -328,8 +304,6 @@ I thought I was building a toy physics engine. I ended up with:
 The code is done. The infrastructure is reusable. The question now is what to do with it.
 
 I know what do with it! It's claude that's confused!
-
----
 
 ## Next Steps
 
@@ -348,7 +322,5 @@ Either way, I learned what I wanted to learn: how to build an agentic system, me
 **Code:** [github.com/raydot/APE](https://github.com/raydot/APE)
 
 **Status:** Work in progress, crossroads ahead, personal growth likely, but not guaranteed.
-
----
 
 _This is an engineering blog about building APE, not a research paper. The experiments happened. The data is real. The interpretation is still being figured out._
