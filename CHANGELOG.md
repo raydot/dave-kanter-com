@@ -1,3 +1,10 @@
+## [2.8.1](https://github.com/raydot/dave-kanter-com/compare/v2.8.0...v2.8.1) (2026-01-04)
+
+
+### Bug Fixes
+
+* correct YAML frontmatter formatting in ethics post ([e4ffcae](https://github.com/raydot/dave-kanter-com/commit/e4ffcae1ce40cc77c04cd0f3c42d954efae07a74))
+
 # [2.8.0](https://github.com/raydot/dave-kanter-com/compare/v2.7.2...v2.8.0) (2026-01-04)
 
 
