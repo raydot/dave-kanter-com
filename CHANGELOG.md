@@ -1,3 +1,10 @@
+# [2.8.0](https://github.com/raydot/dave-kanter-com/compare/v2.7.2...v2.8.0) (2026-01-04)
+
+
+### Features
+
+* publish going-ape blog post and add draft filtering ([ed2c580](https://github.com/raydot/dave-kanter-com/commit/ed2c580d0dd0f0bc2daf91b05c2d1c4d8005f53a))
+
 ## [2.7.2](https://github.com/raydot/dave-kanter-com/compare/v2.7.1...v2.7.2) (2025-12-15)
 
 
