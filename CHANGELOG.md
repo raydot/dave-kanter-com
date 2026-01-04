@@ -1,3 +1,10 @@
+## [2.8.2](https://github.com/raydot/dave-kanter-com/compare/v2.8.1...v2.8.2) (2026-01-04)
+
+
+### Bug Fixes
+
+* remove trailing whitespace in going-ape frontmatter ([8c08544](https://github.com/raydot/dave-kanter-com/commit/8c08544868965a493a5333a0493178be27e3c1f8))
+
 ## [2.8.1](https://github.com/raydot/dave-kanter-com/compare/v2.8.0...v2.8.1) (2026-01-04)
 
 
