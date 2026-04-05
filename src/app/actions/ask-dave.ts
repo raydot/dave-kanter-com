@@ -90,10 +90,9 @@ export async function askDave(question: string): Promise<{
     }
   } catch (error) {
     console.error('Error in askDave:', error)
-    const errorMessage = error instanceof Error ? error.message : String(error)
     return {
       success: false,
-      message: `Debug error: ${errorMessage}`,
+      message: 'Sorry, I encountered an error. Please try again later.',
     }
   }
 }
