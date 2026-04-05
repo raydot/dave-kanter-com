@@ -1,0 +1,34 @@
+---
+title: 'The Missing Layer in LLM Agents'
+date: '2026-03-18'
+excerpt: 'TBD'
+tags:
+  - Ethics
+  - AI
+  - Economics
+  - Advertising
+  - Marketing
+  - Social Media
+---
+
+# The Missing Layer in LLM Agents
+
+## The Pledge
+
+Everyone building AI agents is focused on the wrong thing.
+
+The conversation in 2026 is about making LLMs smarter — better reasoning, longer context, more capable models.
+But there's a structural problem in how agents are built that no amount of model improvement fixes.
+It's an architectural problem, and it has a solution that has nothing to do with machine learning.
+
+## The Turn
+
+The problem is this: current LLM agents are almost entirely efferent. They reach out, call a tool, get a response, decide what to do next. The intelligence flows one direction — from model to world. The feedback path, the afferent path — environment to model — is an afterthought. Usually it's an unstructured error string that the LLM has to interpret itself. Sometimes it's nothing at all.
+This matters because you cannot build a reliable control loop without a reliable error signal. And you cannot get a reliable error signal by asking the system that produced the behavior to evaluate its own output. That's not reflection — that's confabulation. Asking an LLM whether its last action was correct is like trying to lift yourself off the ground by pulling up on both ends of a broomstick.
+The fix isn't a smarter model. It's a smarter sensor.
+
+## The Reveal
+
+What agents actually need is a layer between the environment and the LLM that does what sensors do in any well-engineered control system: observe continuously, filter for relevance, maintain a belief about the current state of the world, and push that belief to the controller before being asked. Not in response to a query. Not as a post-hoc evaluation. As a live, pre-processed signal that the LLM can act on without first having to interpret raw noise.
+This isn't a new idea in engineering. It's new in agent architecture. And the infrastructure to build it — MCP's SSE transport, typed error taxonomies, stateful server processes — already exists. What's missing is the design pattern that connects them.
+That pattern is what this piece is about.
