@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { useParams, useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 interface Post {
   id: string
@@ -62,7 +63,10 @@ export default function EditPostPage() {
       body: JSON.stringify({
         title,
         content: editor.getHTML(),
-        tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
+        tags: tags
+          .split(',')
+          .map((t) => t.trim())
+          .filter(Boolean),
         publish,
       }),
     })
@@ -100,12 +104,12 @@ export default function EditPostPage() {
       <div className="tw-max-w-3xl tw-mx-auto tw-px-4 tw-py-8">
         <div className="tw-flex tw-items-center tw-justify-between tw-mb-8">
           <h1 className="tw-text-3xl tw-font-bold">Edit Post</h1>
-
+          <Link
             href="/admin/posts"
             className="tw-text-sm tw-text-muted-foreground hover:tw-text-foreground"
           >
             ← All Posts
-          </a>
+          </Link>
         </div>
 
         <div className="tw-mb-6">
@@ -126,12 +130,18 @@ export default function EditPostPage() {
               <button
                 key={control}
                 onClick={() => {
-                  if (control === 'Bold') editor?.chain().focus().toggleBold().run()
-                  if (control === 'Italic') editor?.chain().focus().toggleItalic().run()
-                  if (control === 'H2') editor?.chain().focus().toggleHeading({ level: 2 }).run()
-                  if (control === 'H3') editor?.chain().focus().toggleHeading({ level: 3 }).run()
-                  if (control === 'Bullet list') editor?.chain().focus().toggleBulletList().run()
-                  if (control === 'Code') editor?.chain().focus().toggleCode().run()
+                  if (control === 'Bold')
+                    editor?.chain().focus().toggleBold().run()
+                  if (control === 'Italic')
+                    editor?.chain().focus().toggleItalic().run()
+                  if (control === 'H2')
+                    editor?.chain().focus().toggleHeading({ level: 2 }).run()
+                  if (control === 'H3')
+                    editor?.chain().focus().toggleHeading({ level: 3 }).run()
+                  if (control === 'Bullet list')
+                    editor?.chain().focus().toggleBulletList().run()
+                  if (control === 'Code')
+                    editor?.chain().focus().toggleCode().run()
                 }}
                 className="tw-px-3 tw-py-1 tw-text-sm tw-border tw-border-border tw-rounded hover:tw-bg-muted"
               >

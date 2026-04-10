@@ -67,4 +67,55 @@ export default function AdminPostsPage() {
                 key={post.id}
                 className="tw-flex tw-items-center tw-justify-between tw-p-4 tw-border tw-border-border tw-rounded"
               >
-                <div className="tw-flex-1 tw-min-w-0
+                <div className="tw-flex-1 tw-min-w-0">
+                  <div className="tw-flex tw-items-center tw-gap-3 tw-mb-1">
+                    <span
+                      className={`tw-text-xs tw-px-2 tw-py-0.5 tw-rounded-full ${
+                        post.publish
+                          ? 'tw-bg-green-500/20 tw-text-green-400'
+                          : 'tw-bg-yellow-500/20 tw-text-yellow-400'
+                      }`}
+                    >
+                      {post.publish ? 'Published' : 'Draft'}
+                    </span>
+                    <span className="tw-text-sm tw-text-muted-foreground">
+                      {new Date(post.created_at).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'short',
+                        day: 'numeric',
+                      })}
+                    </span>
+                  </div>
+                  <p className="tw-font-medium tw-truncate">{post.title}</p>
+                </div>
+                <div className="tw-flex tw-items-center tw-gap-2 tw-ml-4 tw-shrink-0">
+                  {post.publish && (
+
+                      href={`/blog/${post.slug}`}
+                      target="_blank"
+                      className="tw-text-sm tw-text-muted-foreground hover:tw-text-foreground"
+                    >
+                      View
+                    </a>
+                  )}
+                  <Link
+                    href={`/admin/posts/${post.id}`}
+                    className="tw-text-sm tw-text-primary hover:tw-opacity-70"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    onClick={() => deletePost(post.id, post.title)}
+                    className="tw-text-sm tw-text-red-400 hover:tw-opacity-70"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
