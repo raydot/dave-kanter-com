@@ -1,33 +1,24 @@
 import '../globals.css'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
-import { getPostBySlug, getAllPosts } from '@/lib/blog'
+import { getPostBySlug } from '@/lib/blog'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-
-// Generate static params for all posts
-export async function generateStaticParams() {
-  const posts = await getAllPosts()
-  return posts.map((post) => ({
-    slug: post.slug,
-  }))
-}
+import type { Metadata } from 'next'
 
 // Generate metadata for SEO
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>
-}) {
+}): Promise<Metadata> {
   const { slug } = await params
   const post = await getPostBySlug(slug)
-
   if (!post) {
     return {}
   }
-
   return {
     title: `${post.title} | Dave Kanter`,
     description: post.excerpt,
@@ -40,7 +31,7 @@ export default async function BlogPost({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const post = getPostBySlug(slug)
+  const post = await getPostBySlug(slug)
 
   if (!post) {
     notFound()
