@@ -88,7 +88,10 @@ ${star.result}
         title,
         content,
         excerpt: star.situation.slice(0, 160),
-        tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
+        tags: tags
+          .split(',')
+          .map((t) => t.trim())
+          .filter(Boolean),
         slug,
       }),
     })
@@ -109,11 +112,8 @@ ${star.result}
           <h1 className="tw-text-3xl tw-font-bold tw-mb-4">Published! 🎉</h1>
           <p className="tw-text-muted-foreground tw-mb-6">
             Your post is live at{' '}
-
-              href={`/blog/${title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`}
-              className="tw-text-primary tw-underline"
-            >
-              /blog/{title.toLowerCase().replace(/[^a-z0-9]+/g, '-')}
+            <a href={`/blog/${slug}`} className="tw-text-primary tw-underline">
+              /blog/{slug}
             </a>
           </p>
           <button
@@ -232,12 +232,26 @@ ${star.result}
                   <button
                     key={control}
                     onClick={() => {
-                      if (control === 'Bold') editor?.chain().focus().toggleBold().run()
-                      if (control === 'Italic') editor?.chain().focus().toggleItalic().run()
-                      if (control === 'H2') editor?.chain().focus().toggleHeading({ level: 2 }).run()
-                      if (control === 'H3') editor?.chain().focus().toggleHeading({ level: 3 }).run()
-                      if (control === 'Bullet list') editor?.chain().focus().toggleBulletList().run()
-                      if (control === 'Code') editor?.chain().focus().toggleCode().run()
+                      if (control === 'Bold')
+                        editor?.chain().focus().toggleBold().run()
+                      if (control === 'Italic')
+                        editor?.chain().focus().toggleItalic().run()
+                      if (control === 'H2')
+                        editor
+                          ?.chain()
+                          .focus()
+                          .toggleHeading({ level: 2 })
+                          .run()
+                      if (control === 'H3')
+                        editor
+                          ?.chain()
+                          .focus()
+                          .toggleHeading({ level: 3 })
+                          .run()
+                      if (control === 'Bullet list')
+                        editor?.chain().focus().toggleBulletList().run()
+                      if (control === 'Code')
+                        editor?.chain().focus().toggleCode().run()
                     }}
                     className="tw-px-3 tw-py-1 tw-text-sm tw-border tw-border-border tw-rounded hover:tw-bg-muted"
                   >

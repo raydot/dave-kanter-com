@@ -1,7 +1,3 @@
-// src/app/api/posts/route.ts
-export async function POST() {
-  return Response.json({ ok: true })
-}
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest } from 'next/server'
 
