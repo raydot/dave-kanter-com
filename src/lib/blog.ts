@@ -1,8 +1,9 @@
-import fs from 'fs'
-import path from 'path'
-import matter from 'gray-matter'
+import { createClient } from '@supabase/supabase-js'
 
-const postsDirectory = path.join(process.cwd(), 'content/blog')
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 
 export interface BlogPost {
   slug: string
@@ -14,69 +15,42 @@ export interface BlogPost {
   content: string
 }
 
-export function getAllPosts(): BlogPost[] {
-  // Check if directory exists
-  if (!fs.existsSync(postsDirectory)) {
-    return []
-  }
+export async function getAllPosts(): Promise<BlogPost[]> {
+  const { data, error } = await supabase
+    .from('posts')
+    .select('*')
+    .eq('publish', true)
+    .order('published_at', { ascending: false })
 
-  const fileNames = fs.readdirSync(postsDirectory)
+  if (error || !data) return []
 
-  const allPosts = fileNames
-    .filter((fileName) => fileName.endsWith('.mdx'))
-    .map((fileName) => {
-      const slug = fileName.replace(/\.mdx$/, '')
-      const fullPath = path.join(postsDirectory, fileName)
-      const fileContents = fs.readFileSync(fullPath, 'utf8')
-      const { data, content } = matter(fileContents)
-
-      // Get file stats for creation time
-      const stats = fs.statSync(fullPath)
-
-      // If date doesn't include time, append file creation time
-      let postDate = data.date
-      if (postDate && !postDate.includes('T')) {
-        // Date is just YYYY-MM-DD, add file creation time
-        const fileTime = stats.birthtime.toISOString().split('T')[1]
-        postDate = `${postDate}T${fileTime}`
-      } else if (!postDate) {
-        // No date provided, use file creation time
-        postDate = stats.birthtime.toISOString()
-      }
-
-      return {
-        slug,
-        title: data.title,
-        date: postDate,
-        excerpt: data.excerpt,
-        tags: data.tags || [],
-        publish: data.publish !== false,
-        content,
-      }
-    })
-    .filter((post) => post.publish)
-
-  // Sort posts by date with time (newest first)
-  return allPosts.sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime()
-  })
+  return data.map((post) => ({
+    slug: post.slug,
+    title: post.title,
+    date: post.published_at,
+    excerpt: post.excerpt,
+    tags: post.tags || [],
+    publish: post.publish,
+    content: post.content,
+  }))
 }
 
-export function getPostBySlug(slug: string): BlogPost | null {
-  try {
-    const fullPath = path.join(postsDirectory, `${slug}.mdx`)
-    const fileContents = fs.readFileSync(fullPath, 'utf8')
-    const { data, content } = matter(fileContents)
+export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
+  const { data, error } = await supabase
+    .from('posts')
+    .select('*')
+    .eq('slug', slug)
+    .single()
 
-    return {
-      slug,
-      title: data.title,
-      date: data.date,
-      excerpt: data.excerpt,
-      tags: data.tags || [],
-      content,
-    }
-  } catch (error) {
-    return null
+  if (error || !data) return null
+
+  return {
+    slug: data.slug,
+    title: data.title,
+    date: data.published_at,
+    excerpt: data.excerpt,
+    tags: data.tags || [],
+    publish: data.publish,
+    content: data.content,
   }
 }

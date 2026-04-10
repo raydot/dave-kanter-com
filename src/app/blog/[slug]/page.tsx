@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 
 // Generate static params for all posts
 export async function generateStaticParams() {
-  const posts = getAllPosts()
+  const posts = await getAllPosts()
   return posts.map((post) => ({
     slug: post.slug,
   }))
