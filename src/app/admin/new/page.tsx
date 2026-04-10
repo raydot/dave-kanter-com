@@ -48,10 +48,10 @@ export default function NewPostPage() {
     setError('')
 
     editor?.commands.setContent(
-      `<h2>Situation</h2><p>${star.situation}</p>
-       <h2>Task</h2><p>${star.task}</p>
-       <h2>Action</h2><p>${star.action}</p>
-       <h2>Result</h2><p>${star.result}</p>`
+      `<p>${star.situation}</p>
+       <p>${star.task}</p>
+       <p>${star.action}</p>
+       <p>${star.result}</p>`
     )
 
     setPhase('editor')

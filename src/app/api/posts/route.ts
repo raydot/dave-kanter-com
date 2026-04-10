@@ -6,9 +6,19 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY!
 )
 
+export async function GET() {
+  const { data, error } = await supabase
+    .from('posts')
+    .select('id, title, slug, publish, published_at, created_at')
+    .order('created_at', { ascending: false })
+
+  if (error) return Response.json({ error: error.message }, { status: 500 })
+  return Response.json(data)
+}
+
 export async function POST(request: NextRequest) {
   const body = await request.json()
-  const { title, content, excerpt, tags, slug } = body
+  const { title, content, excerpt, tags, slug, publish = true } = body
 
   if (!title || !content || !slug) {
     return Response.json({ error: 'Missing required fields' }, { status: 400 })
@@ -16,13 +26,10 @@ export async function POST(request: NextRequest) {
 
   const { data, error } = await supabase
     .from('posts')
-    .insert([{ title, content, excerpt, tags, slug, publish: true }])
+    .insert([{ title, content, excerpt, tags, slug, publish }])
     .select()
     .single()
 
-  if (error) {
-    return Response.json({ error: error.message }, { status: 500 })
-  }
-
+  if (error) return Response.json({ error: error.message }, { status: 500 })
   return Response.json({ ok: true, post: data })
 }
