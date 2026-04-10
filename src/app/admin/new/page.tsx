@@ -25,6 +25,11 @@ export default function NewPostPage() {
   const [published, setPublished] = useState(false)
   const [error, setError] = useState('')
 
+  const slug = title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+
   const editor = useEditor({
     extensions: [StarterKit],
     content: '',
@@ -42,24 +47,6 @@ export default function NewPostPage() {
     }
     setError('')
 
-    const draft = `
-## Situation
-
-${star.situation}
-
-## Task
-
-${star.task}
-
-## Action
-
-${star.action}
-
-## Result
-
-${star.result}
-    `.trim()
-
     editor?.commands.setContent(
       `<h2>Situation</h2><p>${star.situation}</p>
        <h2>Task</h2><p>${star.task}</p>
@@ -76,10 +63,6 @@ ${star.result}
     setError('')
 
     const content = editor.getHTML()
-    const slug = title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '')
 
     const res = await fetch('/api/posts', {
       method: 'POST',
