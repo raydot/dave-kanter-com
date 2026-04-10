@@ -162,7 +162,7 @@ export default function NewPostPage() {
                 },
               ].map(({ key, label, hint }) => (
                 <div key={key}>
-                  <label className="tw-block tw-text-sm tw-font-medium tw-mb-1">
+                  <label className="tw-block tw-text-sm tw-font-medium tw-mb-1 tw-mt-8">
                     {label}
                   </label>
                   <p className="tw-text-xs tw-text-muted-foreground tw-mb-2">
