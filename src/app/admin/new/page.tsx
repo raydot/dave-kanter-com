@@ -1,8 +1,10 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
+import styles from './page.module.css'
 
 interface StarForm {
   situation: string
@@ -21,9 +23,9 @@ export default function NewPostPage() {
     action: '',
     result: '',
   })
-  const [publishing, setPublishing] = useState(false)
-  const [published, setPublished] = useState(false)
+  const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
+  const router = useRouter()
 
   const slug = title
     .toLowerCase()
@@ -31,6 +33,7 @@ export default function NewPostPage() {
     .replace(/(^-|-$)/g, '')
 
   const editor = useEditor({
+    immediatelyRender: false,
     extensions: [StarterKit],
     content: '',
     editorProps: {
@@ -57,74 +60,41 @@ export default function NewPostPage() {
     setPhase('editor')
   }
 
-  async function publish() {
+  async function save(publish: boolean) {
     if (!editor) return
-    setPublishing(true)
+    setSaving(true)
     setError('')
-
-    const content = editor.getHTML()
 
     const res = await fetch('/api/posts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         title,
-        content,
+        content: editor.getHTML(),
         excerpt: star.situation.slice(0, 160),
-        tags: tags
-          .split(',')
-          .map((t) => t.trim())
-          .filter(Boolean),
+        tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
         slug,
+        publish,
       }),
     })
 
     if (res.ok) {
-      setPublished(true)
+      router.push('/admin/posts')
     } else {
       const data = await res.json()
       setError(data.error || 'Something went wrong')
+      setSaving(false)
     }
-    setPublishing(false)
-  }
-
-  if (published) {
-    return (
-      <div className="tw-min-h-screen tw-bg-background tw-flex tw-items-center tw-justify-center">
-        <div className="tw-text-center">
-          <h1 className="tw-text-3xl tw-font-bold tw-mb-4">Published! 🎉</h1>
-          <p className="tw-text-muted-foreground tw-mb-6">
-            Your post is live at{' '}
-            <a href={`/blog/${slug}`} className="tw-text-primary tw-underline">
-              /blog/{slug}
-            </a>
-          </p>
-          <button
-            onClick={() => {
-              setPublished(false)
-              setPhase('form')
-              setTitle('')
-              setTags('')
-              setStar({ situation: '', task: '', action: '', result: '' })
-              editor?.commands.setContent('')
-            }}
-            className="tw-px-4 tw-py-2 tw-bg-primary tw-text-primary-foreground tw-rounded hover:tw-opacity-90"
-          >
-            Write another post
-          </button>
-        </div>
-      </div>
-    )
   }
 
   return (
     <div className="tw-min-h-screen tw-bg-background">
-      <div className="tw-max-w-3xl tw-mx-auto tw-px-4 tw-py-8">
+      <div className={`tw-max-w-3xl tw-mx-auto tw-px-4 tw-py-8 ${styles.form}`}>
         <h1 className="tw-text-3xl tw-font-bold tw-mb-8">New Post</h1>
 
         {/* Title always visible */}
-        <div className="tw-mb-6">
-          <label className="tw-block tw-text-sm tw-font-medium tw-mb-2">
+        <div>
+          <label className="tw-block tw-text-sm tw-font-medium">
             Title
           </label>
           <input
@@ -138,7 +108,7 @@ export default function NewPostPage() {
 
         {phase === 'form' && (
           <>
-            <div className="tw-space-y-10 tw-mb-6">
+            <div>
               {[
                 {
                   key: 'situation',
@@ -161,11 +131,11 @@ export default function NewPostPage() {
                   hint: 'What happened? What did you learn?',
                 },
               ].map(({ key, label, hint }) => (
-                <div key={key}>
-                  <label className="tw-block tw-text-sm tw-font-medium tw-mb-1">
+                <div key={key} className={styles.section}>
+                  <label className="tw-block tw-text-sm tw-font-medium">
                     {label}
                   </label>
-                  <p className="tw-text-xs tw-text-muted-foreground tw-mb-2">
+                  <p className="tw-text-xs tw-text-muted-foreground">
                     {hint}
                   </p>
                   <textarea
@@ -180,8 +150,8 @@ export default function NewPostPage() {
               ))}
             </div>
 
-            <div className="tw-mb-6">
-              <label className="tw-block tw-text-sm tw-font-medium tw-mb-2">
+            <div className={styles.section}>
+              <label className="tw-block tw-text-sm tw-font-medium">
                 Tags{' '}
                 <span className="tw-text-muted-foreground tw-font-normal">
                   (comma separated)
@@ -248,8 +218,8 @@ export default function NewPostPage() {
               <EditorContent editor={editor} />
             </div>
 
-            <div className="tw-mb-6">
-              <label className="tw-block tw-text-sm tw-font-medium tw-mb-2">
+            <div className={styles.section}>
+              <label className="tw-block tw-text-sm tw-font-medium">
                 Tags{' '}
                 <span className="tw-text-muted-foreground tw-font-normal">
                   (comma separated)
@@ -274,11 +244,18 @@ export default function NewPostPage() {
                 ← Back to form
               </button>
               <button
-                onClick={publish}
-                disabled={publishing}
+                onClick={() => save(false)}
+                disabled={saving}
+                className="tw-px-6 tw-py-3 tw-border tw-border-border tw-rounded hover:tw-bg-muted disabled:tw-opacity-50"
+              >
+                Save Draft
+              </button>
+              <button
+                onClick={() => save(true)}
+                disabled={saving}
                 className="tw-flex-1 tw-py-3 tw-bg-primary tw-text-primary-foreground tw-rounded tw-font-medium hover:tw-opacity-90 disabled:tw-opacity-50"
               >
-                {publishing ? 'Publishing...' : 'Publish'}
+                Publish
               </button>
             </div>
           </>

@@ -29,6 +29,18 @@ export async function PATCH(
   const { id } = await params
   const body = await request.json()
 
+  // Set published_at when publishing for the first time
+  if (body.publish === true) {
+    const { data: existing } = await supabase
+      .from('posts')
+      .select('published_at')
+      .eq('id', id)
+      .single()
+    if (!existing?.published_at) {
+      body.published_at = new Date().toISOString()
+    }
+  }
+
   const { data, error } = await supabase
     .from('posts')
     .update(body)

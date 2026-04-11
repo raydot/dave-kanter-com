@@ -30,6 +30,21 @@ export default function AdminPostsPage() {
       })
   }, [])
 
+  async function togglePublish(id: string, currentPublish: boolean) {
+    const res = await fetch(`/api/posts/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ publish: !currentPublish }),
+    })
+    if (res.ok) {
+      setPosts((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, publish: !currentPublish } : p))
+      )
+    } else {
+      setError('Failed to update post')
+    }
+  }
+
   async function deletePost(id: string, title: string) {
     if (!confirm(`Delete "${title}"? This cannot be undone.`)) return
 
@@ -98,6 +113,12 @@ export default function AdminPostsPage() {
                       View
                     </Link>
                   )}
+                  <button
+                    onClick={() => togglePublish(post.id, post.publish)}
+                    className="tw-text-sm tw-text-muted-foreground hover:tw-text-foreground"
+                  >
+                    {post.publish ? 'Unpublish' : 'Publish'}
+                  </button>
                   <Link
                     href={`/admin/posts/${post.id}`}
                     className="tw-text-sm tw-text-primary hover:tw-opacity-70"
@@ -106,7 +127,7 @@ export default function AdminPostsPage() {
                   </Link>
                   <button
                     onClick={() => deletePost(post.id, post.title)}
-                    className="tw-text-sm tw-text-red-400 hover:tw-opacity-70"
+                    className="tw-text-sm tw-text-red-400 tw-hover:tw-opacity-70"
                   >
                     Delete
                   </button>
