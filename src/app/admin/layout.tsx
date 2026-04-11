@@ -13,7 +13,7 @@ export default function AdminLayout({
             href="/admin/new"
             className="tw-text-sm tw-font-medium hover:tw-text-primary"
           >
-            New Post
+            New Post |{' '}
           </Link>
           <Link
             href="/admin/posts"

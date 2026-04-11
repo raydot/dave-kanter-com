@@ -124,7 +124,7 @@ export default function NewPostPage() {
 
         {/* Title always visible */}
         <div className="tw-mb-6">
-          <label className="tw-block tw-text-sm tw-font-medium tw-mb-2">
+          <label className="tw-block tw-text-sm tw-font-medium tw-mb-2 tw-mt-8">
             Title
           </label>
           <input
@@ -138,7 +138,7 @@ export default function NewPostPage() {
 
         {phase === 'form' && (
           <>
-            <div className="tw-space-y-6 tw-mb-6">
+            <div className="tw-space-y-10 tw-mb-6">
               {[
                 {
                   key: 'situation',
