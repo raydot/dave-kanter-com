@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import styles from './page.module.css'
+import TagInput from '../components/TagInput'
 
 interface StarForm {
   situation: string
@@ -15,7 +16,7 @@ interface StarForm {
 
 export default function NewPostPage() {
   const [title, setTitle] = useState('')
-  const [tags, setTags] = useState('')
+  const [tags, setTags] = useState<string[]>([])
   const [phase, setPhase] = useState<'form' | 'editor'>('form')
   const [star, setStar] = useState<StarForm>({
     situation: '',
@@ -72,13 +73,14 @@ export default function NewPostPage() {
         title,
         content: editor.getHTML(),
         excerpt: star.situation.slice(0, 160),
-        tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
+        tags,
         slug,
         publish,
       }),
     })
 
     if (res.ok) {
+      router.refresh()
       router.push('/admin/posts')
     } else {
       const data = await res.json()
@@ -151,19 +153,8 @@ export default function NewPostPage() {
             </div>
 
             <div className={styles.section}>
-              <label className="tw-block tw-text-sm tw-font-medium">
-                Tags{' '}
-                <span className="tw-text-muted-foreground tw-font-normal">
-                  (comma separated)
-                </span>
-              </label>
-              <input
-                type="text"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-                placeholder="ai, nextjs, career"
-                className="tw-w-full tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground"
-              />
+              <label className="tw-block tw-text-sm tw-font-medium">Tags</label>
+              <TagInput value={tags} onChange={setTags} />
             </div>
 
             {error && <p className="tw-text-red-500 tw-mb-4">{error}</p>}
@@ -219,19 +210,8 @@ export default function NewPostPage() {
             </div>
 
             <div className={styles.section}>
-              <label className="tw-block tw-text-sm tw-font-medium">
-                Tags{' '}
-                <span className="tw-text-muted-foreground tw-font-normal">
-                  (comma separated)
-                </span>
-              </label>
-              <input
-                type="text"
-                value={tags}
-                onChange={(e) => setTags(e.target.value)}
-                placeholder="ai, nextjs, career"
-                className="tw-w-full tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground"
-              />
+              <label className="tw-block tw-text-sm tw-font-medium">Tags</label>
+              <TagInput value={tags} onChange={setTags} />
             </div>
 
             {error && <p className="tw-text-red-500 tw-mb-4">{error}</p>}

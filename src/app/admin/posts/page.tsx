@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 interface Post {
   id: string
   title: string
   slug: string
+  tags: string[]
+  post_tags: Array<{ tags: { name: string } }>
   publish: boolean
   published_at: string
   created_at: string
@@ -16,6 +19,7 @@ export default function AdminPostsPage() {
   const [posts, setPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const router = useRouter()
 
   useEffect(() => {
     fetch('/api/posts')
@@ -75,25 +79,37 @@ export default function AdminPostsPage() {
                 className="tw-flex tw-items-center tw-justify-between tw-p-4 tw-border tw-border-border tw-rounded"
               >
                 <div className="tw-flex-1 tw-min-w-0">
-                  <div className="tw-flex tw-items-center tw-gap-3 tw-mb-1">
-                    <span
-                      className={`tw-text-xs tw-px-2 tw-py-0.5 tw-rounded-full ${
-                        post.publish
-                          ? 'tw-bg-green-500/20 tw-text-green-400'
-                          : 'tw-bg-yellow-500/20 tw-text-yellow-400'
-                      }`}
-                    >
-                      {post.publish ? 'Published' : 'Draft'}
-                    </span>
-                    <span className="tw-text-sm tw-text-muted-foreground">
-                      {new Date(post.created_at).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                      })}
-                    </span>
-                  </div>
-                  <p className="tw-font-medium tw-truncate">{post.title}</p>
+                  <p className="tw-text-xs tw-text-muted-foreground" style={{ marginBottom: 0 }}>
+                    {new Date(post.created_at).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    })}{' '}
+                    {new Date(post.created_at).toLocaleTimeString('en-US', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </p>
+                  <p className="tw-font-medium tw-truncate" style={{ marginBottom: 0 }}>{post.title}</p>
+                  {(() => {
+                    const displayTags = post.post_tags?.length > 0
+                      ? post.post_tags.map((pt) => pt.tags?.name).filter(Boolean)
+                      : post.tags || []
+                    return displayTags.length > 0 ? (
+                      <p className="tw-text-xs tw-text-muted-foreground tw-truncate" style={{ marginBottom: 0 }}>
+                        {displayTags.join(', ')}
+                      </p>
+                    ) : null
+                  })()}
+                  <span
+                    className={`tw-text-xs tw-px-2 tw-py-0.5 tw-rounded-full tw-border ${
+                      post.publish
+                        ? 'tw-border-green-400 tw-text-green-400'
+                        : 'tw-border-yellow-400 tw-text-yellow-400'
+                    }`}
+                  >
+                    {post.publish ? 'Published' : 'Draft'}
+                  </span>
                 </div>
                 <div className="tw-flex tw-items-center tw-gap-2 tw-ml-4 tw-shrink-0">
                   {post.publish && (
@@ -107,16 +123,16 @@ export default function AdminPostsPage() {
                   )}
                   <button
                     onClick={() => togglePublish(post.id, post.publish)}
-                    className="tw-text-sm tw-text-muted-foreground hover:tw-text-foreground"
+                    className="tw-text-sm hover:tw-opacity-70"
                   >
                     {post.publish ? 'Unpublish' : 'Publish'}
                   </button>
-                  <Link
-                    href={`/admin/posts/${post.id}`}
-                    className="tw-text-sm tw-text-muted-foreground hover:tw-text-foreground"
+                  <button
+                    onClick={() => router.push(`/admin/posts/${post.id}`)}
+                    className="tw-text-sm hover:tw-opacity-70"
                   >
                     Edit
-                  </Link>
+                  </button>
                   <button
                     onClick={() => deletePost(post.id, post.title)}
                     className="tw-text-sm tw-text-red-400 hover:tw-opacity-70"

@@ -5,13 +5,14 @@ import { useRouter, useParams } from 'next/navigation'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import styles from '../../new/page.module.css'
+import TagInput from '../../components/TagInput'
 
 export default function EditPostPage() {
   const { id } = useParams<{ id: string }>()
   const router = useRouter()
 
   const [title, setTitle] = useState('')
-  const [tags, setTags] = useState('')
+  const [tags, setTags] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -32,7 +33,9 @@ export default function EditPostPage() {
       .then((r) => r.json())
       .then((post) => {
         setTitle(post.title)
-        setTags((post.tags || []).join(', '))
+        setTags(
+          (post.post_tags || []).map((pt: { tags: { name: string } | null }) => pt.tags?.name).filter(Boolean) as string[]
+        )
         editor?.commands.setContent(post.content)
         setLoading(false)
       })
@@ -58,12 +61,13 @@ export default function EditPostPage() {
       body: JSON.stringify({
         title,
         content: editor.getHTML(),
-        tags: tags.split(',').map((t) => t.trim()).filter(Boolean),
+        tags,
         slug,
       }),
     })
 
     if (res.ok) {
+      router.refresh()
       router.push('/admin/posts')
     } else {
       const data = await res.json()
@@ -119,17 +123,8 @@ export default function EditPostPage() {
         </div>
 
         <div className={styles.section}>
-          <label className="tw-block tw-text-sm tw-font-medium">
-            Tags{' '}
-            <span className="tw-text-muted-foreground tw-font-normal">(comma separated)</span>
-          </label>
-          <input
-            type="text"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-            placeholder="ai, nextjs, career"
-            className="tw-w-full tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground"
-          />
+          <label className="tw-block tw-text-sm tw-font-medium">Tags</label>
+          <TagInput value={tags} onChange={setTags} />
         </div>
 
         {error && <p className="tw-text-red-500 tw-mt-4">{error}</p>}

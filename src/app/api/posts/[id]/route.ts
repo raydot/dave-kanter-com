@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest } from 'next/server'
+import { resolvePostTags } from '@/lib/tags'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -14,7 +15,7 @@ export async function GET(
 
   const { data, error } = await supabase
     .from('posts')
-    .select('*')
+    .select('*, post_tags(tags(name))')
     .eq('id', id)
     .single()
 
@@ -29,26 +30,35 @@ export async function PATCH(
   const { id } = await params
   const body = await request.json()
 
+  // Separate tags from the fields going into posts table
+  const { tags: tagNames, ...postFields } = body
+
   // Set published_at when publishing for the first time
-  if (body.publish === true) {
+  if (postFields.publish === true) {
     const { data: existing } = await supabase
       .from('posts')
       .select('published_at')
       .eq('id', id)
       .single()
     if (!existing?.published_at) {
-      body.published_at = new Date().toISOString()
+      postFields.published_at = new Date().toISOString()
     }
   }
 
   const { data, error } = await supabase
     .from('posts')
-    .update(body)
+    .update(postFields)
     .eq('id', id)
     .select()
     .single()
 
   if (error) return Response.json({ error: error.message }, { status: 500 })
+
+  // Only update tags if the key was present in the request body
+  if (tagNames !== undefined) {
+    await resolvePostTags(id, Array.isArray(tagNames) ? tagNames : [], supabase)
+  }
+
   return Response.json({ ok: true, post: data })
 }
 
