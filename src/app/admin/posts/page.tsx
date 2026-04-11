@@ -59,15 +59,7 @@ export default function AdminPostsPage() {
   return (
     <div className="tw-min-h-screen tw-bg-background">
       <div className="tw-max-w-3xl tw-mx-auto tw-px-4 tw-py-8">
-        <div className="tw-flex tw-items-center tw-justify-between tw-mb-8">
-          <h1 className="tw-text-3xl tw-font-bold">All Posts</h1>
-          <Link
-            href="/admin/new"
-            className="tw-px-4 tw-py-2 tw-bg-primary tw-text-primary-foreground tw-rounded hover:tw-opacity-90"
-          >
-            + New Post
-          </Link>
-        </div>
+        <h1 className="tw-text-3xl tw-font-bold tw-mb-8">All Posts</h1>
 
         {error && <p className="tw-text-red-500 tw-mb-4">{error}</p>}
 
@@ -121,13 +113,13 @@ export default function AdminPostsPage() {
                   </button>
                   <Link
                     href={`/admin/posts/${post.id}`}
-                    className="tw-text-sm tw-text-primary hover:tw-opacity-70"
+                    className="tw-text-sm tw-text-muted-foreground hover:tw-text-foreground"
                   >
                     Edit
                   </Link>
                   <button
                     onClick={() => deletePost(post.id, post.title)}
-                    className="tw-text-sm tw-text-red-400 tw-hover:tw-opacity-70"
+                    className="tw-text-sm tw-text-red-400 hover:tw-opacity-70"
                   >
                     Delete
                   </button>
