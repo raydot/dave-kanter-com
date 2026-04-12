@@ -3,9 +3,28 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { useEditor, EditorContent } from '@tiptap/react'
+import { type Editor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
+import { Markdown } from '@tiptap/markdown'
+import { Table } from '@tiptap/extension-table'
+import TableRow from '@tiptap/extension-table-row'
+import TableHeader from '@tiptap/extension-table-header'
+import TableCell from '@tiptap/extension-table-cell'
 import styles from '../../new/page.module.css'
 import TagInput from '../../components/TagInput'
+
+const TOOLBAR: { label: string; action: (e: Editor | null) => void }[] = [
+  { label: 'Bold',          action: (e) => e?.chain().focus().toggleBold().run() },
+  { label: 'Italic',        action: (e) => e?.chain().focus().toggleItalic().run() },
+  { label: 'H1',            action: (e) => e?.chain().focus().toggleHeading({ level: 1 }).run() },
+  { label: 'H2',            action: (e) => e?.chain().focus().toggleHeading({ level: 2 }).run() },
+  { label: 'H3',            action: (e) => e?.chain().focus().toggleHeading({ level: 3 }).run() },
+  { label: 'Bullet list',   action: (e) => e?.chain().focus().toggleBulletList().run() },
+  { label: 'Ordered list',  action: (e) => e?.chain().focus().toggleOrderedList().run() },
+  { label: 'Code',          action: (e) => e?.chain().focus().toggleCode().run() },
+  { label: 'Code block',    action: (e) => e?.chain().focus().toggleCodeBlock().run() },
+  { label: 'Insert table',  action: (e) => e?.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run() },
+]
 
 export default function EditPostPage() {
   const { id } = useParams<{ id: string }>()
@@ -19,7 +38,14 @@ export default function EditPostPage() {
 
   const editor = useEditor({
     immediatelyRender: false,
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      Markdown,
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableHeader,
+      TableCell,
+    ],
     content: '',
     editorProps: {
       attributes: {
@@ -36,7 +62,8 @@ export default function EditPostPage() {
         setTags(
           (post.post_tags || []).map((pt: { tags: { name: string } | null }) => pt.tags?.name).filter(Boolean) as string[]
         )
-        editor?.commands.setContent(post.content)
+        const contentType = post.content.trim().startsWith('<') ? 'html' : 'markdown'
+        editor?.commands.setContent(post.content, { contentType })
         setLoading(false)
       })
       .catch(() => {
@@ -60,7 +87,7 @@ export default function EditPostPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         title,
-        content: editor.getHTML(),
+        content: editor.getMarkdown(),
         tags,
         slug,
       }),
@@ -100,20 +127,13 @@ export default function EditPostPage() {
         </div>
 
         <div className={`tw-mb-4 tw-flex tw-gap-2 tw-flex-wrap ${styles.section}`}>
-          {['Bold', 'Italic', 'H2', 'H3', 'Bullet list', 'Code'].map((control) => (
+          {TOOLBAR.map(({ label, action }) => (
             <button
-              key={control}
-              onClick={() => {
-                if (control === 'Bold') editor?.chain().focus().toggleBold().run()
-                if (control === 'Italic') editor?.chain().focus().toggleItalic().run()
-                if (control === 'H2') editor?.chain().focus().toggleHeading({ level: 2 }).run()
-                if (control === 'H3') editor?.chain().focus().toggleHeading({ level: 3 }).run()
-                if (control === 'Bullet list') editor?.chain().focus().toggleBulletList().run()
-                if (control === 'Code') editor?.chain().focus().toggleCode().run()
-              }}
+              key={label}
+              onClick={() => action(editor)}
               className="tw-px-3 tw-py-1 tw-text-sm tw-border tw-border-border tw-rounded hover:tw-bg-muted"
             >
-              {control}
+              {label}
             </button>
           ))}
         </div>

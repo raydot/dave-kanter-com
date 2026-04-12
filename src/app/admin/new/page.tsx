@@ -3,7 +3,13 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useEditor, EditorContent } from '@tiptap/react'
+import { type Editor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
+import { Markdown } from '@tiptap/markdown'
+import { Table } from '@tiptap/extension-table'
+import TableRow from '@tiptap/extension-table-row'
+import TableHeader from '@tiptap/extension-table-header'
+import TableCell from '@tiptap/extension-table-cell'
 import styles from './page.module.css'
 import TagInput from '../components/TagInput'
 
@@ -14,8 +20,22 @@ interface StarForm {
   result: string
 }
 
+const TOOLBAR: { label: string; action: (e: Editor | null) => void }[] = [
+  { label: 'Bold',          action: (e) => e?.chain().focus().toggleBold().run() },
+  { label: 'Italic',        action: (e) => e?.chain().focus().toggleItalic().run() },
+  { label: 'H1',            action: (e) => e?.chain().focus().toggleHeading({ level: 1 }).run() },
+  { label: 'H2',            action: (e) => e?.chain().focus().toggleHeading({ level: 2 }).run() },
+  { label: 'H3',            action: (e) => e?.chain().focus().toggleHeading({ level: 3 }).run() },
+  { label: 'Bullet list',   action: (e) => e?.chain().focus().toggleBulletList().run() },
+  { label: 'Ordered list',  action: (e) => e?.chain().focus().toggleOrderedList().run() },
+  { label: 'Code',          action: (e) => e?.chain().focus().toggleCode().run() },
+  { label: 'Code block',    action: (e) => e?.chain().focus().toggleCodeBlock().run() },
+  { label: 'Insert table',  action: (e) => e?.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run() },
+]
+
 export default function NewPostPage() {
   const [title, setTitle] = useState('')
+  const [excerpt, setExcerpt] = useState('')
   const [tags, setTags] = useState<string[]>([])
   const [phase, setPhase] = useState<'form' | 'editor'>('form')
   const [star, setStar] = useState<StarForm>({
@@ -35,7 +55,14 @@ export default function NewPostPage() {
 
   const editor = useEditor({
     immediatelyRender: false,
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      Markdown,
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableHeader,
+      TableCell,
+    ],
     content: '',
     editorProps: {
       attributes: {
@@ -71,8 +98,8 @@ export default function NewPostPage() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         title,
-        content: editor.getHTML(),
-        excerpt: star.situation.slice(0, 160),
+        content: editor.getMarkdown(),
+        excerpt: excerpt.trim() || editor.getText().slice(0, 160),
         tags,
         slug,
         publish,
@@ -170,43 +197,34 @@ export default function NewPostPage() {
 
         {phase === 'editor' && (
           <>
-            <div className="tw-mb-4 tw-flex tw-gap-2 tw-flex-wrap">
-              {['Bold', 'Italic', 'H2', 'H3', 'Bullet list', 'Code'].map(
-                (control) => (
-                  <button
-                    key={control}
-                    onClick={() => {
-                      if (control === 'Bold')
-                        editor?.chain().focus().toggleBold().run()
-                      if (control === 'Italic')
-                        editor?.chain().focus().toggleItalic().run()
-                      if (control === 'H2')
-                        editor
-                          ?.chain()
-                          .focus()
-                          .toggleHeading({ level: 2 })
-                          .run()
-                      if (control === 'H3')
-                        editor
-                          ?.chain()
-                          .focus()
-                          .toggleHeading({ level: 3 })
-                          .run()
-                      if (control === 'Bullet list')
-                        editor?.chain().focus().toggleBulletList().run()
-                      if (control === 'Code')
-                        editor?.chain().focus().toggleCode().run()
-                    }}
-                    className="tw-px-3 tw-py-1 tw-text-sm tw-border tw-border-border tw-rounded hover:tw-bg-muted"
-                  >
-                    {control}
-                  </button>
-                )
-              )}
+            <div className={`tw-mb-4 tw-flex tw-gap-2 tw-flex-wrap ${styles.section}`}>
+              {TOOLBAR.map(({ label, action }) => (
+                <button
+                  key={label}
+                  onClick={() => action(editor)}
+                  className="tw-px-3 tw-py-1 tw-text-sm tw-border tw-border-border tw-rounded hover:tw-bg-muted"
+                >
+                  {label}
+                </button>
+              ))}
             </div>
 
             <div className="tw-border tw-border-border tw-rounded tw-mb-6 tw-min-h-96">
               <EditorContent editor={editor} />
+            </div>
+
+            <div className={styles.section}>
+              <label className="tw-block tw-text-sm tw-font-medium">Excerpt</label>
+              <p className="tw-text-xs tw-text-muted-foreground">
+                Optional. If blank, auto-generated from first 160 characters.
+              </p>
+              <input
+                type="text"
+                value={excerpt}
+                onChange={(e) => setExcerpt(e.target.value)}
+                placeholder="A short summary shown on the blog index..."
+                className="tw-w-full tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground"
+              />
             </div>
 
             <div className={styles.section}>
