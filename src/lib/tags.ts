@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js'
+import { SupabaseClient } from '@supabase/supabase-js'
 
 export function normalizeTag(name: string): string {
   return name.toLowerCase().replace(/[\s\-_\.]+/g, '')
@@ -22,12 +22,11 @@ export function levenshtein(a: string, b: string): number {
   return dp[m][n]
 }
 
-type SupabaseClient = ReturnType<typeof createClient>
-
 export async function resolvePostTags(
   postId: string,
   tagNames: string[],
-  supabase: SupabaseClient
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: SupabaseClient<any, any, any>
 ): Promise<void> {
   if (tagNames.length === 0) {
     await supabase.from('post_tags').delete().eq('post_id', postId)
