@@ -9,13 +9,14 @@ export interface BlogPost {
   slug: string
   title: string
   date: string
+  updatedAt: string | null
   excerpt: string
   tags?: string[]
   publish?: boolean
   content: string
 }
 
-const POST_SELECT = 'id, slug, title, published_at, excerpt, tags, publish, content, post_tags(tags(name))'
+const POST_SELECT = 'id, slug, title, published_at, updated_at, excerpt, publish, content, post_tags(tags(name))'
 
 function mapPost(post: Record<string, unknown>): BlogPost {
   const postTags = post.post_tags as Array<{ tags: { name: string } | null }> | null
@@ -23,10 +24,9 @@ function mapPost(post: Record<string, unknown>): BlogPost {
     slug: post.slug as string,
     title: post.title as string,
     date: post.published_at as string,
+    updatedAt: post.updated_at as string | null,
     excerpt: post.excerpt as string,
-    tags: postTags && postTags.length > 0
-      ? postTags.map((pt) => pt.tags?.name).filter(Boolean) as string[]
-      : (post.tags as string[] | null) ?? [],
+    tags: postTags ? postTags.map((pt) => pt.tags?.name).filter(Boolean) as string[] : [],
     publish: post.publish as boolean,
     content: post.content as string,
   }

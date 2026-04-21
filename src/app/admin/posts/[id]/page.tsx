@@ -11,7 +11,7 @@ import TableRow from '@tiptap/extension-table-row'
 import TableHeader from '@tiptap/extension-table-header'
 import TableCell from '@tiptap/extension-table-cell'
 import styles from '../../new/page.module.css'
-import TagInput from '../../components/TagInput'
+import TagPicker from '@/components/admin/TagPicker'
 
 const TOOLBAR: { label: string; action: (e: Editor | null) => void }[] = [
   { label: 'Bold',          action: (e) => e?.chain().focus().toggleBold().run() },
@@ -31,7 +31,9 @@ export default function EditPostPage() {
   const router = useRouter()
 
   const [title, setTitle] = useState('')
-  const [tags, setTags] = useState<string[]>([])
+  const [excerpt, setExcerpt] = useState('')
+  const [displayDate, setDisplayDate] = useState('')
+  const [tagIds, setTagIds] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -55,13 +57,15 @@ export default function EditPostPage() {
   })
 
   useEffect(() => {
-    fetch(`/api/posts/${id}`)
-      .then((r) => r.json())
-      .then((post) => {
+    Promise.all([
+      fetch(`/api/posts/${id}`).then((r) => r.json()),
+      fetch(`/api/posts/${id}/tags`).then((r) => r.json()),
+    ])
+      .then(([post, ids]) => {
         setTitle(post.title)
-        setTags(
-          (post.post_tags || []).map((pt: { tags: { name: string } | null }) => pt.tags?.name).filter(Boolean) as string[]
-        )
+        setExcerpt(post.excerpt || '')
+        setDisplayDate(post.published_at ? post.published_at.slice(0, 10) : '')
+        setTagIds(Array.isArray(ids) ? ids : [])
         const contentType = post.content.trim().startsWith('<') ? 'html' : 'markdown'
         editor?.commands.setContent(post.content, { contentType })
         setLoading(false)
@@ -88,19 +92,27 @@ export default function EditPostPage() {
       body: JSON.stringify({
         title,
         content: editor.getMarkdown(),
-        tags,
+        excerpt: excerpt.trim() || undefined,
+        published_at: displayDate ? new Date(displayDate).toISOString() : undefined,
         slug,
       }),
     })
 
-    if (res.ok) {
-      router.refresh()
-      router.push('/admin/posts')
-    } else {
+    if (!res.ok) {
       const data = await res.json()
       setError(data.error || 'Something went wrong')
       setSaving(false)
+      return
     }
+
+    await fetch(`/api/posts/${id}/tags`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tag_ids: tagIds }),
+    })
+
+    router.refresh()
+    router.push('/admin/posts')
   }
 
   if (loading) {
@@ -126,6 +138,33 @@ export default function EditPostPage() {
           />
         </div>
 
+        <div className={styles.section}>
+          <label className="tw-block tw-text-sm tw-font-medium">Excerpt</label>
+          <p className="tw-text-xs tw-text-muted-foreground">
+            Optional. Shown in the frontmatter card and blog index.
+          </p>
+          <input
+            type="text"
+            value={excerpt}
+            onChange={(e) => setExcerpt(e.target.value)}
+            placeholder="A short summary or pull quote..."
+            className="tw-w-full tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground"
+          />
+        </div>
+
+        <div className={styles.section}>
+          <label className="tw-block tw-text-sm tw-font-medium">Display date</label>
+          <p className="tw-text-xs tw-text-muted-foreground">
+            Shown on the post. Useful for backdating. Defaults to publish date if blank.
+          </p>
+          <input
+            type="date"
+            value={displayDate}
+            onChange={(e) => setDisplayDate(e.target.value)}
+            className="tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground"
+          />
+        </div>
+
         <div className={`tw-mb-4 tw-flex tw-gap-2 tw-flex-wrap ${styles.section}`}>
           {TOOLBAR.map(({ label, action }) => (
             <button
@@ -144,7 +183,7 @@ export default function EditPostPage() {
 
         <div className={styles.section}>
           <label className="tw-block tw-text-sm tw-font-medium">Tags</label>
-          <TagInput value={tags} onChange={setTags} />
+          <TagPicker value={tagIds} onChange={setTagIds} />
         </div>
 
         {error && <p className="tw-text-red-500 tw-mt-4">{error}</p>}

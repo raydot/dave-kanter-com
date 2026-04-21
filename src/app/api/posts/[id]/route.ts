@@ -32,9 +32,10 @@ export async function PATCH(
 
   // Separate tags from the fields going into posts table
   const { tags: tagNames, ...postFields } = body
+  postFields.updated_at = new Date().toISOString()
 
-  // Set published_at when publishing for the first time
-  if (postFields.publish === true) {
+  // Set published_at when publishing for the first time, unless caller provided one
+  if (postFields.publish === true && !postFields.published_at) {
     const { data: existing } = await supabase
       .from('posts')
       .select('published_at')

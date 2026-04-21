@@ -11,7 +11,7 @@ import TableRow from '@tiptap/extension-table-row'
 import TableHeader from '@tiptap/extension-table-header'
 import TableCell from '@tiptap/extension-table-cell'
 import styles from './page.module.css'
-import TagInput from '../components/TagInput'
+import TagPicker from '@/components/admin/TagPicker'
 
 interface StarForm {
   situation: string
@@ -36,7 +36,8 @@ const TOOLBAR: { label: string; action: (e: Editor | null) => void }[] = [
 export default function NewPostPage() {
   const [title, setTitle] = useState('')
   const [excerpt, setExcerpt] = useState('')
-  const [tags, setTags] = useState<string[]>([])
+  const [displayDate, setDisplayDate] = useState('')
+  const [tagIds, setTagIds] = useState<string[]>([])
   const [phase, setPhase] = useState<'form' | 'editor'>('form')
   const [star, setStar] = useState<StarForm>({
     situation: '',
@@ -100,20 +101,28 @@ export default function NewPostPage() {
         title,
         content: editor.getMarkdown(),
         excerpt: excerpt.trim() || editor.getText().slice(0, 160),
-        tags,
+        published_at: displayDate ? new Date(displayDate).toISOString() : undefined,
         slug,
         publish,
       }),
     })
 
-    if (res.ok) {
-      router.refresh()
-      router.push('/admin/posts')
-    } else {
+    if (!res.ok) {
       const data = await res.json()
       setError(data.error || 'Something went wrong')
       setSaving(false)
+      return
     }
+
+    const { post } = await res.json()
+    await fetch(`/api/posts/${post.id}/tags`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tag_ids: tagIds }),
+    })
+
+    router.refresh()
+    router.push('/admin/posts')
   }
 
   return (
@@ -181,7 +190,7 @@ export default function NewPostPage() {
 
             <div className={styles.section}>
               <label className="tw-block tw-text-sm tw-font-medium">Tags</label>
-              <TagInput value={tags} onChange={setTags} />
+              <TagPicker value={tagIds} onChange={setTagIds} />
             </div>
 
             {error && <p className="tw-text-red-500 tw-mb-4">{error}</p>}
@@ -228,8 +237,21 @@ export default function NewPostPage() {
             </div>
 
             <div className={styles.section}>
+              <label className="tw-block tw-text-sm tw-font-medium">Display date</label>
+              <p className="tw-text-xs tw-text-muted-foreground">
+                Optional. Useful for backdating. Defaults to publish date if blank.
+              </p>
+              <input
+                type="date"
+                value={displayDate}
+                onChange={(e) => setDisplayDate(e.target.value)}
+                className="tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground"
+              />
+            </div>
+
+            <div className={styles.section}>
               <label className="tw-block tw-text-sm tw-font-medium">Tags</label>
-              <TagInput value={tags} onChange={setTags} />
+              <TagPicker value={tagIds} onChange={setTagIds} />
             </div>
 
             {error && <p className="tw-text-red-500 tw-mb-4">{error}</p>}

@@ -5,9 +5,7 @@ import { AskDave } from './AskDave'
 
 export function ConditionalAskDave() {
   const pathname = usePathname()
-  const isBlogPage = pathname?.startsWith('/blog')
-  
-  if (isBlogPage) {
+  if (pathname?.startsWith('/blog') || pathname?.startsWith('/admin')) {
     return null
   }
   

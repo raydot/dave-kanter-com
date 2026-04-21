@@ -21,7 +21,7 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   const body = await request.json()
-  const { title, content, excerpt, tags: tagNames, slug, publish = false } = body
+  const { title, content, excerpt, tags: tagNames, slug, publish = false, published_at } = body
 
   if (!title || !content || !slug) {
     return Response.json({ error: 'Missing required fields' }, { status: 400 })
@@ -31,7 +31,8 @@ export async function POST(request: NextRequest) {
     .from('posts')
     .insert([{
       title, content, excerpt, slug, publish,
-      published_at: publish ? new Date().toISOString() : null,
+      published_at: published_at ?? (publish ? new Date().toISOString() : null),
+      updated_at: new Date().toISOString(),
     }])
     .select()
     .single()

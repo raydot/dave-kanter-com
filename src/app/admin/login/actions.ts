@@ -6,18 +6,20 @@ import { SignJWT } from 'jose'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
 
-const ratelimit = new Ratelimit({
-  redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(5, '15 m'),
-})
-
 export async function login(formData: FormData) {
-  const headerStore = await headers()
-  const ip = headerStore.get('x-forwarded-for') ?? 'unknown'
+  if (process.env.NODE_ENV === 'production') {
+    const ratelimit = new Ratelimit({
+      redis: Redis.fromEnv(),
+      limiter: Ratelimit.slidingWindow(5, '15 m'),
+    })
 
-  const { success } = await ratelimit.limit(ip)
-  if (!success) {
-    return { error: 'Too many attempts. Try again later.' }
+    const headerStore = await headers()
+    const ip = headerStore.get('x-forwarded-for') ?? 'unknown'
+
+    const { success } = await ratelimit.limit(ip)
+    if (!success) {
+      return { error: 'Too many attempts. Try again later.' }
+    }
   }
 
   const password = formData.get('password') as string
