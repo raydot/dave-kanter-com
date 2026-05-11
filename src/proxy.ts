@@ -6,7 +6,10 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next()
   }
 
-  if (request.nextUrl.pathname === '/admin/login') {
+  if (
+    request.nextUrl.pathname === '/admin/login' ||
+    request.nextUrl.pathname === '/admin/enroll'
+  ) {
     return NextResponse.next()
   }
 
