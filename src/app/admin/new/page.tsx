@@ -13,13 +13,6 @@ import TableCell from '@tiptap/extension-table-cell'
 import styles from './page.module.css'
 import TagPicker from '@/components/admin/TagPicker'
 
-interface StarForm {
-  situation: string
-  task: string
-  action: string
-  result: string
-}
-
 const TOOLBAR: { label: string; action: (e: Editor | null) => void }[] = [
   { label: 'Bold',          action: (e) => e?.chain().focus().toggleBold().run() },
   { label: 'Italic',        action: (e) => e?.chain().focus().toggleItalic().run() },
@@ -35,16 +28,10 @@ const TOOLBAR: { label: string; action: (e: Editor | null) => void }[] = [
 
 export default function NewPostPage() {
   const [title, setTitle] = useState('')
+  const [prompt, setPrompt] = useState('')
   const [excerpt, setExcerpt] = useState('')
   const [displayDate, setDisplayDate] = useState('')
   const [tagIds, setTagIds] = useState<string[]>([])
-  const [phase, setPhase] = useState<'form' | 'editor'>('form')
-  const [star, setStar] = useState<StarForm>({
-    situation: '',
-    task: '',
-    action: '',
-    result: '',
-  })
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
@@ -71,23 +58,6 @@ export default function NewPostPage() {
       },
     },
   })
-
-  function generateDraft() {
-    if (!title.trim()) {
-      setError('Title is required')
-      return
-    }
-    setError('')
-
-    editor?.commands.setContent(
-      `<p>${star.situation}</p>
-       <p>${star.task}</p>
-       <p>${star.action}</p>
-       <p>${star.result}</p>`
-    )
-
-    setPhase('editor')
-  }
 
   async function save(publish: boolean) {
     if (!editor) return
@@ -130,156 +100,92 @@ export default function NewPostPage() {
       <div className={`tw-max-w-3xl tw-mx-auto tw-px-4 tw-py-8 ${styles.form}`}>
         <h1 className="tw-text-3xl tw-font-bold tw-mb-8">New Post</h1>
 
-        {/* Title always visible */}
         <div>
-          <label className="tw-block tw-text-sm tw-font-medium">
-            Title
-          </label>
+          <label className="tw-block tw-text-sm tw-font-medium">Title</label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="What's this post about?"
+            placeholder="Post title"
             className="tw-w-full tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground tw-text-xl"
           />
         </div>
 
-        {phase === 'form' && (
-          <>
-            <div>
-              {[
-                {
-                  key: 'situation',
-                  label: 'Situation',
-                  hint: 'What was the context? What problem existed?',
-                },
-                {
-                  key: 'task',
-                  label: 'Task',
-                  hint: 'What were you trying to do?',
-                },
-                {
-                  key: 'action',
-                  label: 'Action',
-                  hint: 'What did you build, decide, or change?',
-                },
-                {
-                  key: 'result',
-                  label: 'Result',
-                  hint: 'What happened? What did you learn?',
-                },
-              ].map(({ key, label, hint }) => (
-                <div key={key} className={styles.section}>
-                  <label className="tw-block tw-text-sm tw-font-medium">
-                    {label}
-                  </label>
-                  <p className="tw-text-xs tw-text-muted-foreground">
-                    {hint}
-                  </p>
-                  <textarea
-                    value={star[key as keyof StarForm]}
-                    onChange={(e) =>
-                      setStar((prev) => ({ ...prev, [key]: e.target.value }))
-                    }
-                    rows={3}
-                    className="tw-w-full tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground tw-resize-y"
-                  />
-                </div>
-              ))}
-            </div>
+        <div className={styles.section}>
+          <input
+            type="text"
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            placeholder="What's this post about?"
+            className="tw-w-full tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground tw-text-sm"
+          />
+        </div>
 
-            <div className={styles.section}>
-              <label className="tw-block tw-text-sm tw-font-medium">Tags</label>
-              <TagPicker value={tagIds} onChange={setTagIds} />
-            </div>
+        <div className={styles.section}>
+          <label className="tw-block tw-text-sm tw-font-medium">
+            Excerpt <span className="tw-text-muted-foreground">(optional)</span>
+          </label>
+          <input
+            type="text"
+            value={excerpt}
+            onChange={(e) => setExcerpt(e.target.value)}
+            placeholder="A one-sentence description shown in the post list"
+            className="tw-w-full tw-border tw-rounded tw-px-3 tw-py-2 tw-text-sm tw-bg-background"
+          />
+        </div>
 
-            {error && <p className="tw-text-red-500 tw-mb-4">{error}</p>}
-
+        <div className={`tw-mb-4 tw-flex tw-gap-2 tw-flex-wrap ${styles.section}`}>
+          {TOOLBAR.map(({ label, action }) => (
             <button
-              onClick={generateDraft}
-              className="tw-w-full tw-py-3 tw-bg-primary tw-text-primary-foreground tw-rounded tw-font-medium hover:tw-opacity-90"
+              key={label}
+              onClick={() => action(editor)}
+              className="tw-px-3 tw-py-1 tw-text-sm tw-border tw-border-border tw-rounded hover:tw-bg-muted"
             >
-              Generate Draft →
+              {label}
             </button>
-          </>
-        )}
+          ))}
+        </div>
 
-        {phase === 'editor' && (
-          <>
-            <div className={`tw-mb-4 tw-flex tw-gap-2 tw-flex-wrap ${styles.section}`}>
-              {TOOLBAR.map(({ label, action }) => (
-                <button
-                  key={label}
-                  onClick={() => action(editor)}
-                  className="tw-px-3 tw-py-1 tw-text-sm tw-border tw-border-border tw-rounded hover:tw-bg-muted"
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
+        <div className="tw-border tw-border-border tw-rounded tw-mb-6 tw-min-h-96">
+          <EditorContent editor={editor} />
+        </div>
 
-            <div className="tw-border tw-border-border tw-rounded tw-mb-6 tw-min-h-96">
-              <EditorContent editor={editor} />
-            </div>
+        <div className={styles.section}>
+          <label className="tw-block tw-text-sm tw-font-medium">Display date</label>
+          <p className="tw-text-xs tw-text-muted-foreground">
+            Optional. Useful for backdating. Defaults to publish date if blank.
+          </p>
+          <input
+            type="date"
+            value={displayDate}
+            onChange={(e) => setDisplayDate(e.target.value)}
+            className="tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground"
+          />
+        </div>
 
-            <div className={styles.section}>
-              <label className="tw-block tw-text-sm tw-font-medium">Excerpt</label>
-              <p className="tw-text-xs tw-text-muted-foreground">
-                Optional. If blank, auto-generated from first 160 characters.
-              </p>
-              <input
-                type="text"
-                value={excerpt}
-                onChange={(e) => setExcerpt(e.target.value)}
-                placeholder="A short summary shown on the blog index..."
-                className="tw-w-full tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground"
-              />
-            </div>
+        <div className={styles.section}>
+          <label className="tw-block tw-text-sm tw-font-medium">Tags</label>
+          <TagPicker value={tagIds} onChange={setTagIds} />
+        </div>
 
-            <div className={styles.section}>
-              <label className="tw-block tw-text-sm tw-font-medium">Display date</label>
-              <p className="tw-text-xs tw-text-muted-foreground">
-                Optional. Useful for backdating. Defaults to publish date if blank.
-              </p>
-              <input
-                type="date"
-                value={displayDate}
-                onChange={(e) => setDisplayDate(e.target.value)}
-                className="tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground"
-              />
-            </div>
+        {error && <p className="tw-text-red-500 tw-mb-4">{error}</p>}
 
-            <div className={styles.section}>
-              <label className="tw-block tw-text-sm tw-font-medium">Tags</label>
-              <TagPicker value={tagIds} onChange={setTagIds} />
-            </div>
-
-            {error && <p className="tw-text-red-500 tw-mb-4">{error}</p>}
-
-            <div className="tw-flex tw-gap-4">
-              <button
-                onClick={() => setPhase('form')}
-                className="tw-px-6 tw-py-3 tw-border tw-border-border tw-rounded hover:tw-bg-muted"
-              >
-                ← Back to form
-              </button>
-              <button
-                onClick={() => save(false)}
-                disabled={saving}
-                className="tw-px-6 tw-py-3 tw-border tw-border-border tw-rounded hover:tw-bg-muted disabled:tw-opacity-50"
-              >
-                Save Draft
-              </button>
-              <button
-                onClick={() => save(true)}
-                disabled={saving}
-                className="tw-flex-1 tw-py-3 tw-bg-primary tw-text-primary-foreground tw-rounded tw-font-medium hover:tw-opacity-90 disabled:tw-opacity-50"
-              >
-                Publish
-              </button>
-            </div>
-          </>
-        )}
+        <div className="tw-flex tw-gap-4">
+          <button
+            onClick={() => save(false)}
+            disabled={saving}
+            className="tw-px-6 tw-py-3 tw-border tw-border-border tw-rounded hover:tw-bg-muted disabled:tw-opacity-50"
+          >
+            Save Draft
+          </button>
+          <button
+            onClick={() => save(true)}
+            disabled={saving}
+            className="tw-flex-1 tw-py-3 tw-bg-primary tw-text-primary-foreground tw-rounded tw-font-medium hover:tw-opacity-90 disabled:tw-opacity-50"
+          >
+            Publish
+          </button>
+        </div>
       </div>
     </div>
   )
