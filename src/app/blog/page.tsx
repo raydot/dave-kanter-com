@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Blog | Dave Kanter',
     description:
-      'Thoughts on AI/ML engineering, web development, and technical leadership',
+      'Thoughts on AI/ML engineering, web development, and technical leadership.',
     url: 'https://davekanter.com/blog',
     type: 'website',
   },
@@ -42,7 +42,7 @@ export default async function BlogPage() {
 
         <header className="tw-mb-8 sm:tw-mb-12">
           <h1 className="tw-text-3xl sm:tw-text-4xl tw-font-bold tw-mb-3 sm:tw-mb-4">
-            Race Condition
+            Dead Reckoning
           </h1>
           <p className="tw-text-muted-foreground tw-text-base sm:tw-text-lg">
             Thoughts on AI/ML engineering, web development, and technical

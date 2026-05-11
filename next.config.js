@@ -16,6 +16,7 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: ['react-markdown', 'remark-gfm'],
+    devIndicators: false,
   },
   images: {
     formats: ['image/webp', 'image/avif'],
