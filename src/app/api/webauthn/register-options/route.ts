@@ -4,31 +4,37 @@ import { CHALLENGE_KEY, CHALLENGE_TTL, getRedis, getSupabase, rpID, rpName } fro
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  const supabase = getSupabase()
-  const redis = getRedis()
+  try {
+    const supabase = getSupabase()
+    const redis = getRedis()
 
-  const { data: existing } = await supabase
-    .from('webauthn_credentials')
-    .select('credential_id')
+    const { data: existing } = await supabase
+      .from('webauthn_credentials')
+      .select('credential_id')
 
-  const excludeCredentials = (existing ?? []).map((row: { credential_id: string }) => ({
-    id: row.credential_id,
-  }))
+    const excludeCredentials = (existing ?? []).map((row: { credential_id: string }) => ({
+      id: row.credential_id,
+    }))
 
-  const options = await generateRegistrationOptions({
-    rpName,
-    rpID,
-    userName: 'admin',
-    userDisplayName: 'Admin',
-    attestationType: 'none',
-    excludeCredentials,
-    authenticatorSelection: {
-      residentKey: 'preferred',
-      userVerification: 'preferred',
-    },
-  })
+    const options = await generateRegistrationOptions({
+      rpName,
+      rpID,
+      userName: 'admin',
+      userDisplayName: 'Admin',
+      attestationType: 'none',
+      excludeCredentials,
+      authenticatorSelection: {
+        residentKey: 'preferred',
+        userVerification: 'preferred',
+      },
+    })
 
-  await redis.set(CHALLENGE_KEY, options.challenge, { ex: CHALLENGE_TTL })
+    await redis.set(CHALLENGE_KEY, options.challenge, { ex: CHALLENGE_TTL })
 
-  return Response.json(options)
+    return Response.json(options)
+  } catch (err) {
+    console.error('[webauthn/register-options] Failed to generate registration options:', err)
+    const message = err instanceof Error ? err.message : 'Failed to generate registration options'
+    return Response.json({ error: message }, { status: 500 })
+  }
 }

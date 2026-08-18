@@ -15,7 +15,10 @@ export default function LoginPage() {
 
     try {
       const optRes = await fetch('/api/webauthn/auth-options')
-      if (!optRes.ok) throw new Error(await optRes.text())
+      if (!optRes.ok) {
+        const data = await optRes.json().catch(() => ({}))
+        throw new Error(data.error ?? 'Failed to start authentication')
+      }
       const options = await optRes.json()
 
       const authResult = await startAuthentication({ optionsJSON: options })

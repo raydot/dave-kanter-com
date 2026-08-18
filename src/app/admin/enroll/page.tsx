@@ -13,7 +13,10 @@ export default function EnrollPage() {
 
     try {
       const optRes = await fetch('/api/webauthn/register-options')
-      if (!optRes.ok) throw new Error(await optRes.text())
+      if (!optRes.ok) {
+        const data = await optRes.json().catch(() => ({}))
+        throw new Error(data.error ?? 'Failed to start registration')
+      }
       const options = await optRes.json()
 
       const regResult = await startRegistration({ optionsJSON: options })

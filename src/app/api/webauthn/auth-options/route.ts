@@ -4,24 +4,30 @@ import { CHALLENGE_KEY, CHALLENGE_TTL, getRedis, getSupabase, rpID } from '@/lib
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
-  const supabase = getSupabase()
-  const redis = getRedis()
+  try {
+    const supabase = getSupabase()
+    const redis = getRedis()
 
-  const { data: credentials } = await supabase
-    .from('webauthn_credentials')
-    .select('credential_id')
+    const { data: credentials } = await supabase
+      .from('webauthn_credentials')
+      .select('credential_id')
 
-  const allowCredentials = (credentials ?? []).map((row: { credential_id: string }) => ({
-    id: row.credential_id,
-  }))
+    const allowCredentials = (credentials ?? []).map((row: { credential_id: string }) => ({
+      id: row.credential_id,
+    }))
 
-  const options = await generateAuthenticationOptions({
-    rpID,
-    allowCredentials,
-    userVerification: 'preferred',
-  })
+    const options = await generateAuthenticationOptions({
+      rpID,
+      allowCredentials,
+      userVerification: 'preferred',
+    })
 
-  await redis.set(CHALLENGE_KEY, options.challenge, { ex: CHALLENGE_TTL })
+    await redis.set(CHALLENGE_KEY, options.challenge, { ex: CHALLENGE_TTL })
 
-  return Response.json(options)
+    return Response.json(options)
+  } catch (err) {
+    console.error('[webauthn/auth-options] Failed to generate authentication options:', err)
+    const message = err instanceof Error ? err.message : 'Failed to generate authentication options'
+    return Response.json({ error: message }, { status: 500 })
+  }
 }
