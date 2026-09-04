@@ -43,3 +43,6 @@ out/
 /docs
 ./github/CASCADE_RULES.md
 .windsurfrules
+
+# Claude Code local settings (per-developer, not shared)
+.claude/settings.local.json
