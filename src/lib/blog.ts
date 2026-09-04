@@ -48,6 +48,7 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
     .from('posts')
     .select(POST_SELECT)
     .eq('slug', slug)
+    .eq('publish', true)
     .single()
 
   if (error || !data) return null
