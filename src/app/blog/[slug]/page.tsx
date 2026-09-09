@@ -48,8 +48,33 @@ export default async function BlogPost({
     ? new Date(post.updatedAt).toLocaleDateString('en-US', dateOpts)
     : null
 
+  const canonicalUrl = `https://davekanter.com/blog/${slug}`
+  const author = {
+    '@type': 'Person',
+    name: 'Dave Kanter',
+    url: 'https://davekanter.com',
+  }
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    dateModified: post.updatedAt ?? post.date,
+    author,
+    publisher: author,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': canonicalUrl,
+    },
+  }
+
   return (
     <div className="tw-min-h-screen tw-bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <article className="tw-max-w-3xl tw-mx-auto tw-px-4 sm:tw-px-6 lg:tw-px-8 tw-py-8 sm:tw-py-12">
         <nav className="tw-flex tw-gap-4 tw-mb-6 sm:tw-mb-8">
           <Link href="/">
