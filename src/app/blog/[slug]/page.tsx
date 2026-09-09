@@ -2,11 +2,20 @@ import '../globals.css'
 import { notFound } from 'next/navigation'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import remarkGfm from 'remark-gfm'
-import { getPostBySlug } from '@/lib/blog'
+import { getAllPosts, getPostBySlug } from '@/lib/blog'
 import { Separator } from '@/components/ui/separator'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import type { Metadata } from 'next'
+
+// Regenerate at most once an hour; posts change infrequently and
+// irregularly (new posts and edits to old ones both happen, just rarely).
+export const revalidate = 3600
+
+export async function generateStaticParams() {
+  const posts = await getAllPosts()
+  return posts.map((post) => ({ slug: post.slug }))
+}
 
 export async function generateMetadata({
   params,
