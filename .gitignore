@@ -12,6 +12,7 @@ yarn-error.log
 # Next.js build output
 .next/
 out/
+tsconfig.tsbuildinfo
 
 # Environment variables
 .env
