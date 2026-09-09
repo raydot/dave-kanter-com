@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+  // Canonical form has no trailing slash; Next already 308s the /path/
+  // variant to /path, this just makes that convention explicit.
+  trailingSlash: false,
   compiler: {
     // Remove console.log in production, but preserve console.error and console.warn
     removeConsole:
