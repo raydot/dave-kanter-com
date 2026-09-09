@@ -20,7 +20,7 @@ out/
 .env.test.local
 .env.production.local
 
-# My stuff 
+# My stuff
 # /content
 
 #vscode
@@ -46,3 +46,7 @@ out/
 
 # Claude Code local settings (per-developer, not shared)
 .claude/settings.local.json
+
+# Libre office files
+*.odt
+.~lock.*#

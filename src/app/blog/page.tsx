@@ -14,7 +14,7 @@ import { Separator } from '@/components/ui/separator'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Blog | Dave Kanter',
+  title: 'Blog',
   description:
     'Thoughts on AI/ML engineering, web development, and technical leadership from a Staff Frontend Engineer with 20+ years of experience.',
   openGraph: {

@@ -18,8 +18,12 @@ export const viewport = {
 }
 
 export const metadata = {
-  title:
-    'Dave Kanter - Technical Strategist, Team leader, Full-Stack Developer & Educator',
+  metadataBase: new URL('https://davekanter.com'),
+  title: {
+    default:
+      'Dave Kanter - Technical Strategist, Team leader, Full-Stack Developer & Educator',
+    template: '%s | Dave Kanter',
+  },
   description:
     'Full-stack developer with 20+ years experience in enterprise applications, teaching at UC Berkeley, Parsons, and Academy of Art University. Specializing in Next.js, React, and AI.',
   keywords:
@@ -28,6 +32,9 @@ export const metadata = {
   creator: 'Dave Kanter',
   publisher: 'Dave Kanter',
   robots: 'index, follow',
+  alternates: {
+    canonical: './',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',

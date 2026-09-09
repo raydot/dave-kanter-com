@@ -17,8 +17,18 @@ export async function generateMetadata({
   const post = await getPostBySlug(slug)
   if (!post) return {}
   return {
-    title: `${post.title} | Dave Kanter`,
+    title: post.title,
     description: post.excerpt,
+    alternates: { canonical: `/blog/${slug}` },
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: 'article',
+      url: `/blog/${slug}`,
+      publishedTime: post.date,
+      modifiedTime: post.updatedAt ?? post.date,
+      authors: ['https://davekanter.com'],
+    },
   }
 }
 
