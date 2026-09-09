@@ -1,2 +1,0 @@
-# Sitemap reference
-Sitemap: https://davekanter.com/sitemap.xml
