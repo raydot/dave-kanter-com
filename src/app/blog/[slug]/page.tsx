@@ -84,7 +84,7 @@ export default async function BlogPost({
           }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'max-content 1fr', columnGap: '12px' }}>
               <span style={{ color: '#7daedf' }}>title:</span>
-              <span style={{ color: '#dcdcdc', fontWeight: 600 }}>{post.title}</span>
+              <h1 style={{ margin: 0, fontSize: 'inherit', color: '#dcdcdc', fontWeight: 600 }}>{post.title}</h1>
 
               <span style={{ color: '#7daedf' }}>date:</span>
               <span style={{ color: '#b5cea8' }}>{formattedDate}</span>
@@ -120,10 +120,25 @@ export default async function BlogPost({
           </div>
         </header>
 
-        <div className="tw-prose tw-prose-invert tw-max-w-none tw-prose-headings:tw-text-foreground tw-prose-headings:font-bold tw-prose-h1:text-3xl tw-prose-h2:text-2xl tw-prose-h3:text-xl tw-prose-p:tw-text-foreground tw-prose-p:text-base tw-prose-p:leading-7 tw-prose-strong:tw-text-foreground tw-prose-li:tw-text-foreground tw-prose-a:text-primary tw-prose-a:no-underline hover:tw-prose-a:underline tw-prose-code:text-sm tw-prose-pre:bg-muted">
+        <div className="tw-prose tw-prose-invert tw-max-w-none tw-prose-headings:tw-text-foreground tw-prose-headings:font-bold tw-prose-h2:text-3xl tw-prose-h3:text-2xl tw-prose-h4:text-xl tw-prose-p:tw-text-foreground tw-prose-p:text-base tw-prose-p:leading-7 tw-prose-strong:tw-text-foreground tw-prose-li:tw-text-foreground tw-prose-a:text-primary tw-prose-a:no-underline hover:tw-prose-a:underline tw-prose-code:text-sm tw-prose-pre:bg-muted">
           {post.content.trim().startsWith('<')
             ? <div dangerouslySetInnerHTML={{ __html: post.content }} />
-            : <MDXRemote source={post.content} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
+            : (
+              <MDXRemote
+                source={post.content}
+                options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+                components={{
+                  // The post title above is the page's <h1>; demote body
+                  // headings by one level so there's exactly one <h1>.
+                  h1: (props) => <h2 {...props} />,
+                  h2: (props) => <h3 {...props} />,
+                  h3: (props) => <h4 {...props} />,
+                  h4: (props) => <h5 {...props} />,
+                  h5: (props) => <h6 {...props} />,
+                  h6: (props) => <h6 {...props} />,
+                }}
+              />
+            )
           }
         </div>
 
