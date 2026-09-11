@@ -13,6 +13,11 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import type { Metadata } from 'next'
 
+// Same 1h window as the post pages and sitemap. Without it Next freezes
+// this page at build time and new posts don't show up on the index until
+// the next deploy, even though they're already live at their own URL.
+export const revalidate = 3600
+
 export const metadata: Metadata = {
   title: 'Blog',
   description:
