@@ -1,5 +1,10 @@
 import Link from 'next/link'
 
+// A post-submission confirmation page has no business in search results.
+export const metadata = {
+  robots: { index: false, follow: false },
+}
+
 export default function Success() {
   return (
     <div className="container">
