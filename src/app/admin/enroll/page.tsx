@@ -33,7 +33,7 @@ export default function EnrollPage() {
       }
 
       setStatus('done')
-      setMessage('Fingerprint enrolled. You can now log in at /admin/login.')
+      setMessage('Passkey registered. You can now sign in with it at /admin/login.')
     } catch (err) {
       setStatus('error')
       setMessage(err instanceof Error ? err.message : 'Unknown error')
@@ -42,19 +42,17 @@ export default function EnrollPage() {
 
   return (
     <div style={{ padding: '2rem', maxWidth: 480 }}>
-      <h1>Enroll Fingerprint</h1>
-      <p>One-time setup. After enrollment, delete or ignore this page.</p>
-      {process.env.NODE_ENV === 'production' && !process.env.NEXT_PUBLIC_ENROLL_OPEN && (
-        <p style={{ color: 'red' }}>
-          Set <code>NEXT_PUBLIC_ENROLL_OPEN=1</code> in env to enable this page in production.
-        </p>
-      )}
+      <h1>Register Passkey</h1>
+      <p>
+        Adds a passkey for this device. Requires an existing admin session, so
+        sign in with the password first.
+      </p>
       <button
         onClick={handleEnroll}
         disabled={status === 'working' || status === 'done'}
         style={{ padding: '0.75rem 1.5rem', fontSize: '1rem', cursor: 'pointer' }}
       >
-        {status === 'working' ? 'Waiting for biometric…' : 'Enroll Fingerprint'}
+        {status === 'working' ? 'Waiting for biometric…' : 'Register Passkey'}
       </button>
       {message && (
         <p style={{ marginTop: '1rem', color: status === 'error' ? 'red' : 'green' }}>

@@ -1,9 +1,18 @@
 import { generateRegistrationOptions } from '@simplewebauthn/server'
+import { cookies } from 'next/headers'
 import { CHALLENGE_KEY, CHALLENGE_TTL, getRedis, getSupabase, rpID, rpName } from '@/lib/webauthn'
+import { verifyAdminToken } from '@/lib/admin-auth'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
+  // Checked in the middleware too; repeated here because this endpoint
+  // leads to minting a permanent credential.
+  const token = (await cookies()).get('admin_token')?.value
+  if (!(await verifyAdminToken(token))) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     const supabase = getSupabase()
     const redis = getRedis()

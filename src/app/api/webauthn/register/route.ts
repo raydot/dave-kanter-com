@@ -1,7 +1,16 @@
 import { verifyRegistrationResponse } from '@simplewebauthn/server'
+import { cookies } from 'next/headers'
 import { CHALLENGE_KEY, getRedis, getSupabase, origin, rpID } from '@/lib/webauthn'
+import { verifyAdminToken } from '@/lib/admin-auth'
 
 export async function POST(request: Request) {
+  // Checked in the middleware too; repeated here because this endpoint
+  // mints a permanent credential.
+  const token = (await cookies()).get('admin_token')?.value
+  if (!(await verifyAdminToken(token))) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
   try {
     const redis = getRedis()
     const supabase = getSupabase()
