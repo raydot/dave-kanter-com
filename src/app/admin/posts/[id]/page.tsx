@@ -13,6 +13,14 @@ import TableCell from '@tiptap/extension-table-cell'
 import styles from '../../new/page.module.css'
 import TagPicker from '@/components/admin/TagPicker'
 
+interface SyndicationEntry {
+  platform: string
+  url: string
+  date: string
+}
+
+const SYNDICATION_PLATFORMS = ['dev.to', 'LinkedIn', 'Medium', 'Hashnode', 'Other']
+
 const TOOLBAR: { label: string; action: (e: Editor | null) => void }[] = [
   { label: 'Bold',          action: (e) => e?.chain().focus().toggleBold().run() },
   { label: 'Italic',        action: (e) => e?.chain().focus().toggleItalic().run() },
@@ -34,6 +42,9 @@ export default function EditPostPage() {
   const [excerpt, setExcerpt] = useState('')
   const [displayDate, setDisplayDate] = useState('')
   const [tagIds, setTagIds] = useState<string[]>([])
+  const [syndicatedTo, setSyndicatedTo] = useState<SyndicationEntry[]>([])
+  const [newPlatform, setNewPlatform] = useState(SYNDICATION_PLATFORMS[0])
+  const [newUrl, setNewUrl] = useState('')
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -66,6 +77,7 @@ export default function EditPostPage() {
         setExcerpt(post.excerpt || '')
         setDisplayDate(post.published_at ? post.published_at.slice(0, 10) : '')
         setTagIds(Array.isArray(ids) ? ids : [])
+        setSyndicatedTo(Array.isArray(post.syndicated_to) ? post.syndicated_to : [])
         const contentType = post.content.trim().startsWith('<') ? 'html' : 'markdown'
         editor?.commands.setContent(post.content, { contentType })
         setLoading(false)
@@ -95,6 +107,7 @@ export default function EditPostPage() {
         excerpt: excerpt.trim() || undefined,
         published_at: displayDate ? new Date(displayDate).toISOString() : undefined,
         slug,
+        syndicated_to: syndicatedTo,
       }),
     })
 
@@ -113,6 +126,16 @@ export default function EditPostPage() {
 
     router.refresh()
     router.push('/admin/posts')
+  }
+
+  function addSyndication() {
+    const url = newUrl.trim()
+    if (!url) return
+    setSyndicatedTo([
+      ...syndicatedTo,
+      { platform: newPlatform, url, date: new Date().toISOString() },
+    ])
+    setNewUrl('')
   }
 
   if (loading) {
@@ -184,6 +207,67 @@ export default function EditPostPage() {
         <div className={styles.section}>
           <label className="tw-block tw-text-sm tw-font-medium">Tags</label>
           <TagPicker value={tagIds} onChange={setTagIds} />
+        </div>
+
+        <div className={styles.section}>
+          <label className="tw-block tw-text-sm tw-font-medium">Syndicated to</label>
+          <p className="tw-text-xs tw-text-muted-foreground">
+            Where this post was cross-posted. Add the URL once it&apos;s live there.
+            Saved with the post.
+          </p>
+
+          {syndicatedTo.length > 0 && (
+            <ul className="tw-mb-3 tw-space-y-1">
+              {syndicatedTo.map((entry, i) => (
+                <li key={`${entry.platform}-${entry.url}`} className="tw-flex tw-items-center tw-gap-2 tw-text-sm">
+                  <span className="tw-text-muted-foreground tw-shrink-0">{entry.platform}</span>
+                  <a
+                    href={entry.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="tw-underline tw-truncate"
+                  >
+                    {entry.url}
+                  </a>
+                  <span className="tw-text-xs tw-text-muted-foreground tw-shrink-0">
+                    {entry.date?.slice(0, 10)}
+                  </span>
+                  <button
+                    onClick={() => setSyndicatedTo(syndicatedTo.filter((_, j) => j !== i))}
+                    className="tw-text-xs tw-text-red-400 hover:tw-opacity-70 tw-shrink-0"
+                  >
+                    remove
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <div className="tw-flex tw-gap-2">
+            <select
+              value={newPlatform}
+              onChange={(e) => setNewPlatform(e.target.value)}
+              className="tw-px-3 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground tw-text-sm"
+            >
+              {SYNDICATION_PLATFORMS.map((p) => (
+                <option key={p} value={p}>{p}</option>
+              ))}
+            </select>
+            <input
+              type="url"
+              value={newUrl}
+              onChange={(e) => setNewUrl(e.target.value)}
+              placeholder="https://dev.to/..."
+              className="tw-flex-1 tw-px-3 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground tw-text-sm"
+            />
+            <button
+              onClick={addSyndication}
+              disabled={!newUrl.trim()}
+              className="tw-px-4 tw-py-2 tw-text-sm tw-border tw-border-border tw-rounded hover:tw-bg-muted disabled:tw-opacity-50"
+            >
+              Add
+            </button>
+          </div>
         </div>
 
         {error && <p className="tw-text-red-500 tw-mt-4">{error}</p>}

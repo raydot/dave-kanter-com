@@ -51,3 +51,4 @@ tsconfig.tsbuildinfo
 # Libre office files
 *.odt
 .~lock.*#
+next-env.d.ts
