@@ -39,8 +39,15 @@ export async function getAllPosts(): Promise<BlogPost[]> {
     .eq('publish', true)
     .order('published_at', { ascending: false })
 
-  if (error || !data) return []
-  return data.map(mapPost)
+  // Deliberately throws rather than returning []. These run during ISR
+  // regeneration, where an empty result would get cached as an empty blog
+  // index, sitemap and feed for the full revalidate window. Throwing makes
+  // Next keep serving the last good version instead.
+  if (error) {
+    throw new Error(`Failed to load posts: ${error.message}`)
+  }
+
+  return (data ?? []).map(mapPost)
 }
 
 export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
@@ -51,6 +58,12 @@ export async function getPostBySlug(slug: string): Promise<BlogPost | null> {
     .eq('publish', true)
     .single()
 
-  if (error || !data) return null
-  return mapPost(data)
+  if (error) {
+    // PGRST116 is "no rows matched" — a real 404, not a failure. Anything
+    // else would otherwise cache a 404 over a live post for an hour.
+    if (error.code === 'PGRST116') return null
+    throw new Error(`Failed to load post "${slug}": ${error.message}`)
+  }
+
+  return data ? mapPost(data) : null
 }
