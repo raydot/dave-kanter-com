@@ -113,13 +113,22 @@ export default function AdminPostsPage() {
                 </div>
                 <div className="tw-flex tw-items-center tw-gap-2 tw-ml-4 tw-shrink-0">
                   {post.publish && (
-                    <Link
-                      href={`/blog/${post.slug}`}
-                      target="_blank"
-                      className="tw-text-sm tw-text-muted-foreground hover:tw-text-foreground"
-                    >
-                      View
-                    </Link>
+                    <>
+                      <Link
+                        href={`/blog/${post.slug}`}
+                        target="_blank"
+                        className="tw-text-sm tw-text-muted-foreground hover:tw-text-foreground"
+                      >
+                        View
+                      </Link>
+                      <Link
+                        href={`/api/posts/${post.id}/export`}
+                        target="_blank"
+                        className="tw-text-sm tw-text-muted-foreground hover:tw-text-foreground"
+                      >
+                        Export
+                      </Link>
+                    </>
                   )}
                   <button
                     onClick={() => togglePublish(post.id, post.publish)}
