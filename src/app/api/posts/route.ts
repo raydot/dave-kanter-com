@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextRequest } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { resolvePostTags } from '@/lib/tags'
 
 export const dynamic = 'force-dynamic'
@@ -42,6 +43,13 @@ export async function POST(request: NextRequest) {
   if (Array.isArray(tagNames) && tagNames.length > 0) {
     await resolvePostTags(data.id, tagNames, supabase)
   }
+
+  // Without this the new post waits out the revalidate window before it
+  // appears on the index, in the sitemap or in the feed.
+  revalidatePath('/blog')
+  revalidatePath(`/blog/${data.slug}`)
+  revalidatePath('/sitemap.xml')
+  revalidatePath('/feed.xml')
 
   return Response.json({ ok: true, post: data })
 }
