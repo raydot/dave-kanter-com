@@ -34,9 +34,19 @@ export async function generateMetadata({
       description: post.excerpt,
       type: 'article',
       url: `/blog/${slug}`,
+      siteName: 'Dave Kanter',
+      locale: 'en_US',
       publishedTime: post.date,
       modifiedTime: post.updatedAt ?? post.date,
       authors: ['https://davekanter.com'],
+    },
+    // Setting `twitter` replaces the root layout's object wholesale, so
+    // card and creator have to be repeated or posts lose them.
+    twitter: {
+      card: 'summary_large_image',
+      creator: '@raydot',
+      title: post.title,
+      description: post.excerpt,
     },
   }
 }
@@ -72,6 +82,7 @@ export default async function BlogPost({
     dateModified: post.updatedAt ?? post.date,
     author,
     publisher: author,
+    image: `${canonicalUrl}/opengraph-image`,
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': canonicalUrl,
@@ -82,7 +93,11 @@ export default async function BlogPost({
     <div className="tw-min-h-screen tw-bg-background">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        // JSON.stringify doesn't escape `<`, so a title containing
+        // "</script>" would otherwise break out of the tag.
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
+        }}
       />
       <article className="tw-max-w-3xl tw-mx-auto tw-px-4 sm:tw-px-6 lg:tw-px-8 tw-py-8 sm:tw-py-12">
         <nav className="tw-flex tw-gap-4 tw-mb-6 sm:tw-mb-8">
