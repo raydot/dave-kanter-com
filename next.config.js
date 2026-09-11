@@ -19,8 +19,10 @@ const nextConfig = {
   },
   experimental: {
     optimizePackageImports: ['react-markdown', 'remark-gfm'],
-    devIndicators: false,
   },
+  // Not a valid `experimental` key in Next 16 — it warned on every build
+  // and never actually hid the indicator.
+  devIndicators: false,
   images: {
     formats: ['image/webp', 'image/avif'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
