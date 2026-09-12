@@ -1,3 +1,31 @@
+# [2.9.0](https://github.com/raydot/dave-kanter-com/compare/v2.8.4...v2.9.0) (2026-09-12)
+
+
+### Bug Fixes
+
+* emit post-specific social metadata and harden post JSON-LD ([1b5d09b](https://github.com/raydot/dave-kanter-com/commit/1b5d09b2d8cbcbbe7b9dd7837eac4ab2579ee62d))
+* enforce publish filter in getPostBySlug ([4e87393](https://github.com/raydot/dave-kanter-com/commit/4e873931b9ba5a365f7946348d0c31e57339e2b2))
+* move devIndicators out of experimental in next.config.js ([97aa4ce](https://github.com/raydot/dave-kanter-com/commit/97aa4ce550de296d2795de574b49f81e1ce2a37b))
+* purge cached blog paths after post create, update and delete ([bb04155](https://github.com/raydot/dave-kanter-com/commit/bb0415501d864bff4b467637b54c12d5f5cc6d16))
+* require admin auth on posts/tags API routes ([60ada96](https://github.com/raydot/dave-kanter-com/commit/60ada96948147a9049c94ada11e81105fe00d582))
+* require admin auth on WebAuthn registration routes ([44a18e3](https://github.com/raydot/dave-kanter-com/commit/44a18e3e73c993962cf0fa9c38ff9aa53e6fe60d))
+* revalidate the blog index hourly ([24b1553](https://github.com/raydot/dave-kanter-com/commit/24b155343a7b724dac707b1dd9fd1268ea5461ca))
+* surface Supabase errors instead of caching empty blog results ([7d954aa](https://github.com/raydot/dave-kanter-com/commit/7d954aab3efd69124e128ea85559113641abe211))
+
+
+### Features
+
+* add canonical URLs and article OpenGraph metadata ([57f2fdd](https://github.com/raydot/dave-kanter-com/commit/57f2fdda26aa140fbe301f86b63929a25c7f7695))
+* add dev.to syndication export route ([42e0c30](https://github.com/raydot/dave-kanter-com/commit/42e0c3078448adb54f4e9243c1463c0e7bc4ffd4))
+* add dynamic sitemap.xml via App Router sitemap convention ([986396c](https://github.com/raydot/dave-kanter-com/commit/986396cda8add4a8747e020314ecd37597dd6f17))
+* add JSON-LD structured data to blog post pages ([244a8e4](https://github.com/raydot/dave-kanter-com/commit/244a8e4bbe43ffcca1305d0417406487acd424bf))
+* add OG image generation for blog post pages ([473c9d9](https://github.com/raydot/dave-kanter-com/commit/473c9d9e0254aceae82f9964f6670de53e3287b4))
+* add RSS feed via App Router route handler ([8a9be19](https://github.com/raydot/dave-kanter-com/commit/8a9be19df475b7159e4467148d557e1494d31cc7))
+* add semantic h1 and fix heading hierarchy on post page ([3fdf5bb](https://github.com/raydot/dave-kanter-com/commit/3fdf5bb60587cabdc7d4c07d125a649639dbbf26))
+* enable ISR for blog post pages and sitemap ([2df7bed](https://github.com/raydot/dave-kanter-com/commit/2df7bed805951cb23a8119c75b11221aa4be9329))
+* generate robots.txt via App Router robots convention ([34865f3](https://github.com/raydot/dave-kanter-com/commit/34865f3d3ba917841c0f35328744e8bc0355f39b))
+* record syndication targets per post in the admin editor ([fd23e5d](https://github.com/raydot/dave-kanter-com/commit/fd23e5d2a95cee7c1bc46833d5ca7181df191f1e))
+
 ## [2.8.4](https://github.com/raydot/dave-kanter-com/compare/v2.8.3...v2.8.4) (2026-01-04)
 
 
