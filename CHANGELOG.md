@@ -1,3 +1,10 @@
+# [2.10.0](https://github.com/raydot/dave-kanter-com/compare/v2.9.0...v2.10.0) (2026-09-12)
+
+
+### Features
+
+* add sign-out to the admin nav ([06901af](https://github.com/raydot/dave-kanter-com/commit/06901af52fb969996e77b41c7cf07b929ae55045))
+
 # [2.9.0](https://github.com/raydot/dave-kanter-com/compare/v2.8.4...v2.9.0) (2026-09-12)
 
 
