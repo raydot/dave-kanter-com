@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { logout } from './actions'
 
 const navItems = [
   { label: 'New Post', href: '/admin/new' },
@@ -31,6 +32,17 @@ export default function AdminLayout({
               </Link>
             </span>
           ))}
+
+          {pathname !== '/admin/login' && (
+            <form action={logout} className="tw-ml-auto">
+              <button
+                type="submit"
+                className="tw-text-sm tw-font-medium tw-text-muted-foreground hover:tw-text-foreground"
+              >
+                Sign out
+              </button>
+            </form>
+          )}
         </div>
       </nav>
       {children}
