@@ -29,8 +29,7 @@ export default function StepUpForm() {
   return (
     <>
       <p>
-        Re-enter the admin password to continue. Registering a passkey mints
-        a permanent credential, so a session alone isn&apos;t enough here.
+        Re-enter the admin password to continue.
       </p>
       <form action={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', maxWidth: 320 }}>
         <input
