@@ -1,3 +1,18 @@
+# [2.11.0](https://github.com/raydot/dave-kanter-com/compare/v2.10.1...v2.11.0) (2026-09-13)
+
+
+### Bug Fixes
+
+* center .container pages and rewrite 404 copy ([bf944ea](https://github.com/raydot/dave-kanter-com/commit/bf944eaa391fb1aff43c181f2d0305d430c7cf01))
+* hide admin nav and sign-out on pre-auth pages ([935b2b7](https://github.com/raydot/dave-kanter-com/commit/935b2b72ec5c85fd3d77b344816832f51df6a656))
+
+
+### Features
+
+* add custom 404 page ([ee5c709](https://github.com/raydot/dave-kanter-com/commit/ee5c7091b10363427609970dd4a3ecaf46749ef7))
+* add local-only bypass to bootstrap the first admin passkey ([087958e](https://github.com/raydot/dave-kanter-com/commit/087958e9c8f25d7535116bc95fbab7712764450d))
+* add screenshot capability to ux-reviewer agent ([5426a23](https://github.com/raydot/dave-kanter-com/commit/5426a231560aa66d1f65bc7fe2f9ac043b335dc4))
+
 ## [2.10.1](https://github.com/raydot/dave-kanter-com/compare/v2.10.0...v2.10.1) (2026-09-13)
 
 
