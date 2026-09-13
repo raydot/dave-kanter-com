@@ -1,3 +1,15 @@
+# [2.12.0](https://github.com/raydot/dave-kanter-com/compare/v2.11.0...v2.12.0) (2026-09-13)
+
+
+### Bug Fixes
+
+* edited the text stop over-explaining the login process. ([82730ee](https://github.com/raydot/dave-kanter-com/commit/82730eee9c1aa8351477200a0fd22510ec55c66b))
+
+
+### Features
+
+* require password step-up before minting enroll passkeys ([77dbc6a](https://github.com/raydot/dave-kanter-com/commit/77dbc6a11467bb86f24699ba53005a9e9300d28a))
+
 # [2.11.0](https://github.com/raydot/dave-kanter-com/compare/v2.10.1...v2.11.0) (2026-09-13)
 
 
