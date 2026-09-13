@@ -129,7 +129,8 @@ export default async function BlogPost({
             <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#ff5f57', display: 'inline-block' }} />
             <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#febc2e', display: 'inline-block' }} />
             <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#28c840', display: 'inline-block' }} />
-            <span style={{ marginLeft: 8, fontSize: '11px', color: 'rgba(220,220,220,0.35)', fontFamily: 'monospace', letterSpacing: '0.03em' }}>
+            {/* 0.6 alpha composites to 4.75:1 on #252c34; 0.35 was 2.58:1 (fails AA). */}
+            <span style={{ marginLeft: 8, fontSize: '11px', color: 'rgba(220,220,220,0.6)', fontFamily: 'monospace', letterSpacing: '0.03em' }}>
               {slug}.mdx
             </span>
           </div>
