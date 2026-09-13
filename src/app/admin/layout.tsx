@@ -16,7 +16,11 @@ export default function AdminLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
-  const visible = navItems.filter((item) => item.href !== pathname)
+  // /admin/login and /admin/enroll are the only routes reachable without a
+  // session (enroll only when the ADMIN_ENROLL_OPEN bypass is on) — neither
+  // should show the authenticated nav or sign-out control.
+  const isPreAuthPage = pathname === '/admin/login' || pathname === '/admin/enroll'
+  const visible = isPreAuthPage ? [] : navItems.filter((item) => item.href !== pathname)
 
   return (
     <div style={{ padding: '1.5rem' }}>
@@ -34,7 +38,7 @@ export default function AdminLayout({
             </span>
           ))}
 
-          {pathname !== '/admin/login' && (
+          {!isPreAuthPage && (
             <form action={logout} className={styles.signOutForm}>
               <button type="submit" className={styles.signOut}>
                 Sign out
