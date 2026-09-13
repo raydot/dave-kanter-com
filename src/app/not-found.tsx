@@ -6,8 +6,8 @@ import Link from 'next/link'
 export default function NotFound() {
   return (
     <div className="container">
-      <h1>Page Not Found</h1>
-      <p>The page you&apos;re looking for doesn&apos;t exist or has moved.</p>
+      <h1>404</h1>
+      <p>This page doesn&apos;t exist.  Too bad!</p>
       <Link href="/" className="button">Back to Home</Link>
     </div>
   )

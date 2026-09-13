@@ -177,7 +177,11 @@ a:hover {
 }
 
 /* Wrapper */
-#wrapper {
+/* .container is the same treatment for plain content pages (success
+   confirmation, 404) that skip the #header/#footer intro layout — without
+   this they render flush to the viewport edge with no centering. */
+#wrapper,
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -186,6 +190,7 @@ a:hover {
   position: relative;
   z-index: 3;
   padding: 4rem 2rem;
+  text-align: center;
   width: 100%;
   background: transparent;
 }
@@ -227,7 +232,8 @@ body.is-article-visible #footer {
     line-height: 1.5;
   }
 
-  #wrapper {
+  #wrapper,
+  .container {
     padding: 2rem 1rem;
   }
 }
@@ -238,7 +244,8 @@ body.is-article-visible #footer {
     font-size: 10pt;
   }
 
-  #wrapper {
+  #wrapper,
+  .container {
     padding: 1rem;
   }
 
