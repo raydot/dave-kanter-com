@@ -41,9 +41,6 @@ const nextConfig = {
       },
     ],
   },
-  sassOptions: {
-    includePaths: ['./src/assets/scss'],
-  },
   webpack: (config) => {
     config.resolve.alias['@'] = require('path').resolve(__dirname, 'src')
 
