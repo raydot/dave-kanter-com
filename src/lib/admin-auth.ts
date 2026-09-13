@@ -13,3 +13,13 @@ export async function verifyAdminToken(token: string | undefined): Promise<boole
     return false
   }
 }
+
+// Local-only escape hatch for the enroll chicken-and-egg problem: with no
+// admin_token yet, there's no UI path to reach /admin/enroll (it requires a
+// session) to mint the first passkey. Set ADMIN_ENROLL_OPEN=1 to skip the
+// admin_token check on /admin/enroll and its two API routes, register a
+// credential, then unset it (or set back to 0). Gated on NODE_ENV as well
+// as the flag, so it can't take effect in production even if left set.
+export function enrollBypassActive(): boolean {
+  return process.env.ADMIN_ENROLL_OPEN === '1' && process.env.NODE_ENV !== 'production'
+}

@@ -1,13 +1,14 @@
 import { verifyRegistrationResponse } from '@simplewebauthn/server'
 import { cookies } from 'next/headers'
 import { CHALLENGE_KEY, getRedis, getSupabase, origin, rpID } from '@/lib/webauthn'
-import { verifyAdminToken } from '@/lib/admin-auth'
+import { verifyAdminToken, enrollBypassActive } from '@/lib/admin-auth'
 
 export async function POST(request: Request) {
   // Checked in the middleware too; repeated here because this endpoint
-  // mints a permanent credential.
+  // mints a permanent credential. enrollBypassActive() is the same
+  // ADMIN_ENROLL_OPEN escape hatch the middleware honors.
   const token = (await cookies()).get('admin_token')?.value
-  if (!(await verifyAdminToken(token))) {
+  if (!enrollBypassActive() && !(await verifyAdminToken(token))) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

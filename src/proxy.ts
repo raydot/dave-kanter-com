@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { verifyAdminToken } from '@/lib/admin-auth'
+import { verifyAdminToken, enrollBypassActive } from '@/lib/admin-auth'
 
 // Everything here either mutates content or mints credentials, so it needs
 // the same admin_token as the /admin UI. /api/webauthn/register* is included
@@ -16,6 +16,9 @@ export async function proxy(request: NextRequest) {
   const token = request.cookies.get('admin_token')?.value
 
   if (PROTECTED_API_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
+    if (pathname.startsWith('/api/webauthn/register') && enrollBypassActive()) {
+      return NextResponse.next()
+    }
     if (await verifyAdminToken(token)) {
       return NextResponse.next()
     }
@@ -27,6 +30,10 @@ export async function proxy(request: NextRequest) {
   }
 
   if (pathname === '/admin/login') {
+    return NextResponse.next()
+  }
+
+  if (pathname === '/admin/enroll' && enrollBypassActive()) {
     return NextResponse.next()
   }
 
