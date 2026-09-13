@@ -2,6 +2,7 @@ import { verifyAuthenticationResponse } from '@simplewebauthn/server'
 import { SignJWT } from 'jose'
 import { cookies } from 'next/headers'
 import { CHALLENGE_KEY, getRedis, getSupabase, origin, rpID } from '@/lib/webauthn'
+import { adminSessionClaims } from '@/lib/admin-auth'
 
 export async function POST(request: Request) {
   try {
@@ -55,7 +56,7 @@ export async function POST(request: Request) {
       .eq('credential_id', credRow.credential_id)
 
     const secret = new TextEncoder().encode(process.env.ADMIN_COOKIE_SECRET)
-    const token = await new SignJWT({})
+    const token = await new SignJWT(adminSessionClaims())
       .setProtectedHeader({ alg: 'HS256' })
       .setExpirationTime('30d')
       .sign(secret)

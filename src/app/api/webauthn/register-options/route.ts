@@ -1,16 +1,17 @@
 import { generateRegistrationOptions } from '@simplewebauthn/server'
 import { cookies } from 'next/headers'
 import { CHALLENGE_KEY, CHALLENGE_TTL, getRedis, getSupabase, rpID, rpName } from '@/lib/webauthn'
-import { verifyAdminToken, enrollBypassActive } from '@/lib/admin-auth'
+import { STEP_UP_COOKIE, enrollOpen, verifyStepUpToken } from '@/lib/admin-auth'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET() {
   // Checked in the middleware too; repeated here because this endpoint
-  // leads to minting a permanent credential. enrollBypassActive() is the
-  // same ADMIN_ENROLL_OPEN escape hatch the middleware honors.
-  const token = (await cookies()).get('admin_token')?.value
-  if (!enrollBypassActive() && !(await verifyAdminToken(token))) {
+  // mints a permanent credential. Both enrollOpen() and the step-up
+  // cookie are required — an admin_token session is deliberately not
+  // accepted here, see src/proxy.ts.
+  const stepUpToken = (await cookies()).get(STEP_UP_COOKIE)?.value
+  if (!enrollOpen() || !(await verifyStepUpToken(stepUpToken))) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
