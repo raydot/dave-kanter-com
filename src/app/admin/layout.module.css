@@ -1,0 +1,60 @@
+/* Admin loads no Tailwind, so the chrome is styled against the HTML5UP theme
+   directly. This resets the theme's button rule (globals-non-critical.css:113)
+   and reproduces its link affordance (critical.css:66) so the sign-out control
+   reads as a peer of the nav links it sits beside. */
+
+.nav {
+  max-width: 48rem;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.signOut {
+  appearance: none;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  height: auto;
+  line-height: inherit;
+  letter-spacing: inherit;
+  text-transform: none;
+  /* html is 18pt, so 1rem is 24px here — the sibling links inherit that and
+     a fixed rem value would make this the only control in the row that shrinks. */
+  font-size: inherit;
+  font-weight: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: dotted 1px rgba(255, 255, 255, 0.5);
+  color: inherit;
+  transition: color 0.2s ease-in-out, border-bottom-color 0.2s ease-in-out;
+}
+
+/* button:hover in the theme is background-color: rgba(255,255,255,0.075)
+   and would otherwise beat a bare .signOut, painting a rounded grey patch
+   around the glyphs. */
+.signOut:hover,
+.signOut:active {
+  background: none;
+  border-bottom-color: transparent;
+  color: #ffffff;
+}
+
+/* The theme's global `button { outline: 0 }` kills the native focus ring,
+   and folding :focus into the hover/active bucket above left keyboard
+   users with no visible cue (hover already clears the dotted underline,
+   so :focus changed nothing further). The sibling nav links never lose
+   their outline, so this restores an equivalent one here explicitly. */
+.signOut:focus-visible {
+  background: none;
+  border-bottom-color: transparent;
+  color: #ffffff;
+  outline: 1px dotted #ffffff;
+  outline-offset: 2px;
+}
+
+.signOutForm {
+  margin: 0 0 0 auto;
+}
