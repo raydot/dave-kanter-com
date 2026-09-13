@@ -1,3 +1,12 @@
+## [2.10.1](https://github.com/raydot/dave-kanter-com/compare/v2.10.0...v2.10.1) (2026-09-13)
+
+
+### Bug Fixes
+
+* raise contrast on blog post filename label ([6be1d2c](https://github.com/raydot/dave-kanter-com/commit/6be1d2c848986d1b40e6643c26c795b0db0d5c86)), closes [#252c34](https://github.com/raydot/dave-kanter-com/issues/252c34)
+* repair broken tw-prose typography modifiers on blog posts ([4054a01](https://github.com/raydot/dave-kanter-com/commit/4054a01f42995121258c77864fb59100199a8088))
+* restore keyboard focus indicator on admin sign-out button ([51df4de](https://github.com/raydot/dave-kanter-com/commit/51df4de9bb5d3ac38c9f8753912067ead42339ce))
+
 # [2.10.0](https://github.com/raydot/dave-kanter-com/compare/v2.9.0...v2.10.0) (2026-09-12)
 
 
