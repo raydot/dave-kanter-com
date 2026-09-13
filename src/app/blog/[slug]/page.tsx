@@ -180,7 +180,16 @@ export default async function BlogPost({
           </div>
         </header>
 
-        <div className="tw-prose tw-prose-invert tw-max-w-none tw-prose-headings:tw-text-foreground tw-prose-headings:font-bold tw-prose-h2:text-3xl tw-prose-h3:text-2xl tw-prose-h4:text-xl tw-prose-p:tw-text-foreground tw-prose-p:text-base tw-prose-p:leading-7 tw-prose-strong:tw-text-foreground tw-prose-li:tw-text-foreground tw-prose-a:text-primary tw-prose-a:no-underline hover:tw-prose-a:underline tw-prose-code:text-sm tw-prose-pre:bg-muted">
+        {/* Typography modifiers are variants (no `tw-` prefix); the utility
+            after the colon takes it. `hover:` must stay outermost or :hover
+            lands on this wrapper and underlines every link at once.
+            Colours are the blog's own literals: the shadcn --primary/--muted
+            tokens are admin-world values (#0f172b, #f1f5f9) and are unreadable
+            on this dark ground. --foreground is a bare RGB triple that the
+            config never wraps in rgb(), so tw-text-foreground is invalid CSS
+            and silently dropped — omitted rather than left in asserting a
+            colour it doesn't set. */}
+        <div className="tw-prose tw-prose-invert tw-max-w-none prose-headings:tw-font-bold prose-h2:tw-text-3xl prose-h3:tw-text-2xl prose-h4:tw-text-xl prose-h5:tw-text-lg prose-p:tw-leading-7 prose-a:tw-text-[#89b4fa] prose-a:tw-no-underline hover:prose-a:tw-underline prose-code:tw-text-sm prose-pre:tw-bg-[#1e252c]">
           {post.content.trim().startsWith('<')
             ? <div dangerouslySetInnerHTML={{ __html: post.content }} />
             : (
