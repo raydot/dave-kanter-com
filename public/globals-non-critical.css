@@ -185,6 +185,20 @@ button:disabled,
   opacity: 0.25;
 }
 
+/* The outline:0 above kills every button's native focus ring with nothing
+   to replace it. Mirrors the fix already established for the admin
+   sign-out control (src/app/admin/layout.module.css's .signOut:focus-visible)
+   but applied at the source so it covers every themed button, not just
+   one hand-restyled control. */
+input[type='submit']:focus-visible,
+input[type='reset']:focus-visible,
+input[type='button']:focus-visible,
+button:focus-visible,
+.button:focus-visible {
+  outline: 1px dotted #ffffff;
+  outline-offset: 2px;
+}
+
 /* Form */
 form {
   margin: 0 0 2rem 0;
@@ -235,6 +249,8 @@ input[type='text'],
 input[type='password'],
 input[type='email'],
 input[type='tel'],
+input[type='date'],
+input[type='url'],
 select,
 textarea {
   appearance: none;
@@ -253,10 +269,18 @@ input[type='text']:focus,
 input[type='password']:focus,
 input[type='email']:focus,
 input[type='tel']:focus,
+input[type='date']:focus,
+input[type='url']:focus,
 select:focus,
 textarea:focus {
   border-color: #ffffff;
   box-shadow: 0 0 0 1px #ffffff;
+}
+
+/* input[type=date]'s native calendar glyph defaults to a dark icon,
+   invisible against this theme's dark fields. */
+input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(1);
 }
 
 select {
@@ -272,6 +296,8 @@ select {
 input[type='text'],
 input[type='password'],
 input[type='email'],
+input[type='date'],
+input[type='url'],
 select {
   height: 2.75rem;
 }

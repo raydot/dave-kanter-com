@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import styles from './TagPicker.module.css'
 
 interface Tag {
   id: string
@@ -75,20 +76,22 @@ export default function TagPicker({ value, onChange }: TagPickerProps) {
   const selectedTags = allTags.filter((t) => value.includes(t.id))
 
   return (
-    <div className="tw-relative">
-      <div className="tw-flex tw-flex-wrap tw-gap-1.5 tw-mb-2">
-        {selectedTags.map((tag) => (
-          <button
-            key={tag.id}
-            type="button"
-            onClick={() => toggle(tag.id)}
-            className="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-text-sm tw-rounded tw-border tw-border-primary tw-bg-primary tw-text-primary-foreground"
-          >
-            {tag.name}
-            <span className="tw-text-xs tw-leading-none">×</span>
-          </button>
-        ))}
-      </div>
+    <div className={styles.wrapper}>
+      {selectedTags.length > 0 && (
+        <div className={styles.selected}>
+          {selectedTags.map((tag) => (
+            <button
+              key={tag.id}
+              type="button"
+              onClick={() => toggle(tag.id)}
+              className={styles.chip}
+            >
+              {tag.name}
+              <span className={styles.chipRemove}>×</span>
+            </button>
+          ))}
+        </div>
+      )}
 
       <input
         ref={inputRef}
@@ -99,33 +102,33 @@ export default function TagPicker({ value, onChange }: TagPickerProps) {
         onFocus={() => setOpen(true)}
         onBlur={() => setTimeout(() => setOpen(false), 150)}
         placeholder="Search or create tags…"
-        className="tw-w-full tw-px-3 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground tw-text-sm tw-outline-none"
+        className={styles.input}
       />
 
       {open && (filtered.length > 0 || showCreate) && (
-        <div className="tw-absolute tw-z-10 tw-w-full tw-mt-1 tw-rounded tw-border tw-border-border tw-bg-background tw-shadow-md tw-max-h-56 tw-overflow-y-auto">
+        <div className={styles.dropdown}>
           {filtered.map((tag) => (
             <button
               key={tag.id}
               type="button"
               onMouseDown={() => { toggle(tag.id); setInput(''); setOpen(false) }}
-              className={`tw-w-full tw-text-left tw-px-3 tw-py-2 tw-text-sm hover:tw-bg-muted tw-flex tw-items-center tw-justify-between ${value.includes(tag.id) ? 'tw-font-medium' : ''}`}
+              className={`${styles.option} ${value.includes(tag.id) ? styles.optionSelected : ''}`}
             >
               {tag.name}
               {value.includes(tag.id) && (
-                <span className="tw-text-xs tw-text-muted-foreground">selected</span>
+                <span className={styles.optionHint}>selected</span>
               )}
             </button>
           ))}
           {showCreate && (
             <>
-              {filtered.length > 0 && <div className="tw-border-t tw-border-border" />}
+              {filtered.length > 0 && <div className={styles.divider} />}
               <button
                 type="button"
                 onMouseDown={() => createAndSelect(input)}
-                className="tw-w-full tw-text-left tw-px-3 tw-py-2 tw-text-sm hover:tw-bg-muted tw-text-primary"
+                className={styles.option}
               >
-                Create &ldquo;{input.trim()}&rdquo;
+                Create <span className={styles.createLabel}>&ldquo;{input.trim()}&rdquo;</span>
               </button>
             </>
           )}

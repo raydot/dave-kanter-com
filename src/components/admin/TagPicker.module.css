@@ -1,0 +1,109 @@
+/* Admin loads no Tailwind (src/app/admin/** and src/components/admin/**
+   are outside tailwind.config.js's content globs), so this is styled
+   against the HTML5UP theme directly, matching src/app/admin/layout.module.css
+   and src/app/admin/new/page.module.css. input[type="text"] itself needs
+   no class here — the theme already styles it (globals-non-critical.css). */
+
+.wrapper {
+  position: relative;
+}
+
+.selected {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.chip {
+  appearance: none;
+  align-items: center;
+  background-color: #ffffff;
+  border: 0;
+  border-radius: 9999px;
+  color: #1b1f22;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 400;
+  gap: 0.35rem;
+  height: auto;
+  letter-spacing: normal;
+  line-height: 1;
+  padding: 0.4rem 0.7rem;
+  text-transform: none;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.chip:hover {
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.chipRemove {
+  font-size: 0.7rem;
+  line-height: 1;
+  opacity: 0.6;
+}
+
+.input {
+  font-size: 0.9rem;
+}
+
+.dropdown {
+  background-color: #1b1f22;
+  border: solid 1px #ffffff;
+  border-radius: 4px;
+  margin-top: 0.35rem;
+  max-height: 14rem;
+  overflow-y: auto;
+  position: absolute;
+  width: 100%;
+  z-index: 10;
+}
+
+.option {
+  align-items: center;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 300;
+  height: auto;
+  justify-content: space-between;
+  letter-spacing: normal;
+  line-height: 1.4;
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+  text-transform: none;
+  width: 100%;
+}
+
+.option:hover {
+  background-color: rgba(255, 255, 255, 0.075);
+}
+
+.optionSelected {
+  font-weight: 600;
+}
+
+.optionHint {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+}
+
+.divider {
+  border-top: solid 1px rgba(255, 255, 255, 0.2);
+}
+
+/* The blue accent (#89b4fa) belongs to the blog's dark "code editor" visual
+   world, not admin's — admin is the plain HTML5UP theme (see
+   layout.module.css), so "actionable text" here reuses its dotted-underline
+   link affordance (critical.css ~66-77) on just the label, instead of
+   introducing a new color or underlining the whole flex row. */
+.createLabel {
+  border-bottom: dotted 1px rgba(255, 255, 255, 0.5);
+}

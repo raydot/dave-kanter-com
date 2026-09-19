@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, useParams } from 'next/navigation'
-import { useEditor, EditorContent } from '@tiptap/react'
+import { useEditor, useEditorState, EditorContent } from '@tiptap/react'
 import { type Editor } from '@tiptap/core'
 import StarterKit from '@tiptap/starter-kit'
 import { Markdown } from '@tiptap/markdown'
@@ -10,6 +10,19 @@ import { Table } from '@tiptap/extension-table'
 import TableRow from '@tiptap/extension-table-row'
 import TableHeader from '@tiptap/extension-table-header'
 import TableCell from '@tiptap/extension-table-cell'
+import {
+  Bold,
+  Italic,
+  Heading1,
+  Heading2,
+  Heading3,
+  List,
+  ListOrdered,
+  Code,
+  SquareCode,
+  Table as TableIcon,
+  type LucideIcon,
+} from 'lucide-react'
 import styles from '../../new/page.module.css'
 import TagPicker from '@/components/admin/TagPicker'
 
@@ -21,17 +34,72 @@ interface SyndicationEntry {
 
 const SYNDICATION_PLATFORMS = ['dev.to', 'LinkedIn', 'Medium', 'Hashnode', 'Other']
 
-const TOOLBAR: { label: string; action: (e: Editor | null) => void }[] = [
-  { label: 'Bold',          action: (e) => e?.chain().focus().toggleBold().run() },
-  { label: 'Italic',        action: (e) => e?.chain().focus().toggleItalic().run() },
-  { label: 'H1',            action: (e) => e?.chain().focus().toggleHeading({ level: 1 }).run() },
-  { label: 'H2',            action: (e) => e?.chain().focus().toggleHeading({ level: 2 }).run() },
-  { label: 'H3',            action: (e) => e?.chain().focus().toggleHeading({ level: 3 }).run() },
-  { label: 'Bullet list',   action: (e) => e?.chain().focus().toggleBulletList().run() },
-  { label: 'Ordered list',  action: (e) => e?.chain().focus().toggleOrderedList().run() },
-  { label: 'Code',          action: (e) => e?.chain().focus().toggleCode().run() },
-  { label: 'Code block',    action: (e) => e?.chain().focus().toggleCodeBlock().run() },
-  { label: 'Insert table',  action: (e) => e?.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run() },
+const TOOLBAR: {
+  label: string
+  icon: LucideIcon
+  action: (e: Editor | null) => void
+  isActive: (e: Editor) => boolean
+}[] = [
+  {
+    label: 'Bold',
+    icon: Bold,
+    action: (e) => e?.chain().focus().toggleBold().run(),
+    isActive: (e) => e.isActive('bold'),
+  },
+  {
+    label: 'Italic',
+    icon: Italic,
+    action: (e) => e?.chain().focus().toggleItalic().run(),
+    isActive: (e) => e.isActive('italic'),
+  },
+  {
+    label: 'Heading 1',
+    icon: Heading1,
+    action: (e) => e?.chain().focus().toggleHeading({ level: 1 }).run(),
+    isActive: (e) => e.isActive('heading', { level: 1 }),
+  },
+  {
+    label: 'Heading 2',
+    icon: Heading2,
+    action: (e) => e?.chain().focus().toggleHeading({ level: 2 }).run(),
+    isActive: (e) => e.isActive('heading', { level: 2 }),
+  },
+  {
+    label: 'Heading 3',
+    icon: Heading3,
+    action: (e) => e?.chain().focus().toggleHeading({ level: 3 }).run(),
+    isActive: (e) => e.isActive('heading', { level: 3 }),
+  },
+  {
+    label: 'Bullet list',
+    icon: List,
+    action: (e) => e?.chain().focus().toggleBulletList().run(),
+    isActive: (e) => e.isActive('bulletList'),
+  },
+  {
+    label: 'Ordered list',
+    icon: ListOrdered,
+    action: (e) => e?.chain().focus().toggleOrderedList().run(),
+    isActive: (e) => e.isActive('orderedList'),
+  },
+  {
+    label: 'Code',
+    icon: Code,
+    action: (e) => e?.chain().focus().toggleCode().run(),
+    isActive: (e) => e.isActive('code'),
+  },
+  {
+    label: 'Code block',
+    icon: SquareCode,
+    action: (e) => e?.chain().focus().toggleCodeBlock().run(),
+    isActive: (e) => e.isActive('codeBlock'),
+  },
+  {
+    label: 'Insert table',
+    icon: TableIcon,
+    action: (e) => e?.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run(),
+    isActive: (e) => e.isActive('table'),
+  },
 ]
 
 export default function EditPostPage() {
@@ -60,11 +128,12 @@ export default function EditPostPage() {
       TableCell,
     ],
     content: '',
-    editorProps: {
-      attributes: {
-        class: 'prose prose-invert max-w-none min-h-64 focus:outline-none p-4',
-      },
-    },
+  })
+
+  const activeToolbarLabels = useEditorState({
+    editor,
+    selector: ({ editor: e }) =>
+      e ? TOOLBAR.filter(({ isActive }) => isActive(e)).map(({ label }) => label) : [],
   })
 
   useEffect(() => {
@@ -140,153 +209,150 @@ export default function EditPostPage() {
 
   if (loading) {
     return (
-      <div className="tw-min-h-screen tw-bg-background tw-flex tw-items-center tw-justify-center">
-        <p className="tw-text-muted-foreground">Loading...</p>
+      <div className={styles.loading}>
+        <p className={styles.hint}>Loading...</p>
       </div>
     )
   }
 
   return (
-    <div className="tw-min-h-screen tw-bg-background">
-      <div className={`tw-max-w-3xl tw-mx-auto tw-px-4 tw-py-8 ${styles.form}`}>
-        <h1 className="tw-text-3xl tw-font-bold tw-mb-8">Edit Post</h1>
+    <div className={styles.form}>
+      <h1 className={styles.title}>Edit Post</h1>
 
-        <div>
-          <label className="tw-block tw-text-sm tw-font-medium">Title</label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="tw-w-full tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground tw-text-xl"
-          />
+      <div>
+        <label>Title</label>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          className={styles.titleInput}
+        />
+      </div>
+
+      <div className={styles.section}>
+        <label>Excerpt</label>
+        <p className={styles.hint}>
+          Optional. Shown in the frontmatter card and blog index.
+        </p>
+        <input
+          type="text"
+          value={excerpt}
+          onChange={(e) => setExcerpt(e.target.value)}
+          placeholder="A short summary or pull quote..."
+        />
+      </div>
+
+      <div className={styles.section}>
+        <label>Display date</label>
+        <p className={styles.hint}>
+          Shown on the post. Useful for backdating. Defaults to publish date if blank.
+        </p>
+        <input
+          type="date"
+          value={displayDate}
+          onChange={(e) => setDisplayDate(e.target.value)}
+        />
+      </div>
+
+      <div className={styles.section}>
+        <label>Tags</label>
+        <TagPicker value={tagIds} onChange={setTagIds} />
+      </div>
+
+      <div className={styles.section}>
+        <div className={styles.toolbar}>
+          {TOOLBAR.map(({ label, icon: Icon, action }) => {
+            const isActive = (activeToolbarLabels ?? []).includes(label)
+            return (
+              <button
+                key={label}
+                type="button"
+                onClick={() => action(editor)}
+                title={label}
+                aria-label={label}
+                aria-pressed={isActive}
+                className={`${styles.toolbarButton} ${isActive ? styles.toolbarButtonActive : ''}`}
+              >
+                <Icon size={16} strokeWidth={2} aria-hidden="true" />
+              </button>
+            )
+          })}
         </div>
 
-        <div className={styles.section}>
-          <label className="tw-block tw-text-sm tw-font-medium">Excerpt</label>
-          <p className="tw-text-xs tw-text-muted-foreground">
-            Optional. Shown in the frontmatter card and blog index.
-          </p>
-          <input
-            type="text"
-            value={excerpt}
-            onChange={(e) => setExcerpt(e.target.value)}
-            placeholder="A short summary or pull quote..."
-            className="tw-w-full tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground"
-          />
-        </div>
-
-        <div className={styles.section}>
-          <label className="tw-block tw-text-sm tw-font-medium">Display date</label>
-          <p className="tw-text-xs tw-text-muted-foreground">
-            Shown on the post. Useful for backdating. Defaults to publish date if blank.
-          </p>
-          <input
-            type="date"
-            value={displayDate}
-            onChange={(e) => setDisplayDate(e.target.value)}
-            className="tw-px-4 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground"
-          />
-        </div>
-
-        <div className={`tw-mb-4 tw-flex tw-gap-2 tw-flex-wrap ${styles.section}`}>
-          {TOOLBAR.map(({ label, action }) => (
-            <button
-              key={label}
-              onClick={() => action(editor)}
-              className="tw-px-3 tw-py-1 tw-text-sm tw-border tw-border-border tw-rounded hover:tw-bg-muted"
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        <div className="tw-border tw-border-border tw-rounded tw-mb-6 tw-min-h-96">
+        <div className={styles.editor}>
           <EditorContent editor={editor} />
         </div>
+      </div>
 
-        <div className={styles.section}>
-          <label className="tw-block tw-text-sm tw-font-medium">Tags</label>
-          <TagPicker value={tagIds} onChange={setTagIds} />
-        </div>
+      <div className={styles.section}>
+        <label>Syndicated to</label>
+        <p className={styles.hint}>
+          Where this post was cross-posted. Add the URL once it&apos;s live there.
+          Saved with the post.
+        </p>
 
-        <div className={styles.section}>
-          <label className="tw-block tw-text-sm tw-font-medium">Syndicated to</label>
-          <p className="tw-text-xs tw-text-muted-foreground">
-            Where this post was cross-posted. Add the URL once it&apos;s live there.
-            Saved with the post.
-          </p>
+        {syndicatedTo.length > 0 && (
+          <ul className={styles.syndicationList}>
+            {syndicatedTo.map((entry, i) => (
+              <li key={`${entry.platform}-${entry.url}`} className={styles.syndicationItem}>
+                <span className={styles.syndicationPlatform}>{entry.platform}</span>
+                <a
+                  href={entry.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.syndicationLink}
+                >
+                  {entry.url}
+                </a>
+                <span className={styles.syndicationDate}>
+                  {entry.date?.slice(0, 10)}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setSyndicatedTo(syndicatedTo.filter((_, j) => j !== i))}
+                  className={styles.syndicationRemove}
+                >
+                  remove
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
 
-          {syndicatedTo.length > 0 && (
-            <ul className="tw-mb-3 tw-space-y-1">
-              {syndicatedTo.map((entry, i) => (
-                <li key={`${entry.platform}-${entry.url}`} className="tw-flex tw-items-center tw-gap-2 tw-text-sm">
-                  <span className="tw-text-muted-foreground tw-shrink-0">{entry.platform}</span>
-                  <a
-                    href={entry.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="tw-underline tw-truncate"
-                  >
-                    {entry.url}
-                  </a>
-                  <span className="tw-text-xs tw-text-muted-foreground tw-shrink-0">
-                    {entry.date?.slice(0, 10)}
-                  </span>
-                  <button
-                    onClick={() => setSyndicatedTo(syndicatedTo.filter((_, j) => j !== i))}
-                    className="tw-text-xs tw-text-red-400 hover:tw-opacity-70 tw-shrink-0"
-                  >
-                    remove
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <div className="tw-flex tw-gap-2">
-            <select
-              value={newPlatform}
-              onChange={(e) => setNewPlatform(e.target.value)}
-              className="tw-px-3 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground tw-text-sm"
-            >
-              {SYNDICATION_PLATFORMS.map((p) => (
-                <option key={p} value={p}>{p}</option>
-              ))}
-            </select>
-            <input
-              type="url"
-              value={newUrl}
-              onChange={(e) => setNewUrl(e.target.value)}
-              placeholder="https://dev.to/..."
-              className="tw-flex-1 tw-px-3 tw-py-2 tw-rounded tw-border tw-border-border tw-bg-background tw-text-foreground tw-text-sm"
-            />
-            <button
-              onClick={addSyndication}
-              disabled={!newUrl.trim()}
-              className="tw-px-4 tw-py-2 tw-text-sm tw-border tw-border-border tw-rounded hover:tw-bg-muted disabled:tw-opacity-50"
-            >
-              Add
-            </button>
-          </div>
-        </div>
-
-        {error && <p className="tw-text-red-500 tw-mt-4">{error}</p>}
-
-        <div className={`tw-flex tw-gap-4 ${styles.section}`}>
-          <button
-            onClick={() => router.push('/admin/posts')}
-            className="tw-px-6 tw-py-3 tw-border tw-border-border tw-rounded hover:tw-bg-muted"
+        <div className={styles.syndicationAdd}>
+          <select
+            value={newPlatform}
+            onChange={(e) => setNewPlatform(e.target.value)}
           >
-            Cancel
-          </button>
+            {SYNDICATION_PLATFORMS.map((p) => (
+              <option key={p} value={p}>{p}</option>
+            ))}
+          </select>
+          <input
+            type="url"
+            value={newUrl}
+            onChange={(e) => setNewUrl(e.target.value)}
+            placeholder="https://dev.to/..."
+          />
           <button
-            onClick={saveChanges}
-            disabled={saving}
-            className="tw-flex-1 tw-py-3 tw-bg-primary tw-text-primary-foreground tw-rounded tw-font-medium hover:tw-opacity-90 disabled:tw-opacity-50"
+            type="button"
+            onClick={addSyndication}
+            disabled={!newUrl.trim()}
           >
-            {saving ? 'Saving...' : 'Save Changes'}
+            Add
           </button>
         </div>
+      </div>
+
+      {error && <p className={styles.error}>{error}</p>}
+
+      <div className={styles.actions}>
+        <button type="button" onClick={() => router.push('/admin/posts')}>
+          Cancel
+        </button>
+        <button type="button" onClick={saveChanges} disabled={saving} className="primary">
+          {saving ? 'Saving...' : 'Save Changes'}
+        </button>
       </div>
     </div>
   )
