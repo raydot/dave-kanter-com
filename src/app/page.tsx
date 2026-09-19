@@ -34,25 +34,35 @@ export default function Home() {
 
   const handleOpenArticle = useCallback((articleName: string | Event) => {
     // Ensure articleName is a string, not an event object
-    const article = typeof articleName === 'string' ? articleName : (articleName.target as HTMLElement)?.dataset?.article || '';
-    // console.log('handleOpenArticle called with:', article, typeof article);
+    const nextArticle = typeof articleName === 'string' ? articleName : (articleName.target as HTMLElement)?.dataset?.article || '';
 
-    // Prevent double-click issues by checking if already animating or visible
-    if (!isArticleVisible && !isAnimating) {
-      setIsAnimating(true)
-      setIsArticleVisible(true)
-      setArticle(article)
+    if (isAnimating) return
 
-      setTimeout(() => {
-        setTimeoutState(!timeout)
-      }, 325)
-
-      setTimeout(() => {
-        setArticleTimeout(!articleTimeout)
-        setIsAnimating(false) // Animation complete
-      }, 350)
+    if (isArticleVisible) {
+      // Switching directly between two already-open articles: #main,
+      // timeout, and articleTimeout are already set from the first open,
+      // so just swap which article carries .active. The existing CSS
+      // transition on #main article.timeout / .active.timeout
+      // cross-fades it with no extra JS animation needed.
+      if (nextArticle !== article) {
+        setArticle(nextArticle)
+      }
+      return
     }
-  }, [isArticleVisible, isAnimating, timeout, articleTimeout])
+
+    setIsAnimating(true)
+    setIsArticleVisible(true)
+    setArticle(nextArticle)
+
+    setTimeout(() => {
+      setTimeoutState(!timeout)
+    }, 325)
+
+    setTimeout(() => {
+      setArticleTimeout(!articleTimeout)
+      setIsAnimating(false) // Animation complete
+    }, 350)
+  }, [isArticleVisible, isAnimating, timeout, articleTimeout, article])
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -76,7 +86,17 @@ export default function Home() {
       if (target.closest('[class*="AskDave"]')) {
         return
       }
-      
+
+      // The header's own nav controls are always an intentional
+      // open-or-switch action, never a "click away to dismiss" gesture.
+      // Without this, clicking a second nav button while an article was
+      // already open fired this mousedown handler first (closing
+      // everything) before the button's own click could switch to the
+      // new article — leaving nothing open until the next click.
+      if (target.closest('#header nav')) {
+        return
+      }
+
       if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
         if (isArticleVisible) {
           handleCloseArticle()
