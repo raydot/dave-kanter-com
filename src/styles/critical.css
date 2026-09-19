@@ -83,7 +83,20 @@ a:hover {
   align-items: center;
   justify-content: center;
   text-align: center;
-  height: 100vh;
+  /* Not height: 100vh. #header sits inside #wrapper, which already adds
+     its own 4rem top/bottom padding and centers everything (#header AND
+     #footer together) via min-height: 100vh + justify-content: center.
+     A hard 100vh here meant #header alone already filled the viewport
+     before that padding and the footer were added on top, guaranteeing
+     the footer landed below the fold on every load. min-height (not
+     height) at a smaller fraction keeps the hero feeling full-size on
+     ordinary screens while leaving room in the shared 100vh frame for
+     the footer too; content can still grow past it if it ever needs to.
+     Very short viewports (roughly <700px tall) may still need a scroll
+     to reach the footer — some tension between "big hero" and
+     "everything visible with no scroll" is inherent once the hero
+     claims most of the screen on purpose. */
+  min-height: 45vh;
   position: relative;
   cursor: default;
   transition: transform 0.5s ease-in-out, filter 0.5s ease-in-out,
@@ -166,6 +179,7 @@ a:hover {
   width: 100%;
   max-width: 100%;
   text-align: center;
+  margin-top: 2em;
 }
 
 #footer .copyright {
