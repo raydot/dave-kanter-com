@@ -50,7 +50,7 @@ export default function LoginPage() {
           disabled={working}
           className="tw-w-full tw-py-3 tw-bg-primary tw-text-primary-foreground tw-rounded hover:tw-opacity-90 tw-text-lg disabled:tw-opacity-50"
         >
-          {working ? 'Waiting for biometric…' : '🔑 Use Fingerprint'}
+          {working ? 'Waiting for biometric…' : '🔑 Sign in'}
         </button>
         {error && <p className="tw-text-red-500 tw-text-sm tw-text-center">{error}</p>}
       </div>
