@@ -37,11 +37,16 @@ const Portfolio = () => {
     [projects]
   )
 
-  // Compute filtered projects directly from state
+  // Trigger the entrance animation on mount, and again after every filter
+  // change: handleFilterChange sets isLoaded false to fade the grid out
+  // before swapping activeFilter, but relied on this effect to fade it
+  // back in — which it only ever did once, on mount, permanently hiding
+  // every card (opacity: 0, see .portfolio-card below) after the first
+  // filter click.
   useEffect(() => {
-    // Trigger entrance animation
-    setTimeout(() => setIsLoaded(true), 100)
-  }, [])
+    const timer = setTimeout(() => setIsLoaded(true), 100)
+    return () => clearTimeout(timer)
+  }, [activeFilter])
 
   // Derive filtered projects from activeFilter instead of storing in state
   const computedFilteredProjects = useMemo(() => {
