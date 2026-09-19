@@ -1,3 +1,10 @@
+## [2.12.1](https://github.com/raydot/dave-kanter-com/compare/v2.12.0...v2.12.1) (2026-09-19)
+
+
+### Bug Fixes
+
+* restyle admin post editor with real CSS after dead Tailwind discovery ([6d1cd38](https://github.com/raydot/dave-kanter-com/commit/6d1cd380904414844697d8f02803075fa27696da))
+
 # [2.12.0](https://github.com/raydot/dave-kanter-com/compare/v2.11.0...v2.12.0) (2026-09-13)
 
 
