@@ -1,660 +1,280 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import Image from './Image'
-import projectsData from '../data/Projects.json'
+'use client'
+
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react'
+import styles from './Portfolio.module.css'
+import data from '../data/portfolio.json'
+
+const PHONE_QUERY = '(max-width: 736px)'
+const isDev = process.env.NODE_ENV !== 'production'
+
+// Incomplete entries live in portfolio.drafts.json and show, with a Draft
+// badge and a "needs" note, in development only. The condition is written
+// inline on purpose: the bundler folds process.env.NODE_ENV at build time
+// and drops the require, so drafts are not in the production JavaScript at
+// all (check: grep .next/static/chunks for a draft-only title after a build).
+const drafts =
+  process.env.NODE_ENV !== 'production' ? require('../data/portfolio.drafts.json').projects : []
+const projects = [...drafts, ...data.projects]
+const groups = data.groups.filter((g) => projects.some((p) => p.group === g.id))
+const groupById = Object.fromEntries(data.groups.map((g) => [g.id, g]))
+
+function subscribePhone(onChange) {
+  const mq = window.matchMedia(PHONE_QUERY)
+  mq.addEventListener('change', onChange)
+  return () => mq.removeEventListener('change', onChange)
+}
+const usePhone = () =>
+  useSyncExternalStore(
+    subscribePhone,
+    () => window.matchMedia(PHONE_QUERY).matches,
+    () => false
+  )
+
+function Dot({ group }) {
+  const g = groupById[group]
+  return <span className={styles.dot} style={{ background: g.color }} title={g.name} />
+}
+
+function Picture({ file, alt, className, eager }) {
+  if (!file) {
+    return (
+      <span className={`${className} ${styles.noImage}`} aria-hidden="true">
+        {isDev ? 'Image needed' : ''}
+      </span>
+    )
+  }
+  const convertible = /\.(png|jpe?g)$/i.test(file)
+  return (
+    <span className={className}>
+      <picture>
+        {convertible && (
+          <source srcSet={`/images/${file.replace(/\.(png|jpe?g)$/i, '.webp')}`} type="image/webp" />
+        )}
+        <img
+          src={`/images/${file}`}
+          alt={alt}
+          width={400}
+          height={300}
+          loading={eager ? 'eager' : 'lazy'}
+          decoding="async"
+        />
+      </picture>
+    </span>
+  )
+}
+
+function Detail({ project }) {
+  return (
+    <>
+      <p>{project.description}</p>
+      {project.technologies.length > 0 && (
+        <ul className={styles.tech}>
+          {project.technologies.map((t) => (
+            <li key={t}>{t}</li>
+          ))}
+        </ul>
+      )}
+      {project.url && (
+        <a className={styles.view} href={project.url}>
+          View
+        </a>
+      )}
+    </>
+  )
+}
 
 const Portfolio = () => {
-  const [activeFilter, setActiveFilter] = useState('All')
-  const [isLoaded, setIsLoaded] = useState(false)
+  const phone = usePhone()
+  const [filter, setFilter] = useState('all')
+  const [activeId, setActiveId] = useState(null)
+  const [expandedId, setExpandedId] = useState(null)
+  const [more, setMore] = useState(0)
+  const [atEnd, setAtEnd] = useState(true)
+  const scrollerRef = useRef(null)
 
-  // Category color mapping
-  const categoryColors = {
-    Multimedia: '#FF6B35',
-    Retail: '#4ECDC4',
-    Frontend: '#3498DB',
-    'Small Biz': '#9B59B6',
-    Mobile: '#E67E22',
-    Fullstack: '#27AE60',
-    Enterprise: '#8E44AD',
+  const visible = useMemo(
+    () => (filter === 'all' ? projects : projects.filter((p) => p.group === filter)),
+    [filter]
+  )
+  const active = visible.find((p) => p.id === activeId) ?? visible[0]
+  const expanded = visible.find((p) => p.id === expandedId)?.id ?? null
+
+  const choose = (p) => {
+    setActiveId(p.id)
+    setExpandedId((prev) => (prev === p.id ? null : p.id))
   }
 
-  // Memoize projects to prevent recreation on every render
-  const projects = useMemo(
-    () => projectsData.filter((project) => project.lead === 'true'),
-    []
-  )
+  // "N more" cue: how many cards are cut off below the visible edge.
+  const measure = useCallback(() => {
+    const el = scrollerRef.current
+    if (!el) return
+    const bottom = el.scrollTop + el.clientHeight
+    let hidden = 0
+    el.querySelectorAll('[data-id]').forEach((card) => {
+      if (card.offsetTop + card.offsetHeight > bottom + 2) hidden += 1
+    })
+    setMore(hidden)
+    setAtEnd(bottom >= el.scrollHeight - 2)
+  }, [])
 
-  const categories = useMemo(
-    () => [
-      'All',
-      ...new Set(
-        projects.flatMap((project) =>
-          Array.isArray(project.category)
-            ? project.category
-            : [project.category]
-        )
-      ),
-    ],
-    [projects]
-  )
-
-  // Trigger the entrance animation on mount, and again after every filter
-  // change: handleFilterChange sets isLoaded false to fade the grid out
-  // before swapping activeFilter, but relied on this effect to fade it
-  // back in — which it only ever did once, on mount, permanently hiding
-  // every card (opacity: 0, see .portfolio-card below) after the first
-  // filter click.
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoaded(true), 100)
-    return () => clearTimeout(timer)
-  }, [activeFilter])
+    const el = scrollerRef.current
+    if (!el) return undefined
+    // ResizeObserver fires once on observe() and on size changes; the
+    // deferred call covers content changes (filter, opened card) that
+    // don't resize the scroller.
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    const raf = requestAnimationFrame(measure)
+    return () => {
+      cancelAnimationFrame(raf)
+      ro.disconnect()
+    }
+  }, [measure, visible, phone, expanded])
 
-  // Derive filtered projects from activeFilter instead of storing in state
-  const computedFilteredProjects = useMemo(() => {
-    return activeFilter === 'All'
-      ? projects
-      : projects.filter((project) =>
-          Array.isArray(project.category)
-            ? project.category.includes(activeFilter)
-            : project.category === activeFilter
-        )
-  }, [activeFilter, projects])
+  // On a phone, bring a newly opened card fully into view.
+  useEffect(() => {
+    const el = scrollerRef.current
+    if (!phone || !expanded || !el) return
+    const card = el.querySelector(`[data-id="${expanded}"]`)
+    if (!card) return
+    const top = card.offsetTop
+    if (top < el.scrollTop || top + card.offsetHeight > el.scrollTop + el.clientHeight) {
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      el.scrollTo({ top: Math.max(0, top - 8), behavior: reduce ? 'auto' : 'smooth' })
+    }
+  }, [expanded, phone])
 
-  const handleFilterChange = (category) => {
-    if (category === activeFilter) return
-
-    setIsLoaded(false)
-    setTimeout(() => {
-      setActiveFilter(category)
-    }, 150)
+  const changeFilter = (next) => {
+    setFilter(next)
+    setActiveId(null)
+    setExpandedId(null)
+    if (scrollerRef.current) scrollerRef.current.scrollTop = 0
   }
+
+  const count = (id) => (id === 'all' ? projects.length : projects.filter((p) => p.group === id).length)
 
   return (
-    <div className="portfolio-container">
-      {/* Filter Navigation */}
-      <div className="portfolio-filters">
-        <div className="filter-row">
-          {categories.slice(0, 3).map((category, index) => (
-            <button
-              key={category}
-              className={activeFilter === category ? 'active' : ''}
-              onClick={() => handleFilterChange(category)}
-              style={{ animationDelay: `${index * 0.1}s` }}
+    <div className={styles.root}>
+      <div className={styles.toolbar}>
+        {phone ? (
+          <div className={styles.menu}>
+            <label htmlFor="portfolio-filter">Show</label>
+            <select
+              id="portfolio-filter"
+              value={filter}
+              onChange={(e) => changeFilter(e.target.value)}
             >
-              {category}
-            </button>
-          ))}
-        </div>
-        <div className="filter-row">
-          {categories.slice(3, 6).map((category, index) => (
-            <button
-              key={category}
-              className={activeFilter === category ? 'active' : ''}
-              onClick={() => handleFilterChange(category)}
-              style={{ animationDelay: `${(index + 3) * 0.1}s` }}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
-        <div className="filter-row">
-          {categories.slice(6).map((category, index) => (
-            <button
-              key={category}
-              className={activeFilter === category ? 'active' : ''}
-              onClick={() => handleFilterChange(category)}
-              style={{ animationDelay: `${(index + 6) * 0.1}s` }}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Projects Grid */}
-      <div className="portfolio-grid">
-        {computedFilteredProjects.map((project, index) =>
-          project.src !== 'null' ? (
-            <div
-              key={`${project.title}-${project.year}`}
-              className={`portfolio-card ${isLoaded ? 'loaded' : ''} ${
-                project.featured ? 'featured' : ''
-              }`}
-              style={{
-                animationDelay: `${index * 0.1}s`,
-              }}
-            >
-              <div className="card-content">
-                <div
-                  className="project-image-container"
-                  style={{ backgroundColor: project.bgColor || 'black' }}
-                >
-                  <Image
-                    fileName={project.src}
-                    width={400}
-                    height={300}
-                    style={{
-                      maxWidth: '100%',
-                      height: 'auto',
-                      display: 'block',
-                      margin: '0 auto',
-                      verticalAlign: 'top',
-                    }}
-                    alt={project.alt}
-                  />
-                </div>
-
-                <div className="project-info">
-                  <div className="project-header">
-                    <h4 className="project-title">{project.title}</h4>
-                    <span className="project-year">{project.year}</span>
-                  </div>
-
-                  <p className="project-description">{project.description}</p>
-
-                  <div className="project-meta">
-                    {Array.isArray(project.category) ? (
-                      project.category.map((cat) => (
-                        <span
-                          key={cat}
-                          className="project-category"
-                          style={{ backgroundColor: categoryColors[cat] }}
-                        >
-                          {cat}
-                        </span>
-                      ))
-                    ) : (
-                      <span
-                        className="project-category"
-                        style={{
-                          backgroundColor: categoryColors[project.category],
-                        }}
-                      >
-                        {project.category}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="tech-details">
-                    <div className="tech-tags">
-                      {project.technologies.map((tech, techIndex) => (
-                        <React.Fragment key={tech}>
-                          <span
-                            className="tech-tag"
-                            style={{ animationDelay: `${techIndex * 0.05}s` }}
-                          >
-                            {tech}
-                          </span>
-                          {techIndex < project.technologies.length - 1 && (
-                            <span className="tech-separator">•</span>
-                          )}
-                        </React.Fragment>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div
-              key={`${project.title}-${project.year}`}
-              className={`portfolio-card no-image ${isLoaded ? 'loaded' : ''} ${
-                project.featured ? 'featured' : ''
-              }`}
-              style={{
-                animationDelay: `${index * 0.1}s`,
-              }}
-            >
-              <div className="card-content">
-                <div className="no-image-placeholder">
-                  <div className="placeholder-icon">
-                    <span>🚀</span>
-                  </div>
-                </div>
-
-                <div className="project-info">
-                  <div className="project-header">
-                    <h4 className="project-title">{project.title}</h4>
-                    <span className="project-year">{project.year}</span>
-                  </div>
-
-                  <p className="project-description">{project.description}</p>
-
-                  <div className="project-meta">
-                    {Array.isArray(project.category) ? (
-                      project.category.map((cat) => (
-                        <span
-                          key={cat}
-                          className="project-category"
-                          style={{ backgroundColor: categoryColors[cat] }}
-                        >
-                          {cat}
-                        </span>
-                      ))
-                    ) : (
-                      <span
-                        className="project-category"
-                        style={{
-                          backgroundColor: categoryColors[project.category],
-                        }}
-                      >
-                        {project.category}
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="tech-details">
-                    <div className="tech-tags">
-                      {project.technologies.map((tech, techIndex) => (
-                        <React.Fragment key={tech}>
-                          <span
-                            className="tech-tag"
-                            style={{ animationDelay: `${techIndex * 0.05}s` }}
-                          >
-                            {tech}
-                          </span>
-                          {techIndex < project.technologies.length - 1 && (
-                            <span className="tech-separator">•</span>
-                          )}
-                        </React.Fragment>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )
+              <option value="all">All projects ({count('all')})</option>
+              {groups.map((g) => (
+                <option key={g.id} value={g.id}>
+                  {g.name} ({count(g.id)})
+                </option>
+              ))}
+            </select>
+          </div>
+        ) : (
+          <div className={styles.chips} role="group" aria-label="Filter projects">
+            {[{ id: 'all', name: 'All' }, ...groups].map((g) => (
+              <button
+                key={g.id}
+                type="button"
+                className={styles.chip}
+                aria-pressed={filter === g.id}
+                onClick={() => changeFilter(g.id)}
+              >
+                {g.id !== 'all' && <span className={styles.dot} style={{ background: g.color }} />}
+                {g.name} <span className={styles.n}>{count(g.id)}</span>
+              </button>
+            ))}
+          </div>
         )}
       </div>
 
-      <style jsx>{`
-        .portfolio-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          width: 100%;
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 2rem 1rem;
-        }
+      <div className={styles.split}>
+        <div className={styles.listWrap}>
+          <ul
+            className={`${styles.scroller} ${atEnd ? styles.atEnd : ''}`}
+            ref={scrollerRef}
+            onScroll={measure}
+            aria-label="Projects"
+          >
+            {visible.map((p) => {
+              const isActive = !phone && active?.id === p.id
+              const isOpen = phone && expanded === p.id
+              return (
+                <li
+                  key={p.id}
+                  data-id={p.id}
+                  className={`${styles.card} ${isActive ? styles.selected : ''} ${isOpen ? styles.open : ''}`}
+                  onClick={() => choose(p)}
+                >
+                  <Picture file={p.image} alt="" className={styles.thumb} />
+                  <div className={styles.body}>
+                    <div className={styles.top}>
+                      <h3>
+                        <button
+                          type="button"
+                          className={styles.titleBtn}
+                          {...(phone ? { 'aria-expanded': isOpen } : { 'aria-pressed': isActive })}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            choose(p)
+                          }}
+                        >
+                          {p.title}
+                        </button>
+                      </h3>
+                      <span className={styles.year}>
+                        <Dot group={p.group} />
+                        {p.year}
+                        {phone && <span className={styles.chev} aria-hidden="true" />}
+                      </span>
+                    </div>
+                    <p className={styles.hook}>{p.hook}</p>
+                    {isDev && p.draft && <span className={styles.flag}>{p.draft}</span>}
+                  </div>
+                  {isOpen && (
+                    <div className={styles.more}>
+                      <div className={styles.groupLine}>
+                        <Dot group={p.group} />
+                        {groupById[p.group].name}
+                      </div>
+                      <Detail project={p} />
+                    </div>
+                  )}
+                </li>
+              )
+            })}
+          </ul>
+          {!phone && !atEnd && more > 0 && (
+            <div className={styles.cue} aria-hidden="true">
+              <span>{'↓'} {more} more</span>
+            </div>
+          )}
+        </div>
 
-        .portfolio-filters {
-          margin-bottom: 3rem;
-          opacity: 0;
-          animation: fadeInUp 0.6s ease-out 0.2s forwards;
-        }
-
-        .filter-row {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin-bottom: 0.5rem;
-        }
-
-        .filter-row:last-child {
-          margin-bottom: 0;
-        }
-
-        .filter-row button {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 0.75rem 1.5rem;
-          border: 0;
-          background: transparent;
-          color: #ffffff;
-          cursor: pointer;
-          font-family: 'Source Sans Pro', sans-serif;
-          font-size: 1rem;
-          font-weight: 300;
-          letter-spacing: 0.2rem;
-          text-transform: uppercase;
-          text-decoration: none;
-          transition: background-color 0.2s ease-in-out;
-          opacity: 0;
-          animation: slideInDown 0.4s ease-out forwards;
-          position: relative;
-          white-space: nowrap;
-        }
-
-        .filter-row button:not(:first-child)::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 1px;
-          height: 1.5rem;
-          background: #ffffff;
-        }
-
-        .filter-row button.active {
-          color: white;
-          text-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
-          font-weight: 500;
-        }
-
-        .portfolio-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-          justify-content: center;
-          justify-items: center;
-          gap: 1rem;
-          perspective: 1000px;
-          align-items: start;
-          width: 100%;
-        }
-
-        @media (min-width: 768px) {
-          .portfolio-grid {
-            gap: 1.5rem;
-          }
-        }
-
-        @media (min-width: 1024px) {
-          .portfolio-grid {
-            // justify-content: space-between;
-            gap: 2rem;
-          }
-        }
-
-        .portfolio-card {
-          position: relative;
-          height: auto;
-          width: 100%;
-          max-width: 500px;
-          opacity: 0;
-          transition: opacity 0.4s ease, transform 0.3s ease;
-          cursor: pointer;
-        }
-
-        @media (min-width: 1024px) {
-          .portfolio-grid {
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-          }
-          .portfolio-card {
-            max-width: 550px;
-          }
-        }
-
-        .portfolio-card.loaded {
-          opacity: 1;
-        }
-
-        .card-content {
-          display: flex;
-          flex-direction: column;
-          width: 100%;
-          height: auto;
-          text-align: left;
-          border-radius: 8px;
-          background: rgba(27, 31, 34, 0.8);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .portfolio-card:hover {
-          transform: scale(1.05);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .project-image-container {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: auto;
-          flex-shrink: 0;
-          border-radius: 4px;
-          padding: 0;
-          margin: 0;
-          line-height: 0;
-        }
-
-        .no-image-placeholder {
-          height: 250px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: #666;
-          position: relative;
-          overflow: hidden;
-        }
-
-        .no-image-placeholder::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(
-            90deg,
-            transparent,
-            rgba(255, 255, 255, 0.2),
-            transparent
-          );
-          animation: shimmer 2s infinite;
-        }
-
-        .placeholder-icon {
-          font-size: 3rem;
-          opacity: 0.8;
-        }
-
-        .project-info {
-          padding: 1.5rem;
-          display: flex;
-          flex-direction: column;
-          flex: 1;
-          gap: 0.5rem;
-        }
-
-        .project-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-        }
-
-        .project-title {
-          color: #ffffff;
-          font-size: 1.2rem;
-          font-weight: 600;
-          margin: 0;
-          text-align: left;
-          flex: 1;
-        }
-
-        .project-year {
-          color: rgba(255, 255, 255, 0.6);
-          font-size: 0.9rem;
-          font-weight: 300;
-          margin-left: 1rem;
-        }
-
-        .project-description {
-          color: rgba(255, 255, 255, 0.8);
-          font-size: 0.95rem;
-          line-height: 1.5;
-          margin: 0 0 1.5rem 0;
-          text-align: left;
-        }
-
-        .project-meta {
-          display: flex;
-          gap: 0.5rem;
-          align-items: center;
-          flex-wrap: wrap;
-        }
-
-        .project-category {
-          color: white;
-          padding: 0.4rem 1rem;
-          border-radius: 15px;
-          font-size: 0.7rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.05rem;
-        }
-
-        .tech-details {
-          display: flex;
-          flex-direction: column;
-          gap: 1rem;
-        }
-
-        .tech-tags {
-          display: flex;
-          flex-wrap: wrap;
-          align-items: center;
-          gap: 0.5rem;
-          margin-top: 0.5rem;
-        }
-
-        .tech-tag {
-          color: rgba(255, 255, 255, 0.7);
-          font-size: 0.8rem;
-          opacity: 0;
-          animation: fadeInUp 0.6s ease forwards;
-          transition: all 0.3s ease;
-        }
-
-        .tech-tag:hover {
-          color: rgba(255, 255, 255, 0.9);
-        }
-
-        .tech-separator {
-          color: rgba(255, 255, 255, 0.4);
-          font-size: 0.8rem;
-          margin: 0 0.25rem;
-        }
-
-        .project-stats {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1rem;
-        }
-
-        .stat {
-          text-align: center;
-          padding: 1rem;
-          background: rgba(255, 255, 255, 0.05);
-          border-radius: 8px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .stat-label {
-          display: block;
-          color: rgba(255, 255, 255, 0.6);
-          font-size: 0.8rem;
-          text-transform: uppercase;
-          letter-spacing: 0.1rem;
-          margin-bottom: 0.5rem;
-        }
-
-        .stat-value {
-          display: block;
-          color: #ffffff;
-          font-size: 1rem;
-          font-weight: 600;
-        }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slideInDown {
-          from {
-            opacity: 0;
-            transform: translateY(-20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes shimmer {
-          0% {
-            left: -100%;
-          }
-          100% {
-            left: 100%;
-          }
-        }
-
-        @keyframes pulse {
-          0%,
-          100% {
-            transform: scale(1);
-          }
-          50% {
-            transform: scale(1.05);
-          }
-        }
-
-        @keyframes popIn {
-          from {
-            opacity: 0;
-            transform: scale(0.8) translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-          }
-        }
-
-        @media (max-width: 736px) {
-          .portfolio-filters > ul li button {
-            font-size: 0.9rem;
-            padding: 0.5rem 0;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .portfolio-filters > ul {
-            flex-direction: column;
-            min-width: 10rem;
-            max-width: 100%;
-          }
-
-          .portfolio-filters > ul li {
-            border-left: 0;
-            border-top: 0;
-          }
-
-          .portfolio-filters > ul li:first-child {
-            border-top: 0;
-          }
-
-          .portfolio-filters > ul li button {
-            height: 3rem;
-            line-height: 3rem;
-            min-width: 0;
-            width: 100%;
-            padding: 0;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .portfolio-grid {
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
-          }
-
-          // .portfolio-card {
-          //   height: 400px;
-          // }
-
-          .project-info {
-            padding: 1rem;
-          }
-        }
-      `}</style>
+        {!phone && active && (
+          <aside className={styles.pane} aria-label="Selected project">
+            <Picture file={active.image} alt={active.alt} className={styles.paneImg} eager />
+            <h3>{active.title}</h3>
+            <div className={styles.meta}>
+              <span>{active.year}</span>
+              <span className={styles.metaGroup}>
+                <Dot group={active.group} />
+                {groupById[active.group].name}
+              </span>
+            </div>
+            <Detail project={active} />
+            {isDev && active.draft && (
+              <>
+                <span className={styles.flag}>{active.draft}</span>
+                {active.todo && <p className={styles.todo}>{active.todo}</p>}
+              </>
+            )}
+          </aside>
+        )}
+      </div>
     </div>
   )
 }

@@ -1,0 +1,257 @@
+{
+  "projects": [
+    {
+      "id": "voterprime",
+      "title": "VoterPrime",
+      "year": "Current",
+      "group": "ai",
+      "hook": "Civic nonprofit I co-founded: AI that matches voters to political content",
+      "description": "VoterPrime is a civic engagement nonprofit focused on voter information and participation. I co-founded it and serve as CTO, leading the technical architecture and the AI/ML work: OpenAI embeddings for semantic matching of political content, GPT-3.5 for sentiment and intensity detection, and GPT-4o for category management.",
+      "technologies": [
+        "OpenAI embeddings",
+        "GPT-4o",
+        "GPT-3.5",
+        "Semantic matching"
+      ],
+      "image": "placeholder-4x3.svg",
+      "alt": "",
+      "draft": "Draft",
+      "todo": "Needs an image."
+    },
+    {
+      "id": "beagle",
+      "title": "Beagle",
+      "year": "TBD",
+      "group": "ai",
+      "hook": "AI project I own and build solo. Lorem ipsum dolor sit amet.",
+      "description": "A project I own and develop on my own. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.",
+      "technologies": [
+        "Lorem",
+        "Ipsum",
+        "Dolor",
+        "Sit amet"
+      ],
+      "image": "placeholder-4x3.svg",
+      "alt": "",
+      "draft": "Draft",
+      "todo": "Needs a description of what it does, the year, the tech and a screenshot. Needs a one-line hook. Tech tags are placeholders. Needs an image."
+    },
+    {
+      "id": "spookyai",
+      "title": "SpookyAI",
+      "year": "TBD",
+      "group": "ai",
+      "hook": "AI project I own and build solo. Lorem ipsum dolor sit amet.",
+      "description": "A project I own and develop on my own. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+      "technologies": [
+        "Lorem",
+        "Ipsum",
+        "Dolor",
+        "Sit amet"
+      ],
+      "image": "placeholder-4x3.svg",
+      "alt": "",
+      "draft": "Draft",
+      "todo": "Needs a description of what it does, the year, the tech and a screenshot. Needs a one-line hook. Tech tags are placeholders. Needs an image."
+    },
+    {
+      "id": "track2",
+      "title": "Track2",
+      "year": "TBD",
+      "group": "web",
+      "hook": "iPhone app I own and built solo, ready for the App Store",
+      "description": "An iPhone app I own and built as the sole developer, ready for the App Store. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+      "technologies": [
+        "Lorem",
+        "Ipsum",
+        "Dolor",
+        "Sit amet"
+      ],
+      "image": "placeholder-4x3.svg",
+      "alt": "",
+      "draft": "Draft",
+      "todo": "Needs a description of what it does, the year, the tech and a screenshot. A View link to the App Store page can go here once it is live. Tech tags are placeholders. Needs an image."
+    },
+    {
+      "id": "coding-interview-book",
+      "title": "Coding Interview Book",
+      "year": "TBD",
+      "group": "teaching",
+      "hook": "Guide to senior and staff-level coding interviews, available to read online",
+      "description": "A technical book for engineers preparing for senior and staff-level roles at major tech companies: algorithm patterns, data structures, system design, behavioral prep and common pitfalls. Available to read online.",
+      "technologies": [
+        "Lorem",
+        "Ipsum",
+        "Dolor",
+        "Sit amet"
+      ],
+      "image": "placeholder-4x3.svg",
+      "alt": "",
+      "draft": "Draft",
+      "todo": "Needs the real title, the year, how to describe its status, the link and a cover image. Tech tags are placeholders. Needs an image."
+    },
+    {
+      "id": "blog",
+      "title": "Blog",
+      "year": "Ongoing",
+      "group": "teaching",
+      "hook": "Writing on AI systems, architecture and lessons from 20+ years",
+      "description": "Essays and technical deep-dives on building AI systems, architecture decisions, and lessons from 20+ years in tech, along with teaching and mentorship notes.",
+      "technologies": [
+        "Lorem",
+        "Ipsum",
+        "Dolor",
+        "Sit amet"
+      ],
+      "image": "placeholder-4x3.svg",
+      "alt": "",
+      "url": "/blog",
+      "draft": "Draft",
+      "todo": "Tech tags are placeholders. Needs an image."
+    },
+    {
+      "id": "uc-berkeley-school-of-information",
+      "title": "UC Berkeley School of Information",
+      "year": "TBD",
+      "group": "teaching",
+      "hook": "Teaching web development. Lorem ipsum dolor sit amet.",
+      "description": "Taught at the UC Berkeley School of Information. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+      "technologies": [
+        "Lorem",
+        "Ipsum",
+        "Dolor",
+        "Sit amet"
+      ],
+      "image": "placeholder-4x3.svg",
+      "alt": "",
+      "draft": "Draft",
+      "todo": "Needs the course, the years and a line about what students built. Needs a one-line hook and the course and years. Tech tags are placeholders. Needs an image."
+    },
+    {
+      "id": "parsons-school-of-design",
+      "title": "Parsons School of Design",
+      "year": "TBD",
+      "group": "teaching",
+      "hook": "Teaching at Parsons. Lorem ipsum dolor sit amet.",
+      "description": "Taught at Parsons School of Design. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.",
+      "technologies": [
+        "Lorem",
+        "Ipsum",
+        "Dolor",
+        "Sit amet"
+      ],
+      "image": "placeholder-4x3.svg",
+      "alt": "",
+      "draft": "Draft",
+      "todo": "Needs the course, the years and a line about what students built. Needs a one-line hook and the course and years. Tech tags are placeholders. Needs an image."
+    },
+    {
+      "id": "academy-of-art-university",
+      "title": "Academy of Art University",
+      "year": "TBD",
+      "group": "teaching",
+      "hook": "Teaching at Academy of Art University. Lorem ipsum dolor sit amet.",
+      "description": "Taught at Academy of Art University. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+      "technologies": [
+        "Lorem",
+        "Ipsum",
+        "Dolor",
+        "Sit amet"
+      ],
+      "image": "placeholder-4x3.svg",
+      "alt": "",
+      "draft": "Draft",
+      "todo": "Needs the course, the years and a line about what students built. Needs a one-line hook and the course and years. Tech tags are placeholders. Needs an image."
+    },
+    {
+      "id": "wawa",
+      "title": "Wawa",
+      "year": "TBD",
+      "group": "retail",
+      "hook": "Via Publicis Sapient. Lorem ipsum dolor sit amet.",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+      "technologies": [
+        "Lorem",
+        "Ipsum",
+        "Dolor",
+        "Sit amet"
+      ],
+      "image": "placeholder-4x3.svg",
+      "alt": "",
+      "draft": "Placeholder",
+      "todo": "Needs a description, year, tech and screenshot. Delivered through Publicis Sapient. Needs a one-line hook. Tech tags are placeholders. Needs an image."
+    },
+    {
+      "id": "tapestry",
+      "title": "Tapestry",
+      "year": "TBD",
+      "group": "retail",
+      "hook": "Via Publicis Sapient. Lorem ipsum dolor sit amet.",
+      "description": "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.",
+      "technologies": [
+        "Lorem",
+        "Ipsum",
+        "Dolor",
+        "Sit amet"
+      ],
+      "image": "placeholder-4x3.svg",
+      "alt": "",
+      "draft": "Placeholder",
+      "todo": "Needs a description, year, tech and screenshot. Delivered through Publicis Sapient. Needs a one-line hook. Tech tags are placeholders. Needs an image."
+    },
+    {
+      "id": "albertsons",
+      "title": "Albertsons",
+      "year": "TBD",
+      "group": "retail",
+      "hook": "Via Publicis Sapient. Lorem ipsum dolor sit amet.",
+      "description": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.",
+      "technologies": [
+        "Lorem",
+        "Ipsum",
+        "Dolor",
+        "Sit amet"
+      ],
+      "image": "placeholder-4x3.svg",
+      "alt": "",
+      "draft": "Placeholder",
+      "todo": "Needs a description, year, tech and screenshot. Delivered through Publicis Sapient. Needs a one-line hook. Tech tags are placeholders. Needs an image."
+    },
+    {
+      "id": "sonepar",
+      "title": "Sonepar",
+      "year": "TBD",
+      "group": "business",
+      "hook": "React developer and architect, via Publicis Sapient",
+      "description": "Delivered through Publicis Sapient. I was the React developer and architect. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+      "technologies": [
+        "Lorem",
+        "Ipsum",
+        "Dolor",
+        "Sit amet"
+      ],
+      "image": "placeholder-4x3.svg",
+      "alt": "",
+      "draft": "Draft",
+      "todo": "Needs a description of what the application did, the year and the tech. Tech tags are placeholders. Needs an image."
+    },
+    {
+      "id": "capital-group",
+      "title": "Capital Group",
+      "year": "TBD",
+      "group": "business",
+      "hook": "Presentation sales software, via Publicis Sapient",
+      "description": "Sales presentation software for Capital Group, delivered through Publicis Sapient. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.",
+      "technologies": [
+        "Lorem",
+        "Ipsum",
+        "Dolor",
+        "Sit amet"
+      ],
+      "image": "placeholder-4x3.svg",
+      "alt": "",
+      "draft": "Draft",
+      "todo": "Needs the year, the tech and a screenshot. Tech tags are placeholders. Needs an image."
+    }
+  ]
+}

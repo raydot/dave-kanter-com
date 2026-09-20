@@ -1,0 +1,452 @@
+/* Portfolio article. The article shell (width, height, phone sheet) is
+   styled in public/globals-non-critical.css under #main article#work; this
+   file is only what is inside it. The theme's global button, label, ul, h3
+   and p rules (uppercase display type, big margins, bullets) are reset
+   here where they would otherwise leak into the cards. */
+
+.root {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  text-align: left;
+}
+
+/* Filters */
+
+.toolbar {
+  margin-bottom: 0.9rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.chip {
+  align-items: center;
+  border: solid 1px rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  color: inherit;
+  display: inline-flex;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  gap: 0.4rem;
+  height: auto;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  padding: 0.35rem 0.65rem;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.chip[aria-pressed='true'] {
+  background-color: #ffffff;
+  border-color: #ffffff;
+  color: #1b1f22;
+}
+
+.chip[aria-pressed='true']:hover {
+  background-color: rgba(255, 255, 255, 0.75);
+}
+
+.n {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.7;
+}
+
+.dot {
+  border-radius: 50%;
+  display: inline-block;
+  flex: none;
+  height: 0.5625rem;
+  width: 0.5625rem;
+}
+
+.menu {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.menu label {
+  flex: none;
+  margin: 0;
+}
+
+.menu select {
+  flex: 1;
+  font-size: 1rem;
+  min-width: 0;
+}
+
+/* List + pane */
+
+.split {
+  display: grid;
+  flex: 1;
+  gap: 1.25rem;
+  grid-template-columns: minmax(0, 1fr) 19rem;
+  grid-template-rows: minmax(0, 1fr);
+  min-height: 0;
+}
+
+.listWrap {
+  min-height: 0;
+  position: relative;
+}
+
+.scroller {
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 3.5rem), transparent);
+  display: grid;
+  gap: 0.6rem;
+  height: 100%;
+  list-style: none;
+  margin: 0;
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 3.5rem), transparent);
+  overflow-y: auto;
+  padding: 0 0.5rem 0 0;
+  position: relative;
+  scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
+  scrollbar-width: thin;
+  align-content: start;
+}
+
+.scroller.atEnd {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.scroller::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scroller::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+}
+
+.cue {
+  bottom: 0.4rem;
+  display: flex;
+  justify-content: center;
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+}
+
+.cue span {
+  background: #ffffff;
+  border-radius: 999px;
+  color: #1b1f22;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  padding: 0.4rem 0.9rem;
+  text-transform: uppercase;
+}
+
+/* Cards */
+
+.card {
+  border: solid 1px rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
+  cursor: pointer;
+  display: grid;
+  gap: 0.875rem;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  margin: 0;
+  padding: 0.75rem;
+}
+
+.card:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.selected {
+  background-color: rgba(255, 255, 255, 0.06);
+  border-color: #ffffff;
+}
+
+.thumb {
+  aspect-ratio: 4 / 3;
+  background: #222222;
+  border-radius: 4px;
+  display: block;
+  overflow: hidden;
+}
+
+.thumb picture,
+.paneImg picture {
+  display: block;
+  height: 100%;
+}
+
+.thumb img,
+.paneImg img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.noImage {
+  align-items: center;
+  background: transparent;
+  border: dashed 1px rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.62);
+  display: flex;
+  font-size: 0.6875rem;
+  justify-content: center;
+  letter-spacing: 0.12em;
+  padding: 0.4rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.body {
+  min-width: 0;
+}
+
+.top {
+  align-items: baseline;
+  display: flex;
+  gap: 0.6rem;
+  justify-content: space-between;
+}
+
+.top h3 {
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  line-height: 1.25;
+  margin: 0;
+  min-width: 0;
+  text-transform: none;
+}
+
+.titleBtn {
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  height: auto;
+  letter-spacing: inherit;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+  overflow-wrap: anywhere;
+  text-align: left;
+  text-transform: none;
+  white-space: normal;
+}
+
+.titleBtn:hover {
+  background: none;
+}
+
+.year {
+  align-items: center;
+  color: rgba(255, 255, 255, 0.62);
+  display: inline-flex;
+  flex: none;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+
+.hook {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  margin: 0.25rem 0 0;
+}
+
+.flag {
+  background: #f4c542;
+  border-radius: 3px;
+  color: #1b1f22;
+  display: inline-block;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  margin-top: 0.4rem;
+  padding: 0.05rem 0.5rem;
+  text-transform: uppercase;
+}
+
+.todo {
+  color: #f4c542;
+  font-size: 0.8125rem;
+  margin: 0.5rem 0 0;
+}
+
+.chev {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.62);
+  border-right: 2px solid rgba(255, 255, 255, 0.62);
+  display: none;
+  height: 0.5rem;
+  transform: rotate(-45deg);
+  transition: transform 0.15s ease;
+  width: 0.5rem;
+}
+
+.open .chev {
+  transform: rotate(45deg);
+}
+
+/* Opened card (phone) */
+
+.more {
+  border-top: solid 1px rgba(255, 255, 255, 0.14);
+  grid-column: 1 / -1;
+  padding-top: 0.75rem;
+}
+
+.groupLine {
+  align-items: center;
+  color: rgba(255, 255, 255, 0.62);
+  display: flex;
+  font-size: 0.75rem;
+  font-weight: 600;
+  gap: 0.5rem;
+  letter-spacing: 0.12em;
+  margin-bottom: 0.6rem;
+  text-transform: uppercase;
+}
+
+.more p,
+.pane p {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  margin: 0 0 0.75rem;
+}
+
+.tech {
+  color: rgba(255, 255, 255, 0.62);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.8125rem;
+  gap: 0.3rem 0.9rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tech li {
+  padding: 0;
+}
+
+.tech li + li::before {
+  content: '\2022';
+  margin-inline-end: 0.9rem;
+  opacity: 0.4;
+}
+
+.view {
+  border-bottom: dotted 1px rgba(255, 255, 255, 0.5);
+  display: inline-block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  margin-top: 0.75rem;
+  text-transform: uppercase;
+}
+
+/* Detail pane (desktop) */
+
+.pane {
+  align-self: start;
+  border-left: solid 1px rgba(255, 255, 255, 0.14);
+  max-height: 100%;
+  overflow-y: auto;
+  padding-left: 1.25rem;
+}
+
+.paneImg {
+  aspect-ratio: 4 / 3;
+  background: #222222;
+  border-radius: 4px;
+  display: block;
+  margin-bottom: 0.8rem;
+  overflow: hidden;
+}
+
+.pane h3 {
+  font-size: 1.25rem;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+  margin: 0 0 0.35rem;
+  text-transform: none;
+}
+
+.meta {
+  align-items: center;
+  color: rgba(255, 255, 255, 0.62);
+  display: flex;
+  font-size: 0.75rem;
+  gap: 0.9rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.metaGroup {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.4rem;
+}
+
+/* Phone: the article is a full-screen sheet (see globals-non-critical.css).
+   Title, close button and the Show menu stay put; only the list scrolls. */
+
+@media screen and (max-width: 736px) {
+  .toolbar {
+    border-bottom: solid 1px rgba(255, 255, 255, 0.14);
+    margin: 0;
+    padding: 0 1rem 0.8rem;
+  }
+
+  .split {
+    gap: 0;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .scroller {
+    -webkit-mask-image: none;
+    mask-image: none;
+    padding: 0.8rem 1rem 2rem;
+  }
+
+  .card {
+    grid-template-columns: 6rem minmax(0, 1fr);
+    padding: 0.625rem;
+  }
+
+  .chev {
+    display: inline-block;
+  }
+
+  .hook {
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .open .hook {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chev {
+    transition: none;
+  }
+}

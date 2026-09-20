@@ -614,12 +614,45 @@ ul.icons li a:active {
   margin-top: 4rem;
 }
 
+/* Portfolio: a wide article whose header stays put while its list scrolls
+   (see src/components/Portfolio.module.css), instead of the generic
+   scroll-the-whole-article behavior above. On a phone it becomes a
+   full-screen sheet. */
+#main article#work {
+  width: 62rem;
+  max-width: 94%;
+}
+
 #main article#work.active {
-  display: block !important;
+  display: flex !important;
+  flex-direction: column;
   align-self: flex-start;
   margin-top: 4rem;
-  overflow-y: auto;
-  max-height: calc(100vh - 8rem);
+  height: calc(100vh - 8rem);
+  max-height: none;
+  overflow: hidden;
+  padding-bottom: 1.25rem;
+}
+
+@media screen and (max-width: 736px) {
+  #main article#work {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+  }
+
+  #main article#work.active {
+    margin-top: 0;
+    height: 100vh;
+    height: 100dvh;
+    padding: 1.25rem 0 0;
+  }
+
+  #main article#work h2.major {
+    margin-inline: 1rem;
+    padding-inline-end: 3.5rem;
+    text-align: left;
+  }
 }
 
 #main article .close {
