@@ -1,7 +1,7 @@
 // Take a screenshot of a page so it can be looked at.
 //
 //   node scripts/shot.mjs / --w phone
-//   node scripts/shot.mjs / --w desktop --click Portfolio --click Enterprise --name portfolio-filtered
+//   node scripts/shot.mjs / --w desktop --click Portfolio --click "Healthcare 5" --name portfolio-filtered
 //   node scripts/shot.mjs file:///abs/path/mock.html --w phone --full
 //
 // Paths resolve against BASE_URL (default http://localhost:3000); a full
@@ -27,7 +27,7 @@ const PRESETS = {
 }
 const preset = flag('w') ?? 'desktop'
 if (!PRESETS[preset]) throw new Error(`--w must be one of ${Object.keys(PRESETS).join(', ')}`)
-if (!target) throw new Error('usage: node scripts/shot.mjs <path-or-url> [--w desktop|tablet|phone] [--click text]... [--wait ms] [--full] [--name out]')
+if (!target) throw new Error('usage: node scripts/shot.mjs <path-or-url> [--w desktop|tablet|phone] [--click text | --select css=value | --press key | --focus css]... [--wait ms] [--full] [--name out]')
 
 const base = process.env.BASE_URL ?? 'http://localhost:3000'
 const url = /^(https?|file):/.test(target) ? target : new URL(target, base).toString()
@@ -51,11 +51,30 @@ if (url.startsWith('file:')) {
 } else {
   await page.goto(url, { waitUntil: 'networkidle' })
 }
-for (const text of flags('click')) {
-  const byRole = page.getByRole('button', { name: text, exact: true }).first()
-  const el = (await byRole.count()) ? byRole : page.getByText(text, { exact: true }).first()
-  await el.click()
-  await page.waitForTimeout(700)
+// Steps run in the order given: --click "Label" (a real click on a button,
+// matched by accessible name then exact text) and --select "css=value"
+// (choose an option in a <select>, e.g. --select "#portfolio-filter=healthcare"),
+// --press Key (a keyboard key, e.g. Tab, Enter, Shift+Tab) and --focus "css"
+// (focus an element). Browsers only draw :focus-visible rings after keyboard
+// input, so to see a focus ring do: --press Shift --focus "css".
+for (let i = 0; i < args.length; i++) {
+  if (args[i] === '--click') {
+    const text = args[++i]
+    const byRole = page.getByRole('button', { name: text, exact: true }).first()
+    const el = (await byRole.count()) ? byRole : page.getByText(text, { exact: true }).first()
+    await el.click()
+    await page.waitForTimeout(1300)
+  } else if (args[i] === '--select') {
+    const [selector, value] = args[++i].split('=')
+    await page.selectOption(selector, value)
+    await page.waitForTimeout(600)
+  } else if (args[i] === '--press') {
+    await page.keyboard.press(args[++i])
+    await page.waitForTimeout(300)
+  } else if (args[i] === '--focus') {
+    await page.locator(args[++i]).first().focus()
+    await page.waitForTimeout(300)
+  }
 }
 if (flag('wait')) await page.waitForTimeout(Number(flag('wait')))
 
