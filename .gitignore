@@ -52,3 +52,8 @@ tsconfig.tsbuildinfo
 *.odt
 .~lock.*#
 next-env.d.ts
+
+# Playwright
+/test-results/
+/playwright-report/
+/.playwright/
