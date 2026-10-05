@@ -1,3 +1,12 @@
+## [2.12.2](https://github.com/raydot/dave-kanter-com/compare/v2.12.1...v2.12.2) (2026-10-05)
+
+
+### Bug Fixes
+
+* let header nav switch between open articles ([d6e1117](https://github.com/raydot/dave-kanter-com/commit/d6e11176859b2595dc648fd6bc1ff7e511741a69)), closes [#header](https://github.com/raydot/dave-kanter-com/issues/header)
+* restore portfolio cards after changing the filter ([4e30c95](https://github.com/raydot/dave-kanter-com/commit/4e30c953231cf8f2352f3f4837e2e9d930a2e3e7))
+* stop homepage footer landing below the fold on load ([5438c4d](https://github.com/raydot/dave-kanter-com/commit/5438c4d0b3ceb3a746359f75f54ccafe6be780e7)), closes [#header](https://github.com/raydot/dave-kanter-com/issues/header) [#wrapper](https://github.com/raydot/dave-kanter-com/issues/wrapper) [#header](https://github.com/raydot/dave-kanter-com/issues/header) [#footer](https://github.com/raydot/dave-kanter-com/issues/footer) [#header](https://github.com/raydot/dave-kanter-com/issues/header) [#footer](https://github.com/raydot/dave-kanter-com/issues/footer)
+
 ## [2.12.1](https://github.com/raydot/dave-kanter-com/compare/v2.12.0...v2.12.1) (2026-09-19)
 
 
