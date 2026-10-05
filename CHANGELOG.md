@@ -1,3 +1,10 @@
+## [2.12.3](https://github.com/raydot/dave-kanter-com/compare/v2.12.2...v2.12.3) (2026-10-05)
+
+
+### Bug Fixes
+
+* upgrade next to 16.3.8 to patch critical RCE in next/og ImageResponse ([440335e](https://github.com/raydot/dave-kanter-com/commit/440335e807625ced753f07d7592e9f7427885c54)), closes [#317](https://github.com/raydot/dave-kanter-com/issues/317)
+
 ## [2.12.2](https://github.com/raydot/dave-kanter-com/compare/v2.12.1...v2.12.2) (2026-10-05)
 
 
