@@ -83,11 +83,11 @@
       "hook": "Learn the algorithms necessary to ace junior and mid-level coding interviews.  Available to read online",
       "description": "A technical book for engineers preparing for junior and mid-level roles at tech companies.  Learn algorithm patterns, data structures, system design, behavioral prep and common pitfalls. Available to read online.",
       "technologies": [],
-      "image": "placeholder-4x3.svg",
+      "image": "coding-interview.svg",
       "alt": "Coding Interview Mastery",
       "url": "https://codinginterviewsbook.davekanter.com/",
       "draft": "Draft",
-      "todo": "Needs a cover image — staying on the placeholder for now."
+      "todo": ""
     },
     {
       "id": "uc-berkeley-school-of-information",
@@ -100,7 +100,7 @@
       "image": "uc-berkeley.svg",
       "alt": "UC Berkeley",
       "draft": "Draft",
-      "todo": "Needs a one-line hook — still Lorem ipsum."
+      "todo": ""
     },
     {
       "id": "parsons-school-of-design",
