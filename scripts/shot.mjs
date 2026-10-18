@@ -27,7 +27,7 @@ const PRESETS = {
 }
 const preset = flag('w') ?? 'desktop'
 if (!PRESETS[preset]) throw new Error(`--w must be one of ${Object.keys(PRESETS).join(', ')}`)
-if (!target) throw new Error('usage: node scripts/shot.mjs <path-or-url> [--w desktop|tablet|phone] [--click text | --select css=value | --press key | --focus css]... [--wait ms] [--full] [--name out]')
+if (!target) throw new Error('usage: node scripts/shot.mjs <path-or-url> [--w desktop|tablet|phone] [--click text | --clickcss css | --select css=value | --press key | --focus css]... [--wait ms] [--full] [--name out]')
 
 const base = process.env.BASE_URL ?? 'http://localhost:3000'
 const url = /^(https?|file):/.test(target) ? target : new URL(target, base).toString()
@@ -54,8 +54,9 @@ if (url.startsWith('file:')) {
 // Steps run in the order given: --click "Label" (a real click on a button,
 // matched by accessible name then exact text) and --select "css=value"
 // (choose an option in a <select>, e.g. --select "#portfolio-filter=healthcare"),
-// --press Key (a keyboard key, e.g. Tab, Enter, Shift+Tab) and --focus "css"
-// (focus an element). Browsers only draw :focus-visible rings after keyboard
+// --clickcss "css" (a real click by CSS selector, when a link/button's text
+// isn't matchable by --click, e.g. it has a child element appended with no
+// space), --press Key (e.g. Tab, Enter, Shift+Tab) and --focus "css". Browsers only draw :focus-visible rings after keyboard
 // input, so to see a focus ring do: --press Shift --focus "css".
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--click') {
@@ -74,6 +75,9 @@ for (let i = 0; i < args.length; i++) {
   } else if (args[i] === '--focus') {
     await page.locator(args[++i]).first().focus()
     await page.waitForTimeout(300)
+  } else if (args[i] === '--clickcss') {
+    await page.locator(args[++i]).first().click()
+    await page.waitForTimeout(1300)
   }
 }
 if (flag('wait')) await page.waitForTimeout(Number(flag('wait')))

@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-labelledby="spooky-title spooky-desc">
+  <title id="spooky-title">Spooky — context survives the session boundary</title>
+  <desc id="spooky-desc">A diagram of two separate sessions divided by a dashed boundary line marked "no shared context". Below both sits a persistent store built on fastembed and SQLite. An arrow runs down from the first session labelled "store", and an arrow runs up into the second session labelled "retrieved unprompted", where one highlighted message shows recovered context.</desc>
+
+  <defs>
+    <marker id="arrowDown" viewBox="0 0 10 10" refX="5" refY="9"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 1 1 L 5 9 L 9 1" fill="none" stroke="#3dc4b4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrowUp" viewBox="0 0 10 10" refX="5" refY="1"
+            markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 1 9 L 5 1 L 9 9" fill="none" stroke="#3dc4b4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <rect width="800" height="600" fill="#12141a"/>
+
+  <!-- title block -->
+  <text x="96" y="58" fill="#f2f4f8"
+        font-family="ui-sans-serif, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="27" font-weight="600" letter-spacing="-0.4">Context survives the session boundary</text>
+  <text x="96" y="86" fill="#8b93a5"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="14.5">MCP server · embedding retrieval across sessions</text>
+
+  <!-- session boundary -->
+  <text x="400" y="140" fill="#6b7383" text-anchor="middle"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="13" font-style="italic">session boundary — no shared context</text>
+  <line x1="400" y1="154" x2="400" y2="332" stroke="#4a5164" stroke-width="1.5" stroke-dasharray="4 7"/>
+
+  <!-- session 1 -->
+  <rect x="96" y="166" width="256" height="134" rx="6" fill="#1a1d26" stroke="#2c313d" stroke-width="1"/>
+  <text x="114" y="191" fill="#8b93a5"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="12" letter-spacing="1.2">SESSION 1</text>
+  <g fill="#323846">
+    <rect x="114" y="212" width="182" height="8" rx="4"/>
+    <rect x="114" y="230" width="140" height="8" rx="4"/>
+    <rect x="114" y="248" width="212" height="8" rx="4"/>
+    <rect x="114" y="266" width="158" height="8" rx="4"/>
+  </g>
+
+  <!-- session 2 -->
+  <rect x="448" y="166" width="256" height="134" rx="6" fill="#1a1d26" stroke="#2c313d" stroke-width="1"/>
+  <text x="466" y="191" fill="#8b93a5"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="12" letter-spacing="1.2">SESSION 2 · fresh</text>
+  <rect x="466" y="212" width="204" height="8" rx="4" fill="#3dc4b4"/>
+  <g fill="#323846">
+    <rect x="466" y="230" width="146" height="8" rx="4"/>
+    <rect x="466" y="248" width="196" height="8" rx="4"/>
+    <rect x="466" y="266" width="132" height="8" rx="4"/>
+  </g>
+
+  <!-- store / retrieve arrows -->
+  <line x1="224" y1="302" x2="224" y2="384" stroke="#3dc4b4" stroke-width="2" marker-end="url(#arrowDown)"/>
+  <text x="238" y="348" fill="#8b93a5"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="13">store</text>
+
+  <line x1="576" y1="384" x2="576" y2="302" stroke="#3dc4b4" stroke-width="2" marker-end="url(#arrowUp)"/>
+  <text x="562" y="348" fill="#8b93a5" text-anchor="end"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="13">retrieved unprompted</text>
+
+  <!-- persistent store -->
+  <rect x="96" y="390" width="608" height="90" rx="6" fill="#1a1d26" stroke="#2c313d" stroke-width="1"/>
+  <text x="114" y="418" fill="#f2f4f8"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="13" letter-spacing="1.2">PERSISTENT STORE</text>
+  <text x="114" y="442" fill="#6b7383"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="12.5">fastembed · bge-small-en-v1.5 · SQLite</text>
+
+  <!-- embedding neighbourhood -->
+  <g fill="#3a4152">
+    <circle cx="492" cy="418" r="4"/>
+    <circle cx="524" cy="440" r="3.5"/>
+    <circle cx="556" cy="410" r="3"/>
+    <circle cx="588" cy="436" r="4.5"/>
+    <circle cx="620" cy="414" r="3"/>
+    <circle cx="652" cy="446" r="3.5"/>
+    <circle cx="676" cy="420" r="3"/>
+    <circle cx="544" cy="458" r="3"/>
+    <circle cx="612" cy="460" r="2.5"/>
+  </g>
+  <circle cx="588" cy="436" r="10" fill="none" stroke="#3dc4b4" stroke-width="1.5"/>
+  <circle cx="588" cy="436" r="4.5" fill="#3dc4b4"/>
+
+  <!-- footer -->
+  <text x="96" y="566" fill="#5c6373"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="13" letter-spacing="1.5">SPOOKY</text>
+  <text x="704" y="566" fill="#5c6373"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="13" text-anchor="end">MCP context server · 2026</text>
+</svg>

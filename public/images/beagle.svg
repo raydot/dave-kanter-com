@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-labelledby="beagle-title beagle-desc">
+  <title id="beagle-title">Beagle — task-level agent error is step-shaped</title>
+  <desc id="beagle-desc">A line chart of per-turn task error across eighteen conversation turns. The measured signal is flat, jumps abruptly, holds at a plateau, then drops back — it never changes gradually. A faint dashed line shows the smooth ramp a derivative-based controller would require.</desc>
+
+  <defs>
+    <linearGradient id="plateauFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8622c" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#e8622c" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="800" height="600" fill="#12141a"/>
+
+  <!-- gridlines -->
+  <g stroke="#262a34" stroke-width="1">
+    <line x1="96" y1="136" x2="742" y2="136"/>
+    <line x1="96" y1="224" x2="742" y2="224"/>
+    <line x1="96" y1="312" x2="742" y2="312"/>
+    <line x1="96" y1="400" x2="742" y2="400"/>
+  </g>
+
+  <!-- axes -->
+  <line x1="96" y1="488" x2="742" y2="488" stroke="#4a5164" stroke-width="1.5"/>
+  <line x1="96" y1="112" x2="96" y2="488" stroke="#4a5164" stroke-width="1.5"/>
+
+  <!-- axis labels -->
+  <g fill="#6b7383" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13">
+    <text x="82" y="493" text-anchor="end">0</text>
+    <text x="82" y="405" text-anchor="end">.25</text>
+    <text x="82" y="317" text-anchor="end">.50</text>
+    <text x="82" y="229" text-anchor="end">.75</text>
+    <text x="82" y="141" text-anchor="end">1.0</text>
+    <text x="96" y="518">turn 1</text>
+    <text x="742" y="518" text-anchor="end">18</text>
+    <text x="52" y="300" text-anchor="middle" transform="rotate(-90 52 300)">task error</text>
+  </g>
+
+  <!-- the ramp a derivative term would need, and never got -->
+  <path d="M 134 488 L 419 224 L 704 400"
+        fill="none" stroke="#4a5164" stroke-width="2"
+        stroke-dasharray="3 7" stroke-linecap="round" opacity="0.9"/>
+  <text x="430" y="206" fill="#6b7383"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="13" font-style="italic">what a derivative needs</text>
+
+  <!-- measured signal: flat, jump, plateau, jump, plateau, drop, flat -->
+  <path d="M 134 488 L 241 488 L 241 312 L 348 312 L 348 172 L 490 172 L 490 400 L 598 400 L 598 488 L 742 488 Z"
+        fill="url(#plateauFill)" stroke="none"/>
+  <path d="M 134 488 L 241 488 L 241 312 L 348 312 L 348 172 L 490 172 L 490 400 L 598 400 L 598 488 L 742 488"
+        fill="none" stroke="#e8622c" stroke-width="3.5"
+        stroke-linejoin="miter" stroke-linecap="square"/>
+
+  <!-- transition markers -->
+  <g fill="#e8622c">
+    <circle cx="241" cy="312" r="4.5"/>
+    <circle cx="348" cy="172" r="4.5"/>
+    <circle cx="490" cy="400" r="4.5"/>
+    <circle cx="598" cy="488" r="4.5"/>
+  </g>
+
+  <!-- title block -->
+  <text x="96" y="58" fill="#f2f4f8"
+        font-family="ui-sans-serif, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="27" font-weight="600" letter-spacing="-0.4">Task-level agent error is step-shaped</text>
+  <text x="96" y="86" fill="#8b93a5"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="14.5">per-turn error · 0 of 15 runs showed a multi-turn ramp</text>
+
+  <!-- footer -->
+  <text x="96" y="566" fill="#5c6373"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="13" letter-spacing="1.5">BEAGLE</text>
+  <text x="742" y="566" fill="#5c6373"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="13" text-anchor="end">evaluation harness · 2026</text>
+</svg>
