@@ -1,0 +1,2203 @@
+<title>Campus Backlot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Big+Shoulders+Stencil+Display:wght@800&family=Bitter:wght@500;700&family=Caveat:wght@600&family=Courier+Prime:wght@400;700&display=swap">
+<style>
+/* Layout: one 1600x900 stage, letterboxed and scaled to the window; each beat swaps the stage's scene. Single deliberate dark look (a dark theater around the screen). */
+:root{
+  --house:#0d0f12; --paper:#F3EBD8; --kraft:#C9A06E; --kraftD:#9E7650; --lumber:#B88A4A; --lumberD:#8C6A48;
+  --brass:#D9AE3F; --red:#C8463F; --shade:#0b0e13; --ul:rgba(25,18,10,.32); --ink:#3a2a1c;
+  --sign:"Alfa Slab One", "Rockwell", Georgia, serif;
+  --stencil:"Big Shoulders Stencil Display", "Impact", "Arial Narrow", sans-serif;
+  --label:"Bitter", Georgia, serif;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--house);color:var(--paper);overflow:hidden;font-family:var(--label)}
+#viewport{position:fixed;inset:0;display:grid;place-items:center;cursor:pointer}
+#stage{position:absolute;left:50%;top:50%;width:1600px;height:900px;transform-origin:0 0;overflow:hidden;background:#000}
+.layer{position:absolute;inset:0;width:1600px;height:900px}
+svg{display:block;width:1600px;height:900px}
+.world{transform-origin:800px 560px}
+.close{opacity:0;perspective:1200px;perspective-origin:50% 35%}
+.piece{position:absolute;overflow:hidden;transform-style:preserve-3d;backface-visibility:hidden}
+.piece svg{position:absolute;left:0;top:0}
+.sign{font-family:var(--sign)}
+.sten{font-family:var(--stencil);letter-spacing:.06em}
+.lbl{font-family:var(--label);font-weight:700}
+.sub{font-family:var(--label);font-weight:500}
+.tw{font-family:"Courier Prime","Courier New",monospace}
+.after .op{animation:flinch .6s var(--fd,1.5s) steps(7) both}
+@keyframes flinch{0%{transform:none}25%{transform:translateY(-16px)}55%{transform:translateY(3px)}100%{transform:none}}
+
+/* shadow hands appear at the collapse */
+.hand{opacity:0}
+.after .hand{opacity:.9;transition:opacity .4s 1.2s steps(5)}
+.after .f-hold ~ .hand,.after .hold-hand{transition-delay:3.4s}
+.q{opacity:0}
+.after .q{opacity:1;transition:opacity .3s 1.3s steps(4)}
+
+/* ambient loops */
+.loop{animation-iteration-count:infinite}
+@media (prefers-reduced-motion:reduce){.loop,.edge{animation-play-state:paused!important}}
+
+/* HUD */
+#hud{position:fixed;left:12px;bottom:10px;font:500 13px/1.5 var(--label);color:#8a8f98;background:rgba(13,15,18,.85);padding:8px 12px;border-radius:6px;pointer-events:none}
+#hint{position:fixed;left:50%;bottom:6%;transform:translateX(-50%);font:700 18px var(--label);color:var(--paper);background:rgba(13,15,18,.78);padding:12px 20px;border-radius:8px;pointer-events:none;text-align:center}
+#hint small{display:block;font-weight:500;font-size:14px;color:#b9b3a4;margin-top:4px}
+
+/* ---------- classroom: one continuous camera ---------- */
+.cw{transform-origin:800px 470px;perspective:1400px;perspective-origin:800px 470px}
+.cl-bs{transform-origin:0 0;transform:translate(671.43px,402.14px) scale(.16071)}
+.cl-bsclip{clip-path:inset(428px 741px 278px 741px)}
+.cl-a .cw{animation:clWalk 1.2s steps(14,jump-none) both}
+@keyframes clWalk{from{transform:translateY(40px) scale(.85)}to{transform:none}}
+.cl-b .cw{animation:clPush 1.6s steps(19) both}
+@keyframes clPush{from{transform:none}to{transform:scale(5.6)}}
+.door-l,.door-r{transform-box:fill-box}.door-l{transform-origin:left center}.door-r{transform-origin:right center}
+.cl-b .door-l,.cl-b .door-r{animation:clDoor .5s 1.5s steps(6) both}
+@keyframes clDoor{to{transform:scaleX(.12)}}
+.cl-c .door-l,.cl-c .door-r{transform:scaleX(.12)}
+.cl-c .cw{transform:scale(5.6)}
+@keyframes clPull{from{transform:scale(5.6)}to{transform:scale(1.5)}}
+
+@keyframes clBsGrow{from{transform:translate(671.43px,402.14px) scale(.16071)}to{transform:translate(266.67px,156.67px) scale(.66667)}}
+.cl-c .cl-bsclip{animation:clClipOpen .01s .4s both}@keyframes clClipOpen{to{clip-path:inset(0px 0px 0px 0px)}}
+@keyframes clClip{0%{clip-path:inset(428px 741px 278px 741px)}20%{clip-path:inset(58px 278px 261px 278px)}45%,100%{clip-path:inset(0px 0px 0px 0px)}}
+.cl-c .cl-facade{transform-origin:800px 639px;animation:clFall 1.4s .6s steps(17) both}
+@keyframes clFall{0%{transform:none}18%{transform:rotateX(-5deg)}99%{transform:rotateX(-94deg);opacity:1}100%{transform:rotateX(-94deg);opacity:0}}
+.cl-c .cl-sky{animation:clFly 1s 1s steps(12) both}@keyframes clFly{to{transform:translateY(-1100px)}}
+.cl-c .cl-hills{transform-origin:800px 470px;animation:clTip 1s 1.1s steps(12) both}@keyframes clTip{to{transform:rotateX(85deg);opacity:0}}
+.cl-c .hand{opacity:0;animation:clShowH .01s .7s both}.cl-c .q{opacity:0;animation:clShowQ .01s 2.2s both}.cl-c{--fd:3s}@keyframes clShowH{to{opacity:.9}}@keyframes clShowQ{to{opacity:1}}
+@keyframes clDrift{from{transform:translateX(-80px)}to{transform:translateX(420px)}}
+@keyframes clWave{0%,100%{transform:skewY(0deg) scaleX(1)}25%{transform:skewY(-6deg) scaleX(.94)}50%{transform:skewY(2deg) scaleX(1.03)}75%{transform:skewY(5deg) scaleX(.96)}}
+@keyframes clRipple{0%,100%{transform:skewY(0deg)}30%{transform:skewY(-.5deg)}65%{transform:skewY(.4deg)}}
+@keyframes clSec{to{transform:rotate(360deg)}}
+.frozen .edge{animation-play-state:paused!important}
+.after .op.hop{animation:hop .6s steps(7) both}@keyframes hop{0%{transform:none}25%{transform:translateY(-16px)}55%{transform:translateY(3px)}100%{transform:none}}
+/* fall styles: classroom falls forward (above); cafeteria peels in strips; dorm is yanked up; library folds, then falls; bookstore holds */
+.cl-c.fall-peel .cl-facade{animation:none}
+.cl-c.fall-peel .pl{animation:plPeel 1.3s steps(16) both}
+@keyframes plPeel{0%{transform:none}30%{transform:rotate(var(--r))}100%{transform:translateY(760px) rotate(calc(var(--r) * 3))}}
+.cl-c.fall-fly .cl-facade{animation:flyF 1.3s .5s steps(16) both}
+@keyframes flyF{0%{transform:none}22%{transform:translateY(8px)}100%{transform:translateY(-820px)}}
+.bk-l{clip-path:inset(0 799px 0 0);transform-origin:278px 470px;backface-visibility:hidden}
+.bk-r{clip-path:inset(0 0 0 800px);transform-origin:1322px 470px;backface-visibility:hidden}
+.cl-c.fall-book .cl-facade{transform-style:preserve-3d;animation:none}
+.cl-c.fall-book .bk-l{animation:bookL 1.9s .5s steps(23) both}
+.cl-c.fall-book .bk-r{animation:bookR 1.9s .5s steps(23) both}
+@keyframes bookL{0%{transform:none}12%{transform:rotateY(-3deg)}100%{transform:rotateY(105deg)}}
+@keyframes bookR{0%{transform:none}12%{transform:rotateY(3deg)}100%{transform:rotateY(-105deg)}}
+.cl-c.fall-hold .cl-bsclip{animation:none}
+.cl-c.fall-hold .cl-sky,.cl-c.fall-hold .cl-hills{animation:none}
+.cl-c.fall-hold .cl-facade{transform-origin:800px 639px;animation:bkWob 2.4s .2s steps(29) both}
+@keyframes bkWob{0%,100%{transform:none}12%{transform:rotate(2deg)}26%{transform:rotate(-1.6deg)}40%{transform:rotate(1.1deg)}54%{transform:rotate(-.7deg)}70%{transform:rotate(.3deg)}}
+.cl-c.fall-hold .cw{animation:bkAround 1.2s 2.9s steps(9) both}
+@keyframes bkAround{from{transform:scale(5.6)}to{transform:translateX(-1900px) scale(2.2)}}
+.bk-back{transform:translateX(1700px)}
+.cl-c.fall-hold .bk-back{animation:bkIn 1.2s 2.9s steps(9) both}
+@keyframes bkIn{from{transform:translateX(1700px)}to{transform:none}}
+/* gate transitions: push through the gate onto the tacked sheet; later the sheet tears off to reveal the classroom */
+.gt-push .gtw{transform-origin:166px 646px;animation:gtPush .5s steps(4) both}@keyframes gtPush{to{transform:scale(5.4)}}
+.gt-push .gt-reg{opacity:0;animation:clShowQ .01s .5s both}
+.gt-tear{transform-origin:800px 0;animation:gtTear .4s .15s steps(4) both}@keyframes gtTear{to{transform:translateY(1000px) rotate(8deg)}}
+@keyframes camPan{0%,100%{transform:rotate(-14deg)}50%{transform:rotate(22deg)}}@keyframes bkTw{0%,85%{fill:#FFE7A6}86%,100%{fill:#B39A68}}
+</style>
+
+<div id="viewport" aria-label="Presentation stage. Press right arrow or space to advance, left arrow to go back.">
+  <div id="stage"></div>
+</div>
+<div id="hint">Press → or space to begin<small>← back · H keys and position · M mute · F full screen</small></div>
+<div id="hud" hidden></div>
+
+<script>
+"use strict";
+/* ---------- tiny drawing helpers: every shape gets a paper-thickness underlayer ---------- */
+const O = 6;
+const R = (x,y,w,h,f,o=O,rx=0,extra="") => `<rect x="${x+o}" y="${y+o}" width="${w}" height="${h}" rx="${rx}" fill="var(--ul)"/><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" fill="${f}" ${extra}/>`;
+const P = (pts,f,o=O,extra="") => `<polygon points="${pts}" transform="translate(${o} ${o})" fill="var(--ul)"/><polygon points="${pts}" fill="${f}" ${extra}/>`;
+const C = (cx,cy,r,f,o=O) => `<circle cx="${cx+o}" cy="${cy+o}" r="${r}" fill="var(--ul)"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="${f}"/>`;
+const D = (d,f,o=O,extra="") => `<path d="${d}" transform="translate(${o} ${o})" fill="var(--ul)"/><path d="${d}" fill="${f}" ${extra}/>`;
+const L = (x1,y1,x2,y2,c,w) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${c}" stroke-width="${w}" stroke-linecap="round"/>`;
+const T = (x,y,s,cls,fill,txt,anchor="middle",extra="") => `<text x="${x}" y="${y}" font-size="${s}" class="${cls}" fill="${fill}" text-anchor="${anchor}" ${extra}>${txt}</text>`;
+const fit = (txt,maxW,base,ratio=.6) => Math.min(base, Math.floor(maxW/(txt.length*ratio)));
+const svg = (inner,cls="") => `<svg viewBox="0 0 1600 900" class="${cls}" aria-hidden="true">${inner}</svg>`;
+const anim = (name,dur,fps=12,extra="") => `style="animation:${name} ${dur}s steps(${Math.round(dur*fps)}) infinite ${extra}"`;
+
+/* a shadow hand: wrist above, fingertips at (x,y) pointing down, rotated by rot */
+const hand = (x,y,rot=0,s=1,cls="hand") => `<g class="${cls}" transform="translate(${x} ${y}) rotate(${rot}) scale(${s})" fill="var(--shade)">
+  <rect x="-34" y="-520" width="68" height="420" rx="20"/><rect x="-48" y="-130" width="96" height="104" rx="34"/>
+  <rect x="-46" y="-50" width="20" height="74" rx="10"/><rect x="-22" y="-50" width="20" height="82" rx="10"/>
+  <rect x="2" y="-50" width="20" height="78" rx="10"/><rect x="26" y="-50" width="19" height="64" rx="10"/>
+  <rect x="38" y="-110" width="20" height="64" rx="10" transform="rotate(-28 48 -110)"/></g>`;
+
+/* an operator: a small, ordinary person in kraft card with one everyday prop. Behind them, on the backdrop,
+   a giant shadow of the same figure (Baum's Great Head vs. the little man behind the screen). They flinch when the flat falls.
+   arms: list of arms; each arm a list of poses [tx,ty,fromPct,toPct] (one pose = static) on a cycle of dur seconds */
+let _op=0, SHADOWS=[];
+const takeShadows=()=>{const t=SHADOWS.join(""); SHADOWS=[]; return t;};
+/* a jointed paper puppet: card limbs pinned at hips, knees and shoulder, a neck, shoulders wider than the waist,
+   a head in profile with a nose and hair. Faces +x in local units; feet at 0, about 330 tall. */
+function puppet(f, garment, hair, headStyle="", pins=true){
+  const g=garment||f, h=hair||f;
+  const pin=(x,y)=>pins?`<circle cx="${x}" cy="${y}" r="4.5" fill="#c99a3b"/><circle cx="${x-1.2}" cy="${y-1.2}" r="1.8" fill="#e6c46e"/>`:"";
+  return `<rect x="-15" y="-152" width="18" height="76" rx="7" fill="${f}"/><rect x="-16" y="-82" width="16" height="74" rx="6" fill="${f}"/><rect x="-18" y="-11" width="28" height="11" rx="4" fill="${f}"/>
+   <g transform="rotate(7 11 -150)"><rect x="2" y="-152" width="18" height="76" rx="7" fill="${f}"/><rect x="3" y="-82" width="16" height="74" rx="6" fill="${f}"/><rect x="3" y="-11" width="31" height="11" rx="4" fill="${f}"/>${pin(11,-80)}</g>
+   ${pin(-6,-80)}
+   <g transform="rotate(6 0 -150)">
+     <g transform="rotate(10 -13 -250)"><rect x="-20" y="-254" width="14" height="66" rx="6" fill="${g}"/></g>
+     <g transform="rotate(-3 -16 -190)"><rect x="-24" y="-194" width="13" height="62" rx="6" fill="${f}"/></g>
+     <path d="M-24 -258 Q6 -270 36 -258 L27 -146 L-17 -146 Z" fill="${g}"/>${pin(-6,-148)}${pin(11,-148)}${pin(-13,-248)}
+     <rect x="6" y="-278" width="12" height="22" fill="${f}"/>
+     <g style="${headStyle}"><circle cx="14" cy="-298" r="24" fill="${f}"/><polygon points="35,-303 47,-292 35,-287" fill="${f}"/>
+       <path d="M-11 -296 Q-10 -326 16 -324 Q36 -322 38 -308 Q20 -314 5 -309 Q-3 -302 -8 -286 Z" fill="${h}"/></g>
+   </g>`;
+}
+function figure(f){ return puppet(f,f,f,"",false); }
+const PROPS={
+  cup:`<polygon points="-46,-146 -22,-146 -26,-112 -42,-112" fill="#F3EBD8"/><rect x="-47" y="-150" width="26" height="6" fill="#E6DCC4"/>`,
+  lanyard:`<polyline points="-6,-266 9,-212 24,-266" fill="none" stroke="#4A7FC1" stroke-width="4"/><rect x="0" y="-214" width="20" height="24" rx="2" fill="#F3EBD8"/>`,
+  phone:`<rect x="-50" y="-158" width="18" height="30" rx="3" fill="#2E3440"/><rect x="-47" y="-154" width="12" height="20" fill="#7FB8C9"/>`,
+  clipboard:`<rect x="-52" y="-160" width="34" height="44" rx="3" fill="var(--kraftD)"/><rect x="-48" y="-152" width="26" height="32" fill="#F3EBD8"/><rect x="-41" y="-164" width="12" height="8" fill="var(--brass)"/>`,
+};
+const liveArm=p=>`<polyline id="${p}U" fill="none" stroke="var(--ul)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><polyline id="${p}" fill="none" stroke="var(--kraft)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle id="${p}F" r="7" fill="var(--kraft)"/>`;
+function armTo(p,sx,sy,gx,gy){
+  const a=document.getElementById(p); if(!a) return;
+  const vx=gx-sx, vy=gy-sy, len=Math.hypot(vx,vy)||1;
+  let nx=-vy/len, ny=vx/len; if(ny<0){nx=-nx;ny=-ny;}
+  const ex=sx+vx/2+nx*len*.16, ey=sy+vy/2+ny*len*.16;
+  a.setAttribute("points",`${sx},${sy} ${ex},${ey} ${gx},${gy}`);
+  document.getElementById(p+"U").setAttribute("points",`${sx+4},${sy+4} ${ex+4},${ey+4} ${gx+4},${gy+4}`);
+  const f=document.getElementById(p+"F"); f.setAttribute("cx",gx); f.setAttribute("cy",gy);
+}
+function person(x,fy,s,dir,arms,o={}){
+  const GAR={lanyard:"#5E6B7A",clipboard:"#E8E2D2",phone:"#4C6E70",cup:"#8A6A5A"};
+  const {dur=2,cls="hand",glance=4.7,props=[],shadow=true,fd=null,extra="",k=2.8,garment=GAR[props[0]]||"#6B7A86",hair="#3A2E22"}=o;
+  const id="op"+(_op++), c="var(--kraft)";
+  const sx=x+dir*20*s, sy=fy-253*s;
+  let css=`@keyframes ${id}h{0%,76%{transform:none}79%,91%{transform:translate(-16px,4px)}94%,100%{transform:none}}`;
+  let armSvg="";
+  arms.forEach((poses,ai)=>{
+    poses.forEach((pp,pi)=>{
+      const [tx,ty,a=0,b=100]=pp;
+      const vx=tx-sx, vy=ty-sy, len=Math.hypot(vx,vy)||1;
+      let nx=-vy/len, ny=vx/len; if(ny<0){nx=-nx;ny=-ny;}
+      const ex=sx+vx/2+nx*len*.16, ey=sy+vy/2+ny*len*.16;
+      const line=`<polyline points="${sx+4},${sy+4} ${ex+4},${ey+4} ${tx+4},${ty+4}" fill="none" stroke="var(--ul)" stroke-width="${16*s}" stroke-linecap="round" stroke-linejoin="round"/><polyline points="${sx},${sy} ${ex},${ey} ${tx},${ty}" fill="none" stroke="${c}" stroke-width="${16*s}" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${tx}" cy="${ty}" r="${11*s}" fill="${c}"/>`;
+      if(poses.length===1){ armSvg+=line; return; }
+      const k=`${id}a${ai}p${pi}`;
+      css+= a===0 ? `@keyframes ${k}{0%{opacity:1}${b}%{opacity:0}100%{opacity:0}}` : `@keyframes ${k}{0%{opacity:0}${a}%{opacity:1}${b}%{opacity:${b>=100?1:0}}100%{opacity:${b>=100?1:0}}}`;
+      armSvg+=`<g style="animation:${k} ${dur}s steps(1) infinite">${line}</g>`;
+    });
+  });
+  if(shadow){
+    // the operator's own shadow: cast from the feet, away from the key light at top centre, k times larger, same pose
+    const skew=-Math.max(-16,Math.min(16,(x-800)/28));
+    SHADOWS.push(`<g class="${cls}"><use href="#${id}w" transform="translate(${x} ${fy}) skewX(${skew.toFixed(1)}) scale(${k}) translate(${-x} ${-fy})" style="filter:brightness(0);opacity:.5"/></g>`);
+  }
+  return `<g class="${cls}"><style>${css}</style><g id="${id}w"><g class="op" ${fd?`style="--fd:${fd}s"`:""}>
+   <g transform="translate(${x+4} ${fy+4}) scale(${dir*s} ${s})">${figure("var(--ul)")}</g>
+   <g transform="translate(${x} ${fy}) scale(${dir*s} ${s})">${puppet(c, garment, hair, `animation:${id}h ${glance}s steps(${Math.round(glance*12)}) infinite`)}
+    ${props.map(p=>PROPS[p]).join("")}
+   </g>${armSvg}${extra}</g></g></g>`;
+}
+
+/* ---------- the five stops ---------- */
+const STOPS = [
+  {id:"classroom", name:"Classroom", q:["Who sets","the threshold?"], fall:"fwd", obj:"scale", sound:"keaton"},
+  {id:"cafeteria", name:"Cafeteria", q:["Who benefits","if you're worried?"], fall:"peel", obj:"treadmill", sound:"peel"},
+  {id:"dorm", name:"Dorm", q:["What are you","paying with?"], fall:"fly", obj:"assembler", sound:"fly"},
+  {id:"library", name:"Library", q:["Better at what?","For whom?"], fall:"book", obj:"bird", sound:"fold"},
+  {id:"bookstore", name:"Bookstore", q:null, fall:"hold", obj:"anamorph", sound:"hold"},
+];
+
+/* ---------- toys and machines ---------- */
+function objScale(){
+  // the detector is the live Anatomy figure (see mountDetector); a well-meaning administrator on a stepladder holds the threshold handle
+  return `<g class="hand">${L(1108,780,1132,416,"var(--kraftD)",9)}${L(1198,780,1174,416,"var(--kraftD)",9)}
+     ${[520,620,720].map(y=>L(1108+(780-y)*.066, y, 1198-(780-y)*.066, y,"var(--kraftD)",6)).join("")}${R(1120,408,66,12,"var(--kraft)",3)}</g>
+   <svg id="detMount" x="450" y="190" width="660" height="710" viewBox="0 0 660 710" overflow="visible" style="width:660px;height:710px;display:inline"></svg>
+   ${person(1150,410,.62,-1,[],{props:["lanyard"],k:1.7,extra:liveArm("detArm")})}`;
+}
+function detArm(g){ armTo("detArm",1150-20*.62,410-253*.62,450+g[0],190+g[1]); }
+function objTreadmill(){
+  // the treadmill toy (see mountTreadmill), crank pivot at stage (1070,738); a vendor turns it
+  return `<svg id="tmMount" x="470" y="150" width="660" height="710" viewBox="0 0 660 710" overflow="visible" style="width:660px;height:710px;display:inline"></svg>
+   ${person(1180,860,.62,-1,[],{props:["clipboard"],extra:liveArm("tmArm")})}`;
+}
+function tmArm(g){ armTo("tmArm",1180-20*.62,860-253*.62,470+g[0],150+g[1]); }
+function objAssembler(){
+  // the assembler is the live Anatomy figure (see mountAuction), scaled to .82 and raised so the hopper, lectern and crank clear the curtains
+  return `<svg id="aucMount" x="500" y="110" width="660" height="710" viewBox="0 0 660 710" overflow="visible" style="width:660px;height:710px;display:inline"></svg>
+   ${person(420,860,.62,1,[],{props:["phone"],extra:liveArm("aucArm")})}`;
+}
+function aucArm(g){ armTo("aucArm",420+20*.62,860-253*.62,500+g[0],110+g[1]); }
+function objBird(){
+  // the bird is the live Anatomy figure (see mountBird); its ladle pivots at stage (601,358); the operator grips the handle
+  return `<svg id="birdMount" x="470" y="190" width="660" height="710" viewBox="0 0 660 710" overflow="visible" style="width:660px;height:710px;display:inline"></svg>
+   <g class="hand">${R(318,457,150,323,"var(--kraft)")}<rect x="430" y="398" width="34" height="56" fill="rgba(207,227,234,.25)" stroke="#E8F1F4" stroke-width="3"/>
+     ${C(447,442,9,"var(--brass)",0)}${C(441,428,9,"var(--brass)",0)}${C(453,416,9,"var(--brass)",0)}</g>
+   ${person(388,457,.62,1,[],{props:["cup"],k:2.2,extra:liveArm("ladleArm")})}`;
+}
+function ladleArm(theta){ const t=theta*Math.PI/180; armTo("ladleArm",388+20*.62,457-253*.62,601-150*Math.cos(t),358-150*Math.sin(t)); }
+
+const ANA=[
+    [[650,300,300,220],[750,330,100,110],[560,260,90,60,-30],"#9AA4B2"],
+    [[690,360,60,50],[790,580,24,24],[1000,240,40,40,40],"#E0B33C"],
+    [[850,360,60,50],[790,620,24,24],[580,700,40,40,-25],"#E0B33C"],
+    [[785,240,30,60],[796,450,8,40],[1040,520,24,70,60],"#9AA4B2"],
+    [[720,460,160,30],[780,450,40,10],[520,470,120,24,20],"#5E6876"],
+    [[560,560,480,80],[640,470,320,90],[900,780,300,60,-12],"#7C8796"],
+    [[680,640,240,220],[700,560,200,140],[620,560,150,140,25],"#7C8796"],
+    [[560,640,90,160],[560,700,480,24],[1020,330,80,140,-40],"#5E6876"],
+    [[950,640,90,160],[580,724,24,140],[480,330,80,120,30],"#5E6876"],
+    [[700,880,80,20],[996,724,24,140],[760,240,60,20,70],"#4A5260"],
+  ];
+function objAnamorph(){
+  // each fragment: robot layout, person layout, scattered layout (x,y,w,h,rot)
+  const F=ANA;
+  const lay=a=>`translate(${a[0]}px,${a[1]}px) rotate(${a[4]||0}deg) scale(${a[2]},${a[3]})`;
+  let ks="", rects="";
+  F.forEach((f,i)=>{
+    ks+=`@keyframes fr${i}{0%,8%{transform:${lay(f[2])}}22%,40%{transform:${lay(f[0])}}50%,58%{transform:${lay(f[2])}}72%,90%{transform:${lay(f[1])}}100%{transform:${lay(f[2])}}}`;
+    rects+=`<rect class="loop" width="1" height="1" fill="${f[3]}" style="transform-origin:0 0;animation:fr${i} 9s steps(108) infinite"/>`;
+  });
+  return `<style>${ks}</style>${rects}`;
+}
+const OBJ={scale:objScale,treadmill:objTreadmill,assembler:objAssembler,bird:objBird,anamorph:objAnamorph};
+
+function penSpinner(spinCls="loop"){
+  const hand="font-family:Caveat,'Bradley Hand',cursive";
+  const faceA=`${R(-180,-115,360,230,"var(--paper)",6)}
+    <text x="0" y="-58" font-size="44" text-anchor="middle" fill="#2E3A55" style="${hand}">a sonnet</text>
+    ${[0,1,2,3,4].map(i=>`<path d="M-140 ${-24+i*24} q18 -10 36 0 t36 0 t36 0 t36 0 t36 0 t36 0 t36 0" stroke="#5A6680" stroke-width="3.5" fill="none"/>`).join("")}`;
+  const faceB=`${R(-180,-115,360,230,"var(--paper)",6)}
+    ${T(0,-64,40,"sten","var(--ink)","ORDER")}${T(0,-34,22,"lbl","#5B4A36","of execution")}
+    ${[0,1,2].map(i=>`<rect x="-140" y="${-12+i*24}" width="280" height="5" fill="#9A8E7A"/>`).join("")}
+    <path d="M-140 86 q20 -26 36 0 q16 22 34 -8 q10 -14 26 4" stroke="#2E3A55" stroke-width="4" fill="none"/>
+    ${C(118,74,26,"var(--brass)",0)}<circle cx="118" cy="74" r="17" fill="none" stroke="#A8862C" stroke-width="3"/>`;
+  return `<style>@keyframes flip{0%,40%{transform:scaleX(1)}45%{transform:scaleX(.04)}50%,90%{transform:scaleX(1)}95%{transform:scaleX(.04)}100%{transform:scaleX(1)}}
+     @keyframes fa{0%,44.9%{opacity:1}45%,94.9%{opacity:0}95%,100%{opacity:1}}@keyframes fb{0%,44.9%{opacity:0}45%,94.9%{opacity:1}95%,100%{opacity:0}}</style>
+   ${L(800,570,800,790,"var(--lumber)",12)}${R(756,782,88,22,"var(--lumberD)",4)}
+   <g transform="translate(800 455)"><g class="${spinCls}" style="animation:flip 8s steps(96) infinite">
+     <g style="animation:fa 8s steps(1) infinite">${faceA}</g><g style="animation:fb 8s steps(1) infinite">${faceB}</g></g></g>`;
+}
+function regScene(step=-1){
+  const rows=[
+    ["AI 101","Rule-based AI","People write the rules; the machine follows them","None","open"],
+    ["AI 201","Machine learning","Finds patterns in data instead of following hand-written rules","None","open"],
+    ["AI 210","Supervised learning","Learns from examples people have labeled","AI 201","open"],
+    ["AI 220","Reinforcement learning","Learns by trial, error and reward","AI 201","open"],
+    ["AI 301","Deep learning","Many-layered neural networks, the engine under modern AI","AI 201","open"],
+    ["AI 350","Large language models (chatbots)","Predicts the next word; shaped by human examples and ratings","AI 210, 220, 301","full"],
+    ["AI 999","Artificial general intelligence","No agreed syllabus. Instructor, room and time to be announced","TBA","tba"],
+  ];
+  const y0=196,h=88, ink="#3E3A78", pen="#55585E", hand="font-family:Caveat,'Bradley Hand',cursive";
+  const tw=(x,y,sz,txt,anchor="start",fill=ink,bold=false)=>`<text x="${x}" y="${y}" font-size="${sz}" class="tw" fill="${fill}" text-anchor="${anchor}" ${bold?'font-weight="700"':""}>${txt}</text>`;
+  const stamp=(kind,y)=>{
+    if(kind==="tba") return `<text x="1360" y="${y+54}" font-size="36" fill="${pen}" text-anchor="middle" style="${hand}">TBA</text>`;
+    const [txt,col,rot]=kind==="full"?["FULL","#2F3E73",-7]:["OPEN","#3F6A3A",-3];
+    return `<g transform="rotate(${rot} 1360 ${y+42})" opacity=".82"><rect x="1300" y="${y+20}" width="120" height="44" rx="4" fill="none" stroke="${col}" stroke-width="4"/>${T(1360,y+53,28,"sten",col,txt)}</g>`;};
+  const loop=i=>{const y=y0+i*h; return `<path d="M168 ${y+8} C 600 ${y}, 1100 ${y+3}, 1444 ${y+10} C 1458 ${y+36}, 1454 ${y+66}, 1440 ${y+h-6} C 1000 ${y+h+2}, 500 ${y+h-3}, 158 ${y+h-8} C 144 ${y+60}, 146 ${y+28}, 180 ${y+4}" fill="none" stroke="${pen}" stroke-width="3.5" stroke-linecap="round"/>`;};
+  const tick=i=>{const y=y0+i*h; return `<path d="M128 ${y+44} l10 13 l22 -32" fill="none" stroke="${pen}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>`;};
+  const row=(r,i)=>{const y=y0+i*h, both=step===7, dim=both?i<5:step>i;
+    const desc=(i===5&&both)
+      ? `<text x="330" y="${y+74}" font-size="32" fill="${pen}" style="${hand}">ChatGPT is one section of this course</text>`
+      : tw(330,y+70,19,r[2],"start","#5A5590");
+    let extra="";
+    if(i===6&&step>=6) extra+=`<text x="1122" y="${y+52}" font-size="34" fill="${pen}" transform="rotate(-4 1122 ${y+52})" style="${hand};${step===6?"animation:cutIn .01s .5s both":""}">AI 350?</text>`;
+    if(i===6&&both) extra+=`<path d="M1236 ${y+30} C1290 ${y+6} 1290 ${y-40} 1236 ${y-44}" fill="none" stroke="${pen}" stroke-width="3" stroke-linecap="round"/><path d="M1250 ${y-54} L1234 ${y-44} L1248 ${y-32}" fill="none" stroke="${pen}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`;
+    const inner=`${L(160,y+h,1440,y+h,"#D9D3E2",2)}
+      ${tw(170,y+46,26,r[0])}${tw(330,y+40,26,r[1],"start",ink,true)}${desc}
+      ${tw(1060,y+48,20,r[3])}${stamp(r[4],y)}`;
+    return `<g ${dim?'opacity=".35"':""}>${inner}</g>${extra}${dim?tick(i):""}`;};
+  return `<rect width="1600" height="900" fill="#7A5C40"/>
+   ${[[90,60],[1500,120],[60,820],[1530,780],[800,880]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="3" fill="#5E4530"/>`).join("")}
+   ${R(120,36,1360,828,"#F4F1E8",10)}
+   ${[[140,56],[1460,56],[140,844],[1460,844]].map(([x,y])=>C(x,y,9,"var(--brass)",2)).join("")}
+   ${tw(170,112,40,"COURSE REGISTRATION","start",ink,true)}
+   ${tw(1430,104,22,"Department of Artificial Intelligence","end")}${tw(1430,134,18,"Fall term","end","#5A5590")}
+   ${tw(170,180,16,"COURSE","start","#6A6699")}${tw(330,180,16,"TITLE","start","#6A6699")}${tw(1060,180,16,"PREREQUISITES","start","#6A6699")}${tw(1360,180,16,"SEATS","middle","#6A6699")}
+   ${L(160,190,1440,190,"#8E88B8",3)}
+   ${rows.map(row).join("")}${step===7?loop(5)+loop(6):step>=0?loop(step):""}`;
+}
+
+const clSky=()=>`<svg viewBox="0 0 1600 900" aria-hidden="true"><g transform="translate(0 -10) scale(${CS})">
+  <rect x="0" y="0" width="380" height="40" fill="${DAY.classroom.sky[0]}"/><rect x="0" y="40" width="380" height="36" fill="${DAY.classroom.sky[1]}"/><rect x="0" y="76" width="380" height="40" fill="${DAY.classroom.sky[2]}"/>${L(14,2.4,14,80,"rgba(30,30,30,.4)",.6)}<circle cx="15.2" cy="91.2" r="10" fill="#000" opacity=".12"/><circle cx="14" cy="90" r="10" fill="#FBE2A6"/>
+  ${[94,190,285].map(x=>`<rect x="${x}" y="0" width=".8" height="116" fill="#000" opacity=".07"/>`).join("")}
+  <rect x="0" y="2.4" width="380" height="3.2" fill="#4A5550"/>
+  <g class="edge loop" style="animation:clDrift 40s steps(480) infinite">${L(22,2,22,22,"rgba(30,30,30,.4)",.6)}<path d="M8 30 q2 -9 10 -8 q4 -7 12 -3 q8 -2 9 6 q5 1 4 5 Z" fill="#B7C9CC" transform="translate(1.5 1.5)"/><path d="M8 30 q2 -9 10 -8 q4 -7 12 -3 q8 -2 9 6 q5 1 4 5 Z" fill="#F3F1EA"/></g>
+  <g class="edge loop" style="animation:clDrift 55s steps(660) -30s infinite">${L(20,2,20,44,"rgba(30,30,30,.4)",.6)}<path d="M6 52 q2 -8 9 -7 q4 -6 11 -2 q7 -1 8 5 q4 1 3 4 Z" fill="#B7C9CC" transform="translate(1.5 1.5)"/><path d="M6 52 q2 -8 9 -7 q4 -6 11 -2 q7 -1 8 5 q4 1 3 4 Z" fill="#F3F1EA"/></g>
+</g></svg>`;
+const clHills=()=>{const hill="M0 114 L0 103 L22 99 L48 101 L70 97 L96 100 L130 98 L170 100 L210 97 L250 100 L290 96 L322 99 L350 97 L380 100 L380 114Z";
+  const tree=(x,brace)=>`${brace?L(x+6,84,x+18,118,"#8A6A48",1.5):""}<rect x="${x}" y="96" width="4" height="22" fill="#8A6A48"/><path d="M${x-14} 92 q-2 -10 8 -12 q3 -9 12 -6 q9 -2 10 7 q6 4 1 11 q-4 5 -14 4 q-12 2 -17 -4Z" fill="#4C6E4E" transform="translate(2 2)"/><path d="M${x-14} 92 q-2 -10 8 -12 q3 -9 12 -6 q9 -2 10 7 q6 4 1 11 q-4 5 -14 4 q-12 2 -17 -4Z" fill="#6F9A68"/><rect x="${x-4}" y="117" width="12" height="3" rx="1" fill="#7A6A52"/>`;
+  return `<svg viewBox="0 0 1600 900" aria-hidden="true"><g transform="translate(0 -10) scale(${CS})">
+  <path d="${hill}" fill="#889C8B" transform="translate(1.5 1.5)"/><path d="${hill}" fill="#A9BCAA"/><rect x="0" y="113" width="380" height="1.6" fill="#3E4A40"/>
+  ${tree(38,true)}${tree(338,false)}</g></svg>`;};
+/* the yellow brick road in sketch units: the same trapezoid every stop used for its path, bricked in rows that thicken toward us */
+function brickPathS(){
+  const id="bp"+(_op++); let s=`<clipPath id="${id}"><polygon points="136,240 244,240 210.6,158.2 169.4,158.2"/></clipPath><polygon points="136,240 244,240 210.6,158.2 169.4,158.2" fill="#D8C08A"/><g clip-path="url(#${id})">`, y=158.2, k=0;
+  while(y<214){ const h=1+(y-158.2)*.07, y2=y+h, lx=169.4-(y2-158.2)*(33.4/81.8), rx=210.6+(y2-158.2)*(33.4/81.8);
+    s+=`<line x1="${lx.toFixed(2)}" y1="${y2.toFixed(2)}" x2="${rx.toFixed(2)}" y2="${y2.toFixed(2)}" stroke="#C6AA74" stroke-width=".3"/>`;
+    const bw=h*2.4; for(let x=lx+(k%2?bw/2:0);x<rx;x+=bw) s+=`<line x1="${x.toFixed(2)}" y1="${y.toFixed(2)}" x2="${x.toFixed(2)}" y2="${y2.toFixed(2)}" stroke="#C6AA74" stroke-width=".25"/>`;
+    y=y2; k++; }
+  return s+`</g>`;
+}
+const clGround=()=>`<svg viewBox="0 0 1600 900" aria-hidden="true"><g transform="translate(0 -10) scale(${CS})">
+  <rect x="0" y="114" width="380" height="10" fill="#7DA56F"/><rect x="0" y="124" width="380" height="120" fill="#6E9A62"/>
+  ${brickPathS()}</g></svg>`;
+function clFacade(){
+  const grain=`<pattern id="clGrain" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".35" fill="#8E7A5A" opacity=".22"/><circle cx="4" cy="3.6" r=".3" fill="#8E7A5A" opacity=".18"/></pattern>`;
+  const win=(x,lines)=>`<rect x="${x}" y="104" width="34" height="46" fill="#5C4A38"/><rect x="${x+3}" y="107" width="28" height="40" fill="#F1E3BE"/><rect x="${x+5}" y="110" width="24" height="14" fill="#3E5A46"/><path d="${lines}" stroke="#E8E8DC" stroke-width=".8" fill="none"/><rect x="${x+6}" y="132" width="9" height="2" fill="#8A6A48"/><rect x="${x+18}" y="132" width="9" height="2" fill="#8A6A48"/><rect x="${x+16}" y="104" width="2" height="46" fill="#5C4A38"/>`;
+  const slim=x=>`<rect x="${x}" y="104" width="22" height="46" fill="#5C4A38"/><rect x="${x+3}" y="107" width="16" height="40" fill="#C9D9DC"/>`;
+  return `<svg viewBox="0 0 1600 900" aria-hidden="true"><defs>${grain}</defs><g transform="translate(0 -43) scale(${CS})">
+  <rect x="258" y="17" width="2" height="35" fill="#3E4A44"/><g class="edge loop" style="transform-origin:259px 23px;transform-box:view-box;animation:clWave 1.4s steps(17) infinite"><path d="M260 18 L284 20 L284 32 L260 30Z" fill="#2F5C8A"/><path d="M260 24 L284 26 L284 28 L260 26Z" fill="#E0B13A"/></g>
+  <polygon points="113,59 190,27 267,59" fill="#8E7A5A" opacity=".5"/><polygon points="110,56 190,24 270,56" fill="#D8D0BE"/><polygon points="120,54 190,30 260,54" fill="#E4DDCC"/>
+  <circle cx="190" cy="40" r="8" fill="#F3EBD8" stroke="#5C4A38" stroke-width="1.2"/><rect x="189.4" y="35" width="1.2" height="5" fill="#2C2116"/><rect x="189.4" y="39.4" width="4" height="1.2" fill="#2C2116"/>
+  <g class="edge loop" style="transform-origin:190px 40px;transform-box:view-box;animation:clSec 60s steps(60) infinite"><rect x="189.7" y="33.5" width=".6" height="7.5" fill="#2C2116"/></g><circle cx="190" cy="40" r=".9" fill="#2C2116"/>
+  <path fill-rule="evenodd" d="M73 59 H313 V163 H73Z M176 112 H207 V161 H176Z" fill="#8E7A5A" opacity=".5"/>
+  <path fill-rule="evenodd" d="M70 56 H310 V160 H70Z M176 112 H204 V158 H176Z" fill="#CFC6B4"/><path fill-rule="evenodd" d="M70 56 H310 V160 H70Z M176 112 H204 V158 H176Z" fill="url(#clGrain)"/>
+  <rect x="66" y="54" width="248" height="6" fill="#B9AF9A"/><rect x="70" y="60" width="240" height="16" fill="#DCD4C2"/>${secCam(306,64,.3,1)}
+  <text x="190" y="72.5" text-anchor="middle" letter-spacing="3" font-size="11" class="sign" fill="#5C4A38">ARTS &amp; SCIENCES</text>
+  <g fill="#BDB39E"><rect x="70" y="100" width="106" height="1"/><rect x="204" y="100" width="106" height="1"/><rect x="70" y="120" width="106" height="1"/><rect x="204" y="120" width="106" height="1"/><rect x="70" y="140" width="106" height="1"/><rect x="204" y="140" width="106" height="1"/></g>
+  ${win(82,"M89 114 q3 -2 6 0 t6 0 M89 118 h12 M89 121 h8")}${win(264,"M271 114 h10 M271 118 q3 -2 6 0 t6 0 M271 121 h12")}${slim(128)}${slim(230)}
+  <path d="M176 112 h4 c-1.5 10 -2.5 22 -3 46 h-1Z" fill="#6B2E3E"/><path d="M204 112 h-4 c1.5 10 2.5 22 3 46 h1Z" fill="#6B2E3E"/><rect x="176" y="112" width="28" height="3" fill="#7E3648"/><circle cx="177.4" cy="138" r=".8" fill="#C99A3B"/><circle cx="202.6" cy="138" r=".8" fill="#C99A3B"/>
+  <rect x="174" y="110" width="32" height="2" fill="#5C4A38"/><rect x="174" y="110" width="2" height="48" fill="#5C4A38"/><rect x="204" y="110" width="2" height="48" fill="#5C4A38"/>
+  <g class="door-l"><rect x="176" y="112" width="14" height="46" fill="#7A5A3A"/><rect x="178" y="115" width="10" height="18" fill="#6A4C30"/><rect x="178" y="136" width="10" height="18" fill="#6A4C30"/><rect x="186" y="129" width="2" height="6" fill="#C99A3B"/></g>
+  <g class="door-r"><rect x="190" y="112" width="14" height="46" fill="#7A5A3A"/><rect x="192" y="115" width="10" height="18" fill="#6A4C30"/><rect x="192" y="136" width="10" height="18" fill="#6A4C30"/><rect x="192" y="129" width="2" height="6" fill="#C99A3B"/></g>
+  <rect x="160" y="92" width="10" height="66" fill="#E8E1D0"/><rect x="210" y="92" width="10" height="66" fill="#E8E1D0"/><rect x="158" y="90" width="14" height="4" fill="#D8D0BE"/><rect x="208" y="90" width="14" height="4" fill="#D8D0BE"/>
+  <rect x="152" y="158" width="76" height="4" fill="#BDB39E"/><rect x="148" y="162" width="84" height="4" fill="#B0A68F"/><rect x="66" y="158" width="248" height="4" fill="#B9AF9A"/><rect x="64" y="162" width="252" height="3" fill="#3E4A40" opacity=".55"/>
+  <polygon points="310,56 320,62 320,162 310,162" fill="#3E4A40" opacity=".22"/>${L(314,140,324,163,"#8A6A48",2)}<rect x="319" y="161" width="9" height="4" rx="1" fill="#7A6A52"/>
+  ${L(76,80,82,85,"#5C4A38",1)}${L(304,80,298,85,"#5C4A38",1)}<rect x="85" y="87" width="216" height="22" fill="#8E7A5A" opacity=".35"/>
+  <g class="edge loop" style="transform-origin:190px 87px;transform-box:view-box;animation:clRipple 2.4s steps(29) infinite"><path d="M82 84 L298 84 L298 106 Q190 108.5 82 106Z" fill="var(--red)"/><rect x="82" y="84" width="216" height="1.6" fill="#E06A5F"/>
+    ${[[85.5,87],[294.5,87],[85.5,103],[294.5,103]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="1.5" fill="#F3EBD8"/>`).join("")}
+    <text x="190" y="93.5" text-anchor="middle" letter-spacing="2" font-size="7" class="lbl" fill="#FCE3D6">AI MAYBE #1</text><text x="190" y="104" text-anchor="middle" font-size="10" class="sign" fill="#FFF3E0">AI is objective.</text></g>
+</g></svg>`;}
+const clFg=()=>`<svg viewBox="0 0 1600 900" aria-hidden="true"><g transform="translate(0 -10) scale(${CS})">
+  <polygon points="28,195 74,195 84,200 38,200" fill="#3E4A40" opacity=".35"/><rect x="26" y="168" width="54" height="4" fill="#6A5038"/><rect x="24" y="166" width="54" height="4" fill="#8A6A48"/><rect x="26" y="178" width="54" height="5" fill="#6A5038"/><rect x="24" y="176" width="54" height="5" fill="#8A6A48"/><rect x="28" y="181" width="3" height="14" fill="#5C4A38"/><rect x="71" y="181" width="3" height="14" fill="#5C4A38"/><rect x="26" y="170" width="2" height="6" fill="#5C4A38"/><rect x="74" y="170" width="2" height="6" fill="#5C4A38"/>
+  <polygon points="338,200 360,200 372,206 350,206" fill="#3E4A40" opacity=".35"/><rect x="336" y="20" width="5" height="182" fill="#3E4A40" opacity=".5"/><rect x="333" y="18" width="5" height="182" fill="#55615A"/><rect x="326" y="12" width="19" height="8" fill="#55615A"/><rect x="329" y="20" width="13" height="5" fill="#F6E7AE"/><rect x="327" y="198" width="17" height="5" fill="#55615A"/>
+  <line id="clWire" x1="-50" y1="2.4" x2="-50" y2="2.4" stroke="rgba(30,30,30,.45)" stroke-width=".8"/>
+  <g id="clBird" transform="translate(-50 140)"><ellipse cx="0" cy="0" rx="6" ry="4" fill="#7A5A3A"/><ellipse cx="1" cy="1.4" rx="4" ry="2.2" fill="#D9C2A0"/><circle cx="5" cy="-3" r="2.6" fill="#7A5A3A"/><polygon points="7.4,-3.4 10,-2.6 7.4,-2" fill="#E0B13A"/><circle cx="5.6" cy="-3.6" r=".6" fill="#1F1812"/><polygon points="-6,0 -11,-2 -10,2" fill="#5C4430"/>
+    <g data-w="up"><polygon points="-2,-2 3,-2 -3,-10" fill="#5C4430"/></g><g data-w="dn" style="display:none"><polygon points="-2,0 3,0 -3,7" fill="#5C4430"/></g><g data-w="fold" style="display:none"><ellipse cx="-1" cy="-.5" rx="4" ry="2" fill="#5C4430"/><rect x="-1" y="3.5" width=".7" height="3" fill="#3A2E22"/><rect x="1.5" y="3.5" width=".7" height="3" fill="#3A2E22"/></g></g>
+</g></svg>`;
+/* ---------- every stop, built end to end as one continuous camera ----------
+   World layers are drawn in sketch units (380x230) scaled by CS into stage pixels; the horizon sits at stage y 470.
+   The camera pushes about the horizon point (800,470), so the horizon never moves. Facades are lifted 33px so the
+   horizon crosses the doors at about handle height. Every facade cuts its door at the same place (sketch 176..204 x 112..158),
+   so one push and one backstage transform serve all five stops. Backstage is drawn 1:1 in stage pixels and nested in the
+   world with an inverse transform, so it reads true size once the facade is down. The day runs dawn to dusk across the walk. */
+const CS=4.2105, CL={doorX:741,doorW:118,doorY:428,doorB:622,bldX0:278,bldX1:1322,bldY0:58,bldB:639};
+const DAY={
+  classroom:{sky:["#B9A9C9","#E8B9A6","#F4D3B4"],cloud:"#F3F1EA",cloudU:"#B7C9CC",sun:null,hill:["#A9BCAA","#889C8B"],tree:["#6F9A68","#4C6E4E"],lawn:["#7DA56F","#6E9A62"],path:"#DCCBA5",trees:[[38,1],[338,0]],filter:""},
+  cafeteria:{sky:["#6FA7CC","#8DBDD9","#B2D3E2"],cloud:"#FFFFFF",cloudU:"#A9C6D3",sun:[190,16,9,"#FFF3C4"],hill:["#9DBB97","#7E9C7B"],tree:["#77A86A","#4F7A4C"],lawn:["#82B06A","#73A35E"],path:"#E4D3AC",trees:[[24,1],[356,1]],filter:""},
+  dorm:{sky:["#86B4CF","#AECAD6","#DCD7BE"],cloud:"#FBF4E4",cloudU:"#BFC8C2",sun:[270,30,9,"#FFEFB8"],hill:["#A5B793","#869875"],tree:["#79A062","#557647"],lawn:["#80A666","#719859"],path:"#DECBA2",trees:[[30,0],[350,1]],filter:"sepia(.08) saturate(1.05)"},
+  library:{sky:["#93AFC0","#D6C49B","#EDBF7E"],cloud:"#F8DFB8",cloudU:"#C9A985",sun:[356,66,11,"#FBDC94"],hill:["#ACA77A","#8D8862"],tree:["#9C9A4E","#6E6E39"],lawn:["#8E9B57","#7D8C4B"],path:"#D6BE94",trees:[[22,1],[352,1]],filter:"sepia(.2) saturate(1.12) brightness(.98)"},
+  bookstore:{sky:["#5E6C98","#C9846E","#F0AE6C"],cloud:"#F2B9A0",cloudU:"#9C6E78",sun:[362,96,13,"#F8CF84"],hill:["#857C72","#655E58"],tree:["#5F6E4C","#434F37"],lawn:["#62744E","#566745"],path:"#B9A07F",trees:[[340,1]],filter:"sepia(.28) saturate(1.15) brightness(.9) hue-rotate(-8deg)"},
+};
+const WRAP=(inner,ty=-10,extra="")=>`<svg viewBox="0 0 1600 900" aria-hidden="true" ${extra}><g transform="translate(0 ${ty}) scale(${CS})">${inner}</g></svg>`;
+const cloud=(p,x,y,w,dur,del)=>`<g class="edge loop" style="animation:clDrift ${dur}s steps(${dur*12}) ${del}s infinite">${L(x+14,2,x+14,y-8,"rgba(30,30,30,.4)",.6)}<path d="M${x} ${y} q2 -9 10 -8 q4 -7 12 -3 q8 -2 9 6 q5 1 4 5 Z" fill="${p.cloudU}" transform="translate(1.5 1.5)"/><path d="M${x} ${y} q2 -9 10 -8 q4 -7 12 -3 q8 -2 9 6 q5 1 4 5 Z" fill="${p.cloud}"/></g>`;
+function skyFor(s){ const p=DAY[s.id];
+  const sun=p.sun?`${L(p.sun[0],2.4,p.sun[0],p.sun[1]-p.sun[2],"rgba(30,30,30,.4)",.6)}<circle cx="${p.sun[0]+1.2}" cy="${p.sun[1]+1.2}" r="${p.sun[2]}" fill="#000" opacity=".12"/><circle cx="${p.sun[0]}" cy="${p.sun[1]}" r="${p.sun[2]}" fill="${p.sun[3]}"/>`:"";
+  return WRAP(`<rect x="0" y="0" width="380" height="40" fill="${p.sky[0]}"/><rect x="0" y="40" width="380" height="36" fill="${p.sky[1]}"/><rect x="0" y="76" width="380" height="40" fill="${p.sky[2]}"/>
+  ${[94,190,285].map(x=>`<rect x="${x}" y="0" width=".8" height="116" fill="#000" opacity=".07"/>`).join("")}
+  <rect x="0" y="2.4" width="380" height="3.2" fill="#4A5550"/>${sun}
+  ${cloud(p,8,30,40,40,0)}${cloud(p,6,52,40,55,-30)}${s.id!=="classroom"?cloud(p,4,20,40,47,-12):""}`,-10,p.filter?`style="filter:${p.filter}"`:"");}
+function hillsFor(s){ const p=DAY[s.id];
+  const hill="M0 114 L0 103 L22 99 L48 101 L70 97 L96 100 L130 98 L170 100 L210 97 L250 100 L290 96 L322 99 L350 97 L380 100 L380 114Z";
+  const tree=(x,brace)=>`${brace?L(x+6,84,x+18,118,"#8A6A48",1.5):""}<rect x="${x}" y="96" width="4" height="22" fill="#8A6A48"/><path d="M${x-14} 92 q-2 -10 8 -12 q3 -9 12 -6 q9 -2 10 7 q6 4 1 11 q-4 5 -14 4 q-12 2 -17 -4Z" fill="${p.tree[1]}" transform="translate(2 2)"/><path d="M${x-14} 92 q-2 -10 8 -12 q3 -9 12 -6 q9 -2 10 7 q6 4 1 11 q-4 5 -14 4 q-12 2 -17 -4Z" fill="${p.tree[0]}"/><rect x="${x-4}" y="117" width="12" height="3" rx="1" fill="#7A6A52"/>`;
+  return WRAP(`<path d="${hill}" fill="${p.hill[1]}" transform="translate(1.5 1.5)"/><path d="${hill}" fill="${p.hill[0]}"/><rect x="0" y="113" width="380" height="1.6" fill="#3E4A40"/>
+  ${p.trees.map(([x,b])=>tree(x,b)).join("")}`,-10,p.filter?`style="filter:${p.filter}"`:"");}
+function groundFor(s){ const p=DAY[s.id];
+  return WRAP(`<rect x="0" y="114" width="380" height="10" fill="${p.lawn[0]}"/><rect x="0" y="124" width="380" height="120" fill="${p.lawn[1]}"/>
+  ${brickPathS()}`,-10,p.filter?`style="filter:${p.filter}"`:"");}
+
+/* shared facade parts, sketch units */
+const grainDef=(id,col="#8E7A5A")=>`<pattern id="${id}" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".35" fill="${col}" opacity=".22"/><circle cx="4" cy="3.6" r=".3" fill="${col}" opacity=".18"/></pattern>`;
+const HOLE="M176 112 H204 V158 H176Z";
+const wallCut=(d,fill,grain)=>`<path fill-rule="evenodd" d="${d} ${HOLE}" fill="#3a2e22" opacity=".35" transform="translate(3 3)"/><path fill-rule="evenodd" d="${d} ${HOLE}" fill="${fill}"/>${grain?`<path fill-rule="evenodd" d="${d} ${HOLE}" fill="url(#${grain})"/>`:""}`;
+const cut=(d,fill,o=1.6)=>`<path d="${d}" fill="#3a2e22" opacity=".3" transform="translate(${o} ${o})"/><path d="${d}" fill="${fill}"/>`;
+const rr=(x,y,w,h)=>`M${x} ${y}h${w}v${h}h${-w}Z`;
+function stdDoor(frame="#5C4A38",leaf="#7A5A3A",panel="#6A4C30"){
+  return `<path d="M176 112 h4 c-1.5 10 -2.5 22 -3 46 h-1Z" fill="#6B2E3E"/><path d="M204 112 h-4 c1.5 10 2.5 22 3 46 h1Z" fill="#6B2E3E"/><rect x="176" y="112" width="28" height="3" fill="#7E3648"/><circle cx="177.4" cy="138" r=".8" fill="#C99A3B"/><circle cx="202.6" cy="138" r=".8" fill="#C99A3B"/>
+  <rect x="174" y="110" width="32" height="2" fill="${frame}"/><rect x="174" y="110" width="2" height="48" fill="${frame}"/><rect x="204" y="110" width="2" height="48" fill="${frame}"/>
+  <g class="door-l"><rect x="176" y="112" width="14" height="46" fill="${leaf}"/><rect x="178" y="115" width="10" height="18" fill="${panel}"/><rect x="178" y="136" width="10" height="18" fill="${panel}"/><rect x="186" y="129" width="2" height="6" fill="#C99A3B"/></g>
+  <g class="door-r"><rect x="190" y="112" width="14" height="46" fill="${leaf}"/><rect x="192" y="115" width="10" height="18" fill="${panel}"/><rect x="192" y="136" width="10" height="18" fill="${panel}"/><rect x="192" y="129" width="2" height="6" fill="#C99A3B"/></g>`;}
+function bannerCloth(kicker,text,y=84,x0=82,x1=298){ const cx=(x0+x1)/2, w=x1-x0, fs=Math.min(10,Math.floor(w*.92/(text.length*.58)));
+  return `${L(x0-6,y-4,x0,y+1,"#5C4A38",1)}${L(x1+6,y-4,x1,y+1,"#5C4A38",1)}<rect x="${x0+3}" y="${y+3}" width="${w}" height="22" fill="#3a2e22" opacity=".3"/>
+  <g class="edge loop" style="transform-origin:${cx}px ${y+3}px;transform-box:view-box;animation:clRipple 2.4s steps(29) infinite"><path d="M${x0} ${y} L${x1} ${y} L${x1} ${y+22} Q${cx} ${y+24.5} ${x0} ${y+22}Z" fill="var(--red)"/><rect x="${x0}" y="${y}" width="${w}" height="1.6" fill="#E06A5F"/>
+    ${[[x0+3.5,y+3],[x1-3.5,y+3],[x0+3.5,y+19],[x1-3.5,y+19]].map(([x,yy])=>`<circle cx="${x}" cy="${yy}" r="1.5" fill="#F3EBD8"/>`).join("")}
+    <text x="${cx}" y="${y+9.5}" text-anchor="middle" letter-spacing="2" font-size="7" class="lbl" fill="#FCE3D6">${kicker}</text><text x="${cx}" y="${y+20}" text-anchor="middle" font-size="${fs}" class="sign" fill="#FFF3E0">${text}</text></g>`;}
+const flatBrace=x1=>`<polygon points="${x1},56 ${x1+10},62 ${x1+10},162 ${x1},162" fill="#3E4A40" opacity=".22"/>${L(x1+4,140,x1+14,163,"#8A6A48",2)}<rect x="${x1+9}" y="161" width="9" height="4" rx="1" fill="#7A6A52"/>`;
+const baseShadow=(x0,x1)=>`<rect x="${x0}" y="162" width="${x1-x0}" height="3" fill="#3E4A40" opacity=".55"/>`;
+/* a tiny paper figure for windows and crowds, sketch units; h is the height */
+const mini=(x,y,h,col,dir=1)=>`<g transform="translate(${x} ${y}) scale(${dir*h/330} ${h/330})">${puppet(col,col,col,"",false)}</g>`;
+
+/* ---------- CAFETERIA: Dining Commons, midday ---------- */
+function cafFacade(){
+  const W="#F0DCBA", F="#5C4A38";
+  const win=(x,w,inside)=>`<rect x="${x}" y="112" width="${w}" height="40" fill="${F}"/><rect x="${x+2}" y="114" width="${w-4}" height="36" fill="#F6E6C2"/>
+    <g clip-path="url(#cafClip${x})">${inside}</g><clipPath id="cafClip${x}"><rect x="${x+2}" y="114" width="${w-4}" height="36"/></clipPath>
+    ${[1,2,3].map(i=>`<rect x="${x+i*w/4-.8}" y="112" width="1.6" height="40" fill="${F}"/>`).join("")}<rect x="${x}" y="150" width="${w}" height="2.4" fill="#B9A27E"/>`;
+  const lamps=x0=>[0,1,2,3].map(i=>`${L(x0+12+i*24,114,x0+12+i*24,119,"#3a2e22",.5)}<polygon points="${x0+9+i*24},121 ${x0+15+i*24},121 ${x0+13.5+i*24},119 ${x0+10.5+i*24},119" fill="#E0B13A"/>`).join("");
+  const line=[0,1,2,3,4].map(i=>`<g class="edge loop" style="animation:cafLine 3.2s ${-i*.5}s steps(38) infinite">${mini(78+i*15,150,21,["#5E6B7A","#7A5E58","#4C6E70","#6B6A44","#5E5A78"][i])}</g>`).join("");
+  const left=`<rect x="62" y="114" width="104" height="10" fill="#E7D3A8"/><rect x="132" y="117" width="26" height="12" fill="#33473F"/><text x="145" y="124" font-size="3.4" text-anchor="middle" class="lbl" fill="#F3EAD2">MENU</text>${L(135,126,155,126,"#F3EAD2",.5)}
+    ${lamps(62)}<rect x="62" y="138" width="104" height="2" fill="#B9A27E"/>${line}<rect x="62" y="140" width="104" height="10" fill="#9B7B5A"/><rect x="66" y="136" width="12" height="2" fill="#D9C2A0"/><rect x="66" y="134" width="12" height="2" fill="#C9A273"/>`;
+  const right=`<rect x="214" y="114" width="104" height="10" fill="#E7D3A8"/>${lamps(214)}
+    ${[226,256,288].map((x,i)=>`<rect x="${x-9}" y="139" width="20" height="2" fill="#8A6A48"/><rect x="${x}" y="141" width="2" height="9" fill="#8A6A48"/>${mini(x-12,150,17,["#4C6E70","#7A5E58","#5E6B7A"][i],1)}${mini(x+14,150,17,["#6B6A44","#5E5A78","#7A5E58"][i],-1)}`).join("")}`;
+  const steam=[0,1,2].map(i=>`<g transform="translate(292.5 41)"><g class="edge loop" style="animation:cafSteam 2.4s ${-i*.8}s steps(29) infinite"><circle cx="0" cy="0" r="${3+i*.4}" fill="#FFFFFF" opacity=".85"/></g></g>`).join("");
+  return WRAP(`<defs>${grainDef("cafGrain")}</defs><style>@keyframes cafLine{0%,55%{transform:translateX(0)}70%,100%{transform:translateX(4px)}}@keyframes cafSteam{0%{transform:translate(0,0) scale(.6);opacity:.9}100%{transform:translate(10px,-34px) scale(1.6);opacity:0}}@keyframes cafFlap{0%,100%{transform:skewX(0)}50%{transform:skewX(-8deg)}}</style>
+  <rect x="64" y="50" width="34" height="12" fill="#B9AF9A"/><rect x="68" y="46" width="26" height="4" fill="#A49A85"/>
+  ${steam}<rect x="289" y="42" width="7" height="20" fill="#8E8778"/><rect x="287" y="40" width="11" height="3" fill="#7A7366"/>
+  ${cut(rr(46,60,288,18),"#E8D3AE")}<text x="190" y="73.5" text-anchor="middle" letter-spacing="3" font-size="10" class="sign" fill="${F}">DINING COMMONS</text>
+  ${wallCut("M50 78 H330 V160 H50Z",W,"cafGrain")}
+  <rect x="50" y="78" width="280" height="4" fill="#E2C79E"/>
+  ${win(60,108,left)}${win(212,108,right)}
+  <rect x="168" y="80" width="6" height="80" fill="#E2C79E"/><rect x="206" y="80" width="6" height="80" fill="#E2C79E"/>
+  ${stdDoor()}
+  <rect x="152" y="158" width="76" height="4" fill="#CDB896"/>${baseShadow(46,334)}${flatBrace(330)}
+  <g transform="translate(222 146)"><polygon points="0,14 4,0 12,0 16,14" fill="#3a2e22" opacity=".3" transform="translate(1 1)"/><polygon points="1,14 4.5,0 11.5,0 15,14" fill="#7A5A3A"/><rect x="3.2" y="1.5" width="9.6" height="9" fill="#33473F"/><text x="8" y="5.5" font-size="2.6" text-anchor="middle" class="lbl" fill="#F3EAD2">TODAY</text><text x="8" y="9" font-size="2.6" text-anchor="middle" class="lbl" fill="#E0B13A">SOUP</text></g>
+  ${bannerCloth("AI MAYBE #2","Learn AI or fall behind.")}`,-43);}
+function cafFg(){ return WRAP(`${robotSvg()}
+  <polygon points="22,198 70,198 80,203 32,203" fill="#3E4A40" opacity=".3"/>
+  <rect x="44" y="150" width="2" height="48" fill="#6A5038"/>
+  <g class="edge loop" style="transform-origin:45px 150px;transform-box:view-box;animation:cafFlap 1.6s steps(19) infinite"><path d="M18 152 L45 136 L72 152Z" fill="#2A9D8F"/><path d="M18 152 L72 152 L72 155 Q66 157 60 155 Q54 157 48 155 Q42 157 36 155 Q30 157 24 155 Q18 157 18 155Z" fill="#F3EAD2"/></g>
+  <rect x="30" y="180" width="32" height="3" fill="#8A6A48"/><rect x="44" y="183" width="3" height="15" fill="#6A5038"/><rect x="38" y="196" width="15" height="2" fill="#6A5038"/>`);}
+
+/* ---------- DORM: Maple Hall, afternoon ---------- */
+function dormFacade(){
+  const B="#B98264", stone="#E3D6BC";
+  let seed=7; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  const curt=["#E0B13A","#2A9D8F","#F3EAD2","#7E6BB3","#2F63B5","#C9A273","#F3EAD2","#5FA38E"];
+  const w=(x,y,i,h=18)=>{ const c=curt[i%curt.length], lit=i%5===2;
+    return `<rect x="${x-1}" y="${y-1}" width="16" height="${h+2}" fill="${stone}"/><rect x="${x}" y="${y}" width="14" height="${h}" fill="${lit?"#F6D77A":"#61717C"}" ${i===3||i===10?`class="edge loop" style="animation:dmLamp ${i===3?6:8}s ${-i}s steps(1) infinite"`:""}/>
+     <path d="M${x} ${y} h5 c-1 ${h*.4} -2 ${h*.7} -3 ${h} h-2Z" fill="${c}"/><path d="M${x+14} ${y} h-5 c1 ${h*.4} 2 ${h*.7} 3 ${h} h2Z" fill="${c}"/><rect x="${x-1.5}" y="${y+h}" width="17" height="1.6" fill="${stone}"/>
+     ${i===5?`<polygon points="${x+3},${y+4} ${x+11},${y+6} ${x+3},${y+8}" fill="#E0B13A"/>`:""}${i===9?`<rect x="${x+4}" y="${y+h-5}" width="6" height="4" fill="#8A6A48"/><circle cx="${x+7}" cy="${y+h-7}" r="3" fill="#5F8A50"/>`:""}${i===12?`<rect x="${x+4}" y="${y+3}" width="6" height="8" fill="#F3EAD2"/><rect x="${x+5}" y="${y+5}" width="4" height="3" fill="#2F63B5"/>`:""}`;};
+  const cols=[88,110,132,154,212,234,256,278];
+  let wins=""; [32,58].forEach((y,r)=>cols.forEach((x,c)=>wins+=w(x,y,r*8+c)));
+  [92,122,150,216,244,272].forEach((x,c)=>wins+=w(x,116,16+c,22));
+  const bricks=`<pattern id="dmBrick" width="8" height="4" patternUnits="userSpaceOnUse"><rect width="8" height="4" fill="none"/><rect x="0" y="3.6" width="8" height=".4" fill="#8E5E46" opacity=".55"/><rect x="0" y="0" width=".4" height="2" fill="#8E5E46" opacity=".45"/><rect x="4" y="2" width=".4" height="2" fill="#8E5E46" opacity=".45"/></pattern>`;
+  return WRAP(`<defs>${bricks}</defs><style>@keyframes dmLamp{0%,49%{fill:#F6D77A}50%,100%{fill:#61717C}}@keyframes dmCross{0%,10%{transform:translateX(0)}45%,55%{transform:translateX(9px)}90%,100%{transform:translateX(0)}}</style>
+  ${L(112,22,112,-30,"rgba(30,30,30,.5)",.7)}${L(268,22,268,-30,"rgba(30,30,30,.5)",.7)}
+  <rect x="96" y="14" width="22" height="10" fill="#A49A85"/>
+  ${cut(rr(76,20,228,6),stone)}
+  ${wallCut("M80 26 H300 V160 H80Z",B,"")}<path fill-rule="evenodd" d="M80 26 H300 V160 H80Z ${HOLE}" fill="url(#dmBrick)"/>
+  <rect x="80" y="53" width="220" height="2.4" fill="${stone}"/><rect x="80" y="79" width="220" height="2.4" fill="${stone}"/>
+  ${wins}
+  <g clip-path="url(#dmWin)"><g class="edge loop" style="animation:dmCross 5s steps(60) infinite">${mini(234,52,15,"rgba(30,26,34,.55)")}</g></g><clipPath id="dmWin"><rect x="234" y="58" width="14" height="18"/></clipPath>
+  ${stdDoor("#4E3B2C","#5E7A6A","#4E6A5A")}
+  <rect x="164" y="110" width="4" height="48" fill="${stone}"/><rect x="212" y="110" width="4" height="48" fill="${stone}"/>
+  ${cut(rr(160,104,60,7),stone)}<text x="190" y="109.6" text-anchor="middle" letter-spacing="1.6" font-size="5" class="sign" fill="#5C4A38">MAPLE HALL</text>
+  <rect x="150" y="158" width="80" height="4" fill="#CFC3A8"/>${baseShadow(76,304)}${flatBrace(300)}
+  ${bannerCloth("AI MAYBE #3","AI is free.",80,90,290)}`,-43);}
+function dormFg(){ const bike=(x)=>`<circle cx="${x}" cy="186" r="6" fill="none" stroke="#2C2116" stroke-width="1.2"/><circle cx="${x+18}" cy="186" r="6" fill="none" stroke="#2C2116" stroke-width="1.2"/><path d="M${x} 186 L${x+7} 176 L${x+15} 176 L${x+18} 186 M${x+7} 176 L${x+9} 186 L${x+15} 176 M${x+6} 173 h4 M${x+15} 176 l1 -4 h3" stroke="#2F63B5" stroke-width="1.4" fill="none"/>`;
+  return WRAP(`${robotSvg()}<polygon points="22,194 96,194 104,198 30,198" fill="#3E4A40" opacity=".3"/>
+  ${[30,46,62,78].map(x=>`<path d="M${x} 194 V182 a6 6 0 0 1 12 0 V194" fill="none" stroke="#6A6E72" stroke-width="1.6"/>`).join("")}${bike(40)}
+  <polygon points="334,200 356,200 364,204 342,204" fill="#3E4A40" opacity=".3"/><rect x="336" y="180" width="18" height="20" fill="#2A6E5F"/><rect x="334" y="178" width="22" height="3" fill="#24594D"/><text x="345" y="192" font-size="4" text-anchor="middle" class="lbl" fill="#F3EAD2">♻</text>
+  <style>@keyframes sqHop{0%,40%,100%{transform:translateY(0)}48%{transform:translateY(-5px)}56%{transform:translateY(0)}62%{transform:translateY(-3px)}68%{transform:translateY(0)}}@keyframes sqTail{0%,100%{transform:rotate(0)}30%{transform:rotate(-14deg)}45%{transform:rotate(6deg)}60%{transform:rotate(-8deg)}}</style>
+  <polygon points="360,208 376,208 382,211 366,211" fill="#3E4A40" opacity=".35"/><rect x="363" y="206" width="12" height="3" rx="1" fill="#7A6A52"/>
+  <g class="edge loop" style="animation:sqHop 3.4s steps(41) infinite"><g id="dmSquirrel">
+   <rect x="368.4" y="190" width="1.4" height="17" fill="#8A6A48"/>
+   <g class="edge loop" style="transform-origin:364px 192px;transform-box:view-box;animation:sqTail 2.1s steps(25) infinite"><path d="M364 192 C356 192 354 184 357 178 C359 173 365 172 366 177 C362 177 361 182 365 186Z" fill="#6E5440" transform="translate(1 1)"/><path d="M364 192 C356 192 354 184 357 178 C359 173 365 172 366 177 C362 177 361 182 365 186Z" fill="#9C7A58"/></g>
+   <ellipse cx="370" cy="188" rx="6" ry="4.6" fill="#6E5440" transform="translate(1 1)"/><ellipse cx="370" cy="188" rx="6" ry="4.6" fill="#8E6C4E"/><ellipse cx="371.6" cy="189.4" rx="3" ry="2.4" fill="#E8D6B8"/>
+   <circle cx="375" cy="182.6" r="3.2" fill="#8E6C4E"/><polygon points="373.4,180 374.4,176.6 375.6,180" fill="#7A5A40"/><circle cx="376.2" cy="182" r=".6" fill="#1F1812"/><circle cx="378.1" cy="183.4" r=".5" fill="#3A2E22"/>
+   <rect x="373.6" y="186" width="1.2" height="3" fill="#7A5A40" transform="rotate(-30 374 187)"/><circle cx="376" cy="186.6" r="1.1" fill="#C99A3B"/>
+  </g></g>`);}
+
+/* ---------- LIBRARY: late afternoon, golden ---------- */
+function libFacade(){
+  const st="#EFE6D3", sh="#DCD0B8";
+  const col=x=>`<rect x="${x+1.5}" y="78" width="12" height="76" fill="#3a2e22" opacity=".25"/><rect x="${x}" y="80" width="12" height="72" fill="${st}"/>${[3,6,9].map(d=>`<rect x="${x+d-.3}" y="82" width=".6" height="68" fill="${sh}"/>`).join("")}<rect x="${x-2}" y="76" width="16" height="4" fill="${st}"/><rect x="${x-2}" y="152" width="16" height="6" fill="${sh}"/>`;
+  const shelves=x=>`<path d="M${x} 140 V96 a7 7 0 0 1 14 0 V140Z" fill="#5C4A38"/><path d="M${x+1.5} 139 V97 a5.5 5.5 0 0 1 11 0 V139Z" fill="#F2DDB0"/>
+    ${[104,116,128].map(y=>{let b="";for(let i=0;i<5;i++)b+=`<rect x="${x+2+i*2.1}" y="${y-(i%3?7:8)}" width="1.8" height="${i%3?7:8}" fill="${["#7E3648","#2F63B5","#2A9D8F","#C99A3B","#5E6B7A"][(i+y)%5]}"/>`;return b+`<rect x="${x+1.5}" y="${y}" width="11" height="1" fill="#8A6A48"/>`;}).join("")}`;
+  const pigeon=(x,d)=>`<g class="edge loop" style="transform-origin:${x}px 31px;transform-box:view-box;animation:libBob 2.2s ${d}s steps(26) infinite"><ellipse cx="${x}" cy="30" rx="3" ry="2" fill="#7D8590"/><circle cx="${x+2.6}" cy="28.4" r="1.3" fill="#6A7280"/><polygon points="${x+3.8},28.3 ${x+5},28.7 ${x+3.8},29" fill="#C99A3B"/></g>`;
+  return WRAP(`<style>@keyframes libBob{0%,60%,100%{transform:none}70%{transform:rotate(20deg)}80%{transform:none}}</style>
+  <rect x="186" y="20" width="8" height="9" fill="#C9C0AA"/><path d="M185 20 L190 16 L195 20Z" fill="#7FA29A"/>
+  ${cut("M164 54 A26 26 0 0 1 216 54 Z","#86A79E")}${[174,182,190,198,206].map(x=>L(x,54,190+(x-190)*.4,30,"#6E8F86",.6)).join("")}
+  ${cut(rr(158,44,64,8),"#E6DCC8")}
+  ${cut("M52 64 L190 30 L328 64Z",st)}<path d="M72 61 L190 35 L308 61Z" fill="${sh}"/><circle cx="190" cy="52" r="5" fill="${st}"/><rect x="189.4" y="48" width="1.2" height="4" fill="#5C4A38"/><rect x="189.4" y="51.4" width="3.4" height="1.2" fill="#5C4A38"/>
+  ${pigeon(120,0)}${pigeon(262,-1.1)}
+  ${cut(rr(48,64,284,13),"#E9DFCB")}<text x="190" y="74.4" text-anchor="middle" letter-spacing="7" font-size="9" class="sign" fill="#7A6A52">LIBRARY</text>
+  ${wallCut("M60 77 H320 V158 H60Z","#CDBEA2","")}
+  ${shelves(88)}${shelves(122)}${shelves(244)}${shelves(278)}
+  ${[70,104,138,230,264,298].map(col).join("")}
+  ${stdDoor("#4E3B2C","#6A4A2E","#5A3E26")}
+  <rect x="56" y="152" width="120" height="6" fill="${sh}"/><rect x="204" y="152" width="120" height="6" fill="${sh}"/>
+  <rect x="50" y="158" width="280" height="3" fill="#E2D8C3"/><rect x="46" y="161" width="288" height="3" fill="#D3C7AE"/><rect x="42" y="164" width="296" height="3" fill="#C4B79C"/>
+  <rect x="40" y="167" width="300" height="2.6" fill="#3E4A40" opacity=".5"/>${flatBrace(328)}
+  ${bannerCloth("AI MAYBE #4","AI just keeps getting better.")}`,-43);}
+function libFg(){
+  const leaf=(x,d,c)=>`<g class="edge loop" style="animation:libLeaf 6s ${d}s steps(72) infinite"><g transform="translate(${x} 0)"><path d="M0 0 q3 -3 6 0 q-3 3 -6 0Z" fill="${c}"/></g></g>`;
+  return WRAP(`<style>@keyframes libLeaf{0%{transform:translate(0,92px) rotate(0)}25%{transform:translate(8px,120px) rotate(90deg)}50%{transform:translate(-4px,150px) rotate(200deg)}75%{transform:translate(6px,178px) rotate(280deg)}100%{transform:translate(0,204px) rotate(360deg)}}</style>
+  ${leaf(14,0,"#D9902F")}${leaf(30,-2.2,"#C2662F")}${leaf(352,-1.1,"#D9A32F")}${leaf(366,-4,"#C2662F")}
+  <polygon points="338,200 360,200 372,206 350,206" fill="#3E4A40" opacity=".35"/><rect x="336" y="20" width="5" height="182" fill="#3E4A40" opacity=".5"/><rect x="333" y="18" width="5" height="182" fill="#55615A"/><rect x="326" y="12" width="19" height="8" fill="#55615A"/><rect x="329" y="20" width="13" height="5" fill="#E9DEC2"/><rect x="327" y="198" width="17" height="5" fill="#55615A"/>
+  <polygon points="30,198 62,198 70,202 38,202" fill="#3E4A40" opacity=".3"/><rect x="34" y="172" width="26" height="26" fill="#2F63B5"/><path d="M33 172 q14 -8 28 0Z" fill="#2A55A0"/><rect x="38" y="178" width="18" height="2.4" fill="#1E3F7A"/><text x="47" y="189" font-size="3.6" text-anchor="middle" class="lbl" fill="#F3EAD2">BOOK</text><text x="47" y="194" font-size="3.6" text-anchor="middle" class="lbl" fill="#F3EAD2">RETURN</text>
+  ${[[90,184,"#D9902F"],[110,196,"#C2662F"],[290,190,"#D9A32F"],[260,204,"#C2662F"]].map(([x,y,c])=>`<path d="M${x} ${y} q3 -3 6 0 q-3 3 -6 0Z" fill="${c}"/>`).join("")}`);}
+
+/* ---------- BOOKSTORE: sunset ---------- */
+function bookFacade(){
+  const G="#2E4E45", cr="#EDE3CC";
+  const cover=(x,y,c,k)=>`<rect x="${x}" y="${y}" width="9" height="13" fill="${c}"/>`+(k==="doom"?`<rect x="${x+2}" y="${y+3}" width="5" height="4" fill="#C9CED6"/><rect x="${x+2.6}" y="${y+4.2}" width="1.2" height="1.2" fill="#E0B13A"/><rect x="${x+5.2}" y="${y+4.2}" width="1.2" height="1.2" fill="#E0B13A"/><rect x="${x+1.5}" y="${y+9}" width="6" height="1.4" fill="#C9CED6"/>`:`<circle cx="${x+4.5}" cy="${y+5}" r="2.6" fill="#FFF3D6"/><rect x="${x+1.5}" y="${y+9.4}" width="6" height="1.2" fill="#FFF3D6"/>`);
+  const disp=(x,k)=>`<rect x="${x}" y="108" width="86" height="42" fill="${G}"/><rect x="${x+2}" y="110" width="82" height="38" fill="#F2D49A"/><rect x="${x+2}" y="138" width="82" height="10" fill="#7A5A3A"/>
+    ${[0,1,2,3,4,5].map(i=>{const c=k==="doom"?["#6E2A2A","#3E4552","#5A3040","#2C3440","#6E2A2A","#4A4E58"][i]:["#E5B53C","#5FA38E","#F0C877","#E5B53C","#79B9C9","#5FA38E"][i];return `<g transform="rotate(${[-4,3,-2,4,-3,2][i]} ${x+8+i*13.4} 132)">${cover(x+4+i*13.4,(i%2?118:123),c,k)}</g>`;}).join("")}
+    <text x="${x+43}" y="146" font-size="3.6" text-anchor="middle" class="lbl" fill="#F3EAD2">${k==="doom"?"THE END IS NEAR":"THE FUTURE IS BRIGHT"}</text>
+    ${[1,2,3].map(i=>`<rect x="${x+i*21.5-.6}" y="108" width="1.2" height="30" fill="${G}"/>`).join("")}`;
+  const bulbs=[...Array(15)].map((_,i)=>`<circle cx="${84+i*15.5}" cy="${77+(i%2?1.4:0)}" r="1.4" fill="#FFE7A6" class="edge loop" style="animation:bkTw ${2+(i%3)*.7}s ${-i*.37}s steps(1) infinite"/>`).join("");
+  const awn=(x0,x1)=>{let s="";for(let x=x0,i=0;x<x1;x+=8,i++)s+=`<rect x="${x}" y="80" width="${Math.min(8,x1-x)}" height="5" fill="${i%2?cr:"#3F6E5F"}"/><path d="M${x} 85 q4 3 ${Math.min(8,x1-x)} 0Z" fill="${i%2?cr:"#3F6E5F"}"/>`;return `<rect x="${x0+1.5}" y="81.5" width="${x1-x0}" height="6" fill="#3a2e22" opacity=".3"/>`+s;};
+  return WRAP(`<style>@keyframes bkTw{0%,85%{fill:#FFE7A6}86%,100%{fill:#B39A68}}@keyframes bkTag{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg)}}</style>
+  ${cut(rr(66,22,248,6),"#D9CBB0")}
+  ${wallCut("M70 28 H310 V160 H70Z","#8E5E4A","")}
+  ${[92,140,226,274].map(x=>`<rect x="${x-1}" y="32" width="20" height="18" fill="${cr}"/><rect x="${x+1}" y="34" width="16" height="14" fill="#F6CF7A"/><rect x="${x+8.4}" y="34" width="1.2" height="14" fill="${cr}"/>`).join("")}
+  <path fill-rule="evenodd" d="M70 54 H310 V160 H70Z ${HOLE}" fill="${G}"/>
+  ${cut(rr(76,58,228,16),"#1F3A33")}<text x="190" y="69.6" text-anchor="middle" letter-spacing="2" font-size="9" class="sign" fill="#E0B13A">CAMPUS BOOKSTORE</text>
+  ${L(80,76.5,300,76.5,"#2C2116",.4)}${bulbs}
+  ${awn(76,170)}${awn(210,304)}
+  ${disp(80,"doom")}${disp(214,"sun")}
+  ${L(296,110,296,116,"#2C2116",.4)}<g class="edge loop" style="transform-origin:296px 110px;transform-box:view-box;animation:bkTag 2.4s steps(29) infinite"><rect x="290" y="116" width="12" height="8" fill="${cr}"/><text x="296" y="122" font-size="4.4" text-anchor="middle" class="lbl" fill="#2C2116">$$$</text></g>
+  <rect x="166" y="74" width="10" height="86" fill="#284539"/><rect x="204" y="74" width="10" height="86" fill="#284539"/>
+  ${stdDoor("#1F3A33","#3F6E5F","#335C4F")}
+  <rect x="152" y="158" width="76" height="4" fill="#B5A58A"/>${baseShadow(66,314)}${flatBrace(310)}
+  ${bannerCloth("COMING SOON","AGI is right around the corner.")}`,-43);}
+function bookFg(){ return WRAP(`${robotSvg()}
+  <polygon points="338,200 360,200 372,206 350,206" fill="#3E4A40" opacity=".35"/><rect x="336" y="20" width="5" height="182" fill="#3E4A40" opacity=".5"/><rect x="333" y="18" width="5" height="182" fill="#55615A"/><rect x="326" y="12" width="19" height="8" fill="#55615A"/><rect x="329" y="20" width="13" height="5" fill="#FFE7A6"/><rect x="327" y="198" width="17" height="5" fill="#55615A"/>
+  <polygon points="30,200 70,200 80,205 40,205" fill="#3E4A40" opacity=".3"/>
+  <g transform="translate(34 172)"><polygon points="0,28 7,0 29,0 36,28" fill="#3a2e22" opacity=".3" transform="translate(1.5 1.5)"/><polygon points="1,28 8,0 28,0 35,28" fill="#7A5A3A"/><rect x="9" y="3" width="18" height="17" fill="#2C3A35"/><text x="18" y="9.6" font-size="3.6" text-anchor="middle" class="lbl" fill="#F3EAD2">NEW</text><text x="18" y="14.6" font-size="3.6" text-anchor="middle" class="lbl" fill="#F3EAD2">ARRIVALS</text></g>`);}
+
+/* the delivery robot: a little cooler on six wheels, wandering the sidewalk at random (mountRobot drives it) */
+function robotSvg(){ return `<g id="stRobot" transform="translate(-60 180)"><g data-r="body">
+  <ellipse cx="0" cy="9" rx="11" ry="1.6" fill="#000" opacity=".2"/>
+  <rect x="-10" y="-8" width="20" height="13" rx="2" fill="#E9E4D8"/><rect x="-10" y="-9" width="20" height="3" rx="1.4" fill="#D6D0C1"/><rect x="-6" y="-4" width="8" height="3" rx="1" fill="#2C2116"/><circle cx="-3.6" cy="-2.5" r=".7" fill="#7FD3C5"/><circle cx="-.4" cy="-2.5" r=".7" fill="#7FD3C5"/>
+  <rect x="-10" y="2" width="20" height="2" fill="#E0B13A"/>${L(7,-9,8,-20,"#6A6E72",.6)}<g class="edge loop" style="transform-origin:8px -20px;transform-box:view-box;animation:clWave 1s steps(12) infinite"><path d="M8 -20 L13 -19 L13 -16.6 L8 -17.4Z" fill="#E0B13A"/></g>
+  ${[-7,0,7].map(x=>`<circle cx="${x}" cy="6.4" r="2.4" fill="#2C2116"/><rect data-spoke="1" x="${x-.3}" y="4.6" width=".6" height="3.6" fill="#8A8E92"/>`).join("")}</g></g>`;}
+function mountRobot(){
+  const bot=document.getElementById("stRobot"); if(!bot) return;
+  const spokes=[...bot.querySelectorAll("[data-spoke]")];
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  let st="wait",n=Math.round(rnd(10,60)),x=-40,dir=1,v=1.2,stopAt=null,last=-1,k=0; const t0=performance.now();
+  const draw=()=>{bot.setAttribute("transform",`translate(${x.toFixed(1)} 180) scale(${dir} 1)`); spokes.forEach((s,i)=>s.setAttribute("transform",`rotate(${(k*45+i*30)%180} ${s.x.baseVal.value+.3} 6.4)`));};
+  const step=()=>{ if(stage.classList.contains("frozen")) return;
+    if(st==="wait"){ if(--n<=0){ dir=Math.random()<.5?1:-1; x=dir>0?-30:410; v=rnd(.9,1.8); stopAt=Math.random()<.45?rnd(60,320):null; st="go"; } draw(); return; }
+    if(st==="pause"){ if(--n<=0){ if(Math.random()<.25) dir=-dir; st="go"; } draw(); return; }
+    k++; x+=dir*v;
+    if(stopAt!==null && Math.abs(x-stopAt)<v){ st="pause"; n=Math.round(rnd(10,40)); stopAt=null; }
+    if(x<-40||x>420){ st="wait"; n=Math.round(rnd(30,110)); }
+    draw(); };
+  const tick=now=>{const F=Math.floor((now-t0)/1000*12); if(F!==last){last=F;step();} if(bot.isConnected) requestAnimationFrame(tick);};
+  requestAnimationFrame(tick);
+}
+
+/* backstage light: a fire-effect lantern. A long slotted drum with a roll of yellow gel inside, lit along its length and
+   turning slowly, hung lengthwise along the back wall behind a low groundrow. It turns on its long axis, so each cut-out's
+   patch climbs the wall: a hole at angle phi above level lands at height A*tan(phi), stretched 1/cos^2 as it rises and
+   dimming as cos^3, then gives out near the top. Holes facing down throw onto the floor behind the groundrow. */
+const FIRE_Y=600, FIRE_X0=200, FIRE_X1=1400;
+function fireDrum(){
+  const id="fd"+(_op++);
+  let top=`M${FIRE_X0} 620 V568`; let seed=41; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  for(let x=FIRE_X0;x<FIRE_X1;){ const w=Math.min(FIRE_X1-x,40+rnd()*50); top+=` q${(w/2).toFixed(0)} ${(-8-rnd()*8).toFixed(0)} ${w.toFixed(0)} 0`; x+=w; }
+  const edge=top.replace(`M${FIRE_X0} 620 V568`,`M${FIRE_X0} 568`);
+  return `<defs><filter id="${id}b" filterUnits="userSpaceOnUse" x="-700" y="-400" width="3000" height="1100"><feGaussianBlur stdDeviation="7"/></filter>
+     <clipPath id="${id}c"><rect x="-500" y="-500" width="2600" height="1120"/></clipPath>
+     <linearGradient id="${id}g" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#B8442A" stop-opacity=".6"/><stop offset="1" stop-color="#B8442A" stop-opacity="0"/></linearGradient></defs>
+   <g clip-path="url(#${id}c)" style="mix-blend-mode:screen"><rect class="fireAmb" x="${FIRE_X0-60}" y="380" width="${FIRE_X1-FIRE_X0+120}" height="240" rx="120" fill="url(#${id}g)" opacity=".5"/>
+     <g class="fireLight" filter="url(#${id}b)"></g></g>
+   <path d="${top} V620Z" fill="#000" opacity=".3" transform="translate(6 6)"/><path d="${top} V620Z" fill="#3A3026"/>
+   <path class="fireRim" d="${edge}" fill="none" stroke="#D0623A" stroke-width="3" opacity=".6"/>
+   ${[360,800,1240].map(x=>L(x,590,x+16,620,"#2A231C",5)).join("")}`;
+}
+function mountFire(g){
+  const NS="http://www.w3.org/2000/svg", amb=g.parentNode.querySelector(".fireAmb"), rim=g.closest("svg").querySelector(".fireRim");
+  let seed=23; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  /* the cut-outs: long tapering slits that wander along the drum's length, like wood grain */
+  const holes=[...Array(84)].map((_,i)=>{ const N=24, f1=.4+rnd()*.8, f2=1.2+rnd()*1.5, p1=rnd()*6.28, p2=rnd()*6.28, k=.4+rnd()*.5, top=[], bot=[];
+    const flip=k>.65?1:-1, bend=(p1<3.14?1:-1)*(.25+.25*k); for(let j=0;j<=N;j++){ const x=-1+2*j/N, t=(flip*x+1)/2, w=Math.sqrt(Math.max(0,1-x*x))*(.34+.66*Math.pow(t,.9))*1.25, c=bend*(x*x-.35)+.06*Math.sin(f2*x*Math.PI+p2);
+      top.push([x,c-w]); bot.push([x,c+w]); }
+    const pts=top.concat(bot.reverse()); let d=`M${pts[0][0].toFixed(3)} ${pts[0][1].toFixed(3)}`;
+    for(let j=1;j<pts.length;j++){ const p=pts[j-1], q=pts[j]; d+=` Q${p[0].toFixed(3)} ${p[1].toFixed(3)} ${((p[0]+q[0])/2).toFixed(3)} ${((p[1]+q[1])/2).toFixed(3)}`; }
+    const e=document.createElementNS(NS,"path"); e.setAttribute("d",d+"Z"); e.setAttribute("fill",["#C9502C","#A8321F","#D86A34"][i%3]); g.appendChild(e);
+    return {e, phi:rnd()*2*Math.PI, x:FIRE_X0+60+rnd()*(FIRE_X1-FIRE_X0-120), len:45+rnd()*75, s:20+rnd()*14}; });
+  const A=170, W=2*Math.PI/12; let last=-1; const t0=performance.now();
+  const render=F=>{ const t=F/12; let sum=0;
+    holes.forEach(h=>{ const ph=((h.phi+W*t)%(2*Math.PI)+2*Math.PI)%(2*Math.PI)-Math.PI/2, c=Math.cos(ph);
+      if(ph>1.32||c<.25){ h.e.style.display="none"; return; }
+      const y=FIRE_Y-A*Math.tan(ph), a=Math.min(1,.72*c*c*c); if(y<566) sum+=a;
+      h.e.style.display=""; h.e.setAttribute("opacity",a.toFixed(3));
+      h.e.setAttribute("transform",`translate(${h.x.toFixed(1)} ${y.toFixed(1)}) scale(${(h.len*(1+.08*(1/c-1))).toFixed(2)} ${(h.s/(c*c)).toFixed(2)})`); });
+    if(amb) amb.setAttribute("opacity",Math.min(1,.4+.015*sum).toFixed(3)); if(rim) rim.setAttribute("opacity",Math.min(1,.35+.02*sum).toFixed(3)); };
+  const tick=now=>{const F=Math.floor((now-t0)/1000*12); if(F!==last){last=F;render(F);} if(g.isConnected) requestAnimationFrame(tick);};
+  render(0); requestAnimationFrame(tick);
+}
+/* backstage, 1:1 in stage pixels: floor meets the back wall at y 620, below the 470 horizon */
+function stopBackstage(s){
+  const o=OBJ[s.obj](), q=s.q;
+  return `<svg viewBox="0 0 1600 900" overflow="visible" aria-hidden="true">
+   <rect x="-500" y="-500" width="2600" height="1900" fill="#262B31"/><rect x="-500" y="620" width="2600" height="700" fill="#3B3229"/><rect x="-500" y="620" width="2600" height="4" fill="#2A231C"/>
+   ${[0,1,2,3,4,5,6,7].map(i=>`<rect x="${i*200}" y="624" width="2" height="276" fill="#30281F"/>`).join("")}
+   ${fireDrum()}
+   ${R(150,40,40,860,"var(--lumber)",8)}${R(1410,40,40,860,"var(--lumber)",8)}
+   ${L(190,300,420,890,"var(--lumberD)",22)}${L(1410,300,1180,890,"var(--lumberD)",22)}
+   ${R(120,850,90,40,"#6D5E48",4,14)}${R(1390,850,90,40,"#6D5E48",4,14)}
+   ${takeShadows()}${o}
+   ${q?`<g>${R(150,26,1300,156,"var(--lumber)",8)}${T(800,96,60,"sten","#2C1F12",q[0].toUpperCase())}${T(800,162,60,"sten","#2C1F12",q[1].toUpperCase())}</g>`:""}</svg>`;
+}
+const FACADE={classroom:()=>clFacade(),cafeteria:cafFacade,dorm:dormFacade,library:libFacade,bookstore:bookFacade};
+const FG={classroom:()=>clFg(),cafeteria:cafFg,dorm:dormFg,library:libFg,bookstore:bookFg};
+/* the facade layer, cut the way this stop's flat comes down */
+function facadeLayer(s, split){
+  const f=FACADE[s.id](), filt=DAY[s.id].filter;
+  const fs=filt?`<style>.st-${s.id} .cl-facade svg,.st-${s.id} .cl-fg svg{filter:${filt}}</style>`:"";
+  if(split && s.fall==="peel"){ const xs=[0,657,714,771,829,886,943,1600], r=[-3,4,-5,3,-4,5,-2], d=[.75,.5,.95,.6,1.05,.7,.85];
+    return fs+`<div class="layer cl-facade">${xs.slice(0,-1).map((x,i)=>`<div class="layer pl" style="clip-path:inset(0 ${Math.max(0,1600-xs[i+1]-1)}px 0 ${Math.max(0,x-1)}px);transform-origin:${(x+xs[i+1])/2}px 60px;--r:${r[i]}deg;animation-delay:${d[i]}s">${f}</div>`).join("")}</div>`; }
+  if(split && s.fall==="book") return fs+`<div class="layer cl-facade"><div class="layer bk-l">${f}</div><div class="layer bk-r">${f}</div></div>`;
+  return fs+`<div class="layer cl-facade">${f}</div>`;
+}
+/* bookstore: the flat that will not fall, seen from behind once the camera steps around */
+function holdBack(){
+  const brace=(x1,y1,x2,y2,word)=>{const a=Math.atan2(y2-y1,x2-x1)*180/Math.PI, mx=(x1+x2)/2, my=(y1+y2)/2, rot=a>90?a-180:a<-90?a+180:a;
+    return `${L(x1+8,y1+8,x2+8,y2+8,"var(--ul)",66)}${L(x1,y1,x2,y2,"var(--lumber)",66)}<g transform="translate(${mx} ${my}) rotate(${rot})">${T(0,15,42,"sten","#2C1F12",word)}</g>${C(x1,y1,12,"var(--brass)",2)}`;};
+  const frag=[[560,260,90,60,-30,"#9AA4B2"],[1000,240,40,40,40,"#E0B33C"],[580,700,40,40,-25,"#E0B33C"],[1040,520,24,70,60,"#9AA4B2"],[520,470,120,24,20,"#5E6876"],[900,780,300,60,-12,"#7C8796"],[620,560,150,140,25,"#7C8796"],[1020,330,80,140,-40,"#5E6876"],[480,330,80,120,30,"#5E6876"],[760,240,60,20,70,"#4A5260"]];
+  return `<rect width="1600" height="900" fill="#1B1F2A"/>
+   <rect x="0" y="0" width="1600" height="640" fill="#2A2420"/>
+   ${R(110,40,1380,620,"#B28A5B",10)}<rect x="110" y="40" width="1380" height="620" fill="url(#bkFl)"/><defs><pattern id="bkFl" width="16" height="900" patternUnits="userSpaceOnUse"><rect width="2" height="900" fill="#9E7749" opacity=".45"/></pattern></defs>
+   ${R(110,40,1380,30,"var(--lumberD)",4)}${R(110,630,1380,30,"var(--lumberD)",4)}${R(110,40,30,620,"var(--lumberD)",4)}${R(1460,40,30,620,"var(--lumberD)",4)}${R(785,40,30,620,"var(--lumberD)",4)}
+   <rect x="741" y="428" width="118" height="194" fill="#F2B067"/><rect x="741" y="428" width="118" height="194" fill="rgba(255,240,200,.25)"/><polygon points="741,622 859,622 1000,900 600,900" fill="rgba(242,176,103,.18)"/>
+   <rect y="640" width="1600" height="260" fill="#2E2822"/>
+   ${R(330,92,940,96,"var(--kraft)",6)}${T(800,132,32,"sten","#2C1F12","WHO BENEFITS FROM THE CLAIM?")}${T(800,172,32,"sten","#2C1F12","WHO BENEFITS FROM DENYING IT?")}
+   <g class="bkFrags"></g>
+   ${brace(330,180,90,880,"FUNDRAISING?")}${brace(1270,180,1510,880,"FEAR?")}
+   ${R(40,850,120,44,"#6D5E48",4,14)}${R(1440,850,120,44,"#6D5E48",4,14)}
+   ${R(560,800,480,62,"var(--lumber)",8)}${T(800,844,44,"sten","#2C1F12","EVIDENCE?")}
+   ${person(250,880,.62,1,[[[205,560]],[[230,520]]],{cls:"",shadow:false,props:["lanyard"]})}${person(1350,880,.62,-1,[[[1395,560]],[[1370,520]]],{cls:"",shadow:false,props:["phone"],glance:3.9})}`;
+}
+/* the anamorph seen from behind: the same pieces on the same cycle, mirrored, each hanging on its wire from the flies */
+function mountBackFrags(g){
+  const NS="http://www.w3.org/2000/svg";
+  const KEYS=[[0,2],[8,2],[22,0],[40,0],[50,2],[58,2],[72,1],[90,1],[100,2]];
+  const items=ANA.map(f=>{ const wire=document.createElementNS(NS,"line"); wire.setAttribute("stroke","rgba(220,210,190,.45)"); wire.setAttribute("stroke-width","2"); g.appendChild(wire);
+    const p=document.createElementNS(NS,"g"); p.innerHTML=`<rect x="6" y="6" width="1" height="1" fill="var(--ul)"/><rect width="1" height="1" fill="${f[3]}"/>`; g.appendChild(p); return {f,wire,p,ul:p.firstChild,fr:p.lastChild}; });
+  const lay=(f,pct)=>{ let i=0; while(i<KEYS.length-2 && pct>=KEYS[i+1][0]) i++; const [a,la]=KEYS[i],[b,lb]=KEYS[i+1], t=b>a?Math.min(1,Math.max(0,(pct-a)/(b-a))):0;
+    const A=f[la],B=f[lb]; return [0,1,2,3,4].map(k=>(A[k]||0)+((B[k]||0)-(A[k]||0))*t); };
+  let last=-1; const t0=performance.now();
+  const render=F=>{ const pct=(F%108)/108*100;
+    items.forEach(it=>{ const [x,y,w,h,r]=lay(it.f,pct), mx=1600-x-w;
+      it.p.setAttribute("transform",`translate(${mx.toFixed(1)} ${y.toFixed(1)}) rotate(${(-r).toFixed(1)} ${w/2} 0)`);
+      for(const e of [it.ul,it.fr]){ e.setAttribute("width",w.toFixed(1)); e.setAttribute("height",h.toFixed(1)); }
+      it.wire.setAttribute("x1",(mx+w/2).toFixed(1)); it.wire.setAttribute("x2",(mx+w/2).toFixed(1)); it.wire.setAttribute("y1","-10"); it.wire.setAttribute("y2",y.toFixed(1)); }); };
+  const tick=now=>{const F=Math.floor((now-t0)/1000*12); if(F!==last){last=F;render(F);} if(g.isConnected) requestAnimationFrame(tick);};
+  render(0); requestAnimationFrame(tick);
+}
+/* the squirrel turns on its stick now and then: a quick edge-on pivot to face the other way */
+function mountSquirrel(){
+  const q=document.getElementById("dmSquirrel"); if(!q) return;
+  let face=1, k=0, turning=0, wait=24+Math.floor(Math.random()*72), last=-1; const t0=performance.now(), SEQ=[.55,.12,-.12,-.55];
+  const set=sx=>q.setAttribute("transform",`translate(369.1 0) scale(${sx} 1) translate(-369.1 0)`);
+  const step=()=>{ if(stage.classList.contains("frozen")) return;
+    if(turning){ set(face*SEQ[4-turning]); if(--turning===0){ face=-face; set(face); wait=18+Math.floor(Math.random()*90); } return; }
+    if(--wait<=0) turning=4; };
+  const tick=now=>{const F=Math.floor((now-t0)/1000*12); if(F!==last){last=F;step();} if(q.isConnected) requestAnimationFrame(tick);};
+  requestAnimationFrame(tick);
+}
+function stopStage(s, split=false){
+  return `<div class="layer cw">
+    <div class="layer cl-sky">${s.id==="classroom"?clSky():skyFor(s)}</div>
+    <div class="layer cl-hills">${s.id==="classroom"?clHills():hillsFor(s)}</div>
+    <div class="layer cl-ground">${s.id==="classroom"?clGround():groundFor(s)}</div>
+    <div class="layer cl-bsclip"><div class="layer cl-bs">${stopBackstage(s)}</div></div>
+    ${facadeLayer(s, split)}
+    <div class="layer cl-fg">${FG[s.id]()}</div>
+  </div>${s.fall==="hold"?`<div class="layer bk-back">${svg(holdBack())}</div>`:""}`;
+}
+
+/* ---------- the opening and the finale: the whole day on one drop, seen through the backlot gate ----------
+   Five facades stand on one baseline (y 560) in walking order under five painted sky panels, dawn to dusk.
+   A single sun hangs on a pulley track that runs the width of the drop. The yellow brick road turns left toward the classroom;
+   past the turn the bricks are only chalked in. The finale is the same camera at dusk: four flats face down, the bookstore standing. */
+const GATE={base:560, slots:[[100,250,190],[380,290,150],[700,230,230],[960,260,210],[1250,250,200]],
+  panels:[[0,365,"classroom"],[365,685,"cafeteria"],[685,945,"dorm"],[945,1235,"library"],[1235,1600,"bookstore"]]};
+const rolled=(cx,y,w)=>`<rect x="${cx-w/2+3}" y="${y+3}" width="${w}" height="14" rx="7" fill="var(--ul)"/><rect x="${cx-w/2}" y="${y}" width="${w}" height="14" rx="7" fill="var(--red)"/><rect x="${cx-w/2}" y="${y+2}" width="${w}" height="3" rx="1.5" fill="#E06A5F"/>
+  <ellipse cx="${cx-w/2+4}" cy="${y+7}" rx="4" ry="7" fill="#A8352F"/><ellipse cx="${cx+w/2-4}" cy="${y+7}" rx="4" ry="7" fill="#A8352F"/>
+  ${[-.3,0,.3].map(f=>`<rect x="${cx+f*w-1.5}" y="${y-1}" width="3" height="16" fill="#D9C79F"/>`).join("")}`;
+const flatBraceS=(x,top)=>`${L(x,top+60,x+18,GATE.base,"#8A6A48",5)}${R(x+8,GATE.base-6,20,8,"#7A6A52",2)}`;
+function secCam(x,y,s=1,flip=1){ // a security camera on a wall bracket, panning; sketch-free, any scale
+  return `<g transform="translate(${x} ${y}) scale(${s*flip} ${s})">${R(-3,-2,6,16,"#55615A",1.5)}<g class="edge loop" style="transform-origin:0px 0px;transform-box:view-box;animation:camPan 6s steps(72) infinite">
+    ${R(-4,-4,30,12,"#D8D2C2",1.5,2)}<rect x="24" y="-2" width="7" height="8" fill="#2b2b2b"/>${R(-6,-7,34,3,"#C9C2B0",1)}<circle cx="2" cy="2" r="1.6" fill="#E0B33C" class="edge loop" style="animation:bkTw 1.6s steps(1) infinite"/></g></g>`;}
+function miniFacades(final){
+  const B=GATE.base; let s="";
+  // classroom
+  if(final) s+=fallenFlat(100,250,"#CFC6B4"); else s+=`${P(`94,420 225,374 356,420`,"#D8D0BE",3)}${C(225,402,13,"#F3EBD8",2)}${L(225,402,225,394,"#2C2116",2)}${L(225,402,231,402,"#2C2116",2)}
+   ${L(322,414,322,356,"#3E4A44",3)}<g class="edge loop" style="transform-origin:322px 360px;animation:clWave 1.4s steps(17) infinite"><path d="M323 357 L348 359 L348 371 L323 369Z" fill="#2F5C8A"/><path d="M323 362 L348 364 L348 366 L323 364Z" fill="#E0B13A"/></g>
+   ${R(94,414,262,8,"#B9AF9A",3)}${R(100,422,250,138,"#CFC6B4",3)}${[116,158,262,304].map(x=>`${R(x,452,30,44,"#5C4A38",0)}<rect x="${x+3}" y="455" width="24" height="38" fill="#C9D9DC"/>`).join("")}
+   ${R(203,492,44,68,"#5C4A38",0)}<rect x="206" y="495" width="18" height="65" fill="#7A5A3A"/><rect x="226" y="495" width="18" height="65" fill="#7A5A3A"/>
+   ${secCam(344,428,1.1,1)}${rolled(225,430,190)}${flatBraceS(350,370)}`;
+  // cafeteria
+  if(final) s+=fallenFlat(380,290,"#F0DCBA"); else s+=`${[0,1,2].map(i=>`<g transform="translate(645 386)"><g class="edge loop" style="animation:gtSteam 2.4s ${-i*.8}s steps(29) infinite"><circle r="${7+i}" fill="#fff" opacity=".85"/></g></g>`).join("")}${R(640,384,10,26,"#8E8778",0)}<rect x="637" y="382" width="16" height="4" fill="#7A7366"/>
+   ${R(374,410,302,20,"#E8D3AE",3)}${R(380,430,290,130,"#F0DCBA",3)}
+   ${[392,550].map(x=>`${R(x,478,108,58,"#5C4A38",0)}<rect x="${x+3}" y="481" width="102" height="52" fill="#F6E6C2"/>${[1,2,3].map(i=>`<rect x="${x+i*27-1}" y="478" width="2" height="58" fill="#5C4A38"/>`).join("")}${[0,1,2,3].map(i=>`<polygon points="${x+8+i*27},${490} ${x+18+i*27},490 ${x+16+i*27},486 ${x+10+i*27},486" fill="#E0B13A"/>`).join("")}`).join("")}
+   ${R(505,488,40,72,"#5C4A38",0)}<rect x="508" y="491" width="34" height="69" fill="#7A5A3A"/>${rolled(525,446,220)}${flatBraceS(670,410)}`;
+  // dorm
+  if(final) s+=fallenFlat(700,230,"#B98264"); else { const curt=["#E0B13A","#2A9D8F","#F3EAD2","#7E6BB3","#2F63B5","#C9A273"];
+   s+=`${R(694,326,242,8,"#E3D6BC",3)}${R(700,334,230,226,"#B98264",3)}${L(700,388,930,388,"#E3D6BC",3)}
+   ${[346,394,470].map((y,r)=>[714,748,782,834,868,902].map((x,c)=>(r===2&&(c===2||c===3))?"":`<rect x="${x-2}" y="${y-2}" width="24" height="30" fill="#E3D6BC"/><rect x="${x}" y="${y}" width="20" height="26" fill="${(r*6+c)%5===2?"#F6D77A":"#61717C"}"/><path d="M${x} ${y} h7 l-4 26 h-3Z" fill="${curt[(r*6+c)%6]}"/><path d="M${x+20} ${y} h-7 l4 26 h3Z" fill="${curt[(r*6+c)%6]}"/>`).join("")).join("")}
+   ${R(790,486,50,7,"#E3D6BC",2)}<rect x="792" y="493" width="4" height="67" fill="#E3D6BC"/><rect x="834" y="493" width="4" height="67" fill="#E3D6BC"/>${R(800,496,30,64,"#4E3B2C",0)}<rect x="802" y="498" width="26" height="62" fill="#5E7A6A"/>
+   ${rolled(815,428,180)}${flatBraceS(930,330)}`; }
+  // library
+  if(final) s+=fallenFlat(960,260,"#EFE6D3"); else s+=`${R(1086,356,8,12,"#C9C0AA",0)}${D("M1060 396 A30 30 0 0 1 1120 396Z","#86A79E",3)}${P("952,414 1090,380 1228,414","#EFE6D3",3)}${R(948,414,284,14,"#E9DFCB",3)}${R(966,428,248,112,"#CDBEA2",3)}
+   ${[978,1014,1050,1118,1154,1190].map(x=>`<rect x="${x}" y="428" width="12" height="112" fill="#EFE6D3"/><rect x="${x+5}" y="430" width="1.4" height="108" fill="#DCD0B8"/><rect x="${x-2}" y="428" width="16" height="4" fill="#EFE6D3"/>`).join("")}
+   ${R(1070,486,40,54,"#4E3B2C",0)}<rect x="1073" y="489" width="34" height="51" fill="#6A4A2E"/>
+   <rect x="956" y="540" width="268" height="7" fill="#E2D8C3"/><rect x="950" y="547" width="280" height="7" fill="#D3C7AE"/><rect x="944" y="554" width="292" height="6" fill="#C4B79C"/>
+   ${rolled(1090,446,210)}${flatBraceS(1220,350)}`;
+  // bookstore: still standing at the end
+  const lit=final?"#FFD27A":"#F6CF7A";
+  s+=`${R(1246,360,258,8,"#D9CBB0",3)}${R(1250,368,250,60,"#8E5E4A",3)}${[1272,1324,1400,1452].map(x=>`<rect x="${x-2}" y="378" width="30" height="36" fill="#EDE3CC"/><rect x="${x}" y="380" width="26" height="32" fill="${lit}"/>`).join("")}
+   ${R(1250,428,250,132,"#2E4E45",3)}<rect x="1258" y="434" width="234" height="18" fill="#1F3A33"/><rect x="1300" y="441" width="150" height="4" fill="#E0B13A"/>
+   ${[...Array(12)].map((_,i)=>`<circle cx="${1262+i*20}" cy="456" r="2.4" fill="#FFE7A6" class="edge loop" style="animation:bkTw ${2+(i%3)*.7}s ${-i*.37}s steps(1) infinite"/>`).join("")}
+   ${[1258,1394].map(x0=>[...Array(12)].map((_,i)=>`<rect x="${x0+i*8}" y="460" width="8" height="10" fill="${i%2?"#EDE3CC":"#3F6E5F"}"/>`).join("")).join("")}
+   ${[1262,1402].map((x,k)=>`<rect x="${x}" y="494" width="86" height="50" fill="#F2D49A"/>${[0,1,2,3,4].map(i=>`<rect x="${x+6+i*16}" y="${504+(i%2)*6}" width="11" height="16" fill="${k?["#E5B53C","#5FA38E","#F0C877","#79B9C9","#5FA38E"][i]:["#6E2A2A","#3E4552","#5A3040","#2C3440","#6E2A2A"][i]}"/>`).join("")}`).join("")}
+   ${R(1356,492,38,68,"#1F3A33",0)}<rect x="1359" y="495" width="32" height="65" fill="#3F6E5F"/>
+   ${final?"":rolled(1375,474,210)}${flatBraceS(1500,360)}`;
+  return s;
+}
+function fallenFlat(x,w,col){ // face down in its slot: we see its kraft back, its battens, and the braces that held it up
+  const B=GATE.base;
+  return `<polygon points="${x-8},${B} ${x+w+8},${B} ${x+w+20},${B+12} ${x+4},${B+12}" fill="#B28A5B"/><polygon points="${x+4},${B+12} ${x+w+20},${B+12} ${x+w+20},${B+15} ${x+4},${B+15}" fill="#3a2e22" opacity=".45"/>
+   <polygon points="${x-6},${B+1} ${x+w+6},${B+1} ${x+w+8},${B+3} ${x-4},${B+3}" fill="${col}"/>
+   ${L(x+w*.25,B+6,x+w*.25+14,B-50,"#8A6A48",5)}${L(x+w*.75,B+6,x+w*.75+14,B-50,"#8A6A48",5)}${L(x+w*.25+14,B-50,x+w*.75+14,B-50,"#8A6A48",4)}`;
+}
+function brickRoad(final){
+  const B="#D8C08A", J="#C2A56E", T0=574, T1=606;
+  let s=`<clipPath id="gtRoad"><polygon points="580,900 1020,900 828,${T1} 772,${T1}"/></clipPath><polygon points="580,900 1020,900 828,${T1} 772,${T1}" fill="${B}"/><g clip-path="url(#gtRoad)">`;
+  // trunk bricks: rows thicken toward us, joints staggered
+  let y=T1, k=0; while(y<900){ const h=4+(y-T1)*.11, y2=Math.min(900,y+h), lx=772-(y2-T1)*(192/294), rx=828+(y2-T1)*(192/294);
+    s+=L(lx,y2,rx,y2,J,1.1); const bw=h*2.4, off=k%2?bw/2:0; for(let x=lx+off;x<rx;x+=bw) s+=L(x,y,x,y2,J,.9); y=y2; k++; }
+  s+=`</g>`;
+  // cross street: laid from the turn toward the classroom; only chalked toward the rest (laid everywhere at the end)
+  const laidTo=final?1500:832;
+  s+=`<rect x="100" y="${T0}" width="${laidTo-100}" height="${T1-T0}" fill="${B}"/>${L(100,(T0+T1)/2,laidTo,(T0+T1)/2,J,1.4)}${L(100,T1,laidTo,T1,J,1.4)}`;
+  for(let x=100,i=0;x<laidTo;x+=22,i++){ s+=L(x,T0,x,(T0+T1)/2,J,1.2)+L(x+11,(T0+T1)/2,x+11,T1,J,1.2); }
+  if(!final){ s+=`<rect x="832" y="${T0}" width="668" height="${T1-T0}" fill="#B9A57E"/>`;
+    for(let x=832;x<1500;x+=22) s+=`<rect x="${x+2}" y="${T0+2}" width="18" height="12" fill="none" stroke="#F3EDE0" stroke-width="1.6" stroke-dasharray="4 3"/><rect x="${x+13}" y="${T0+18}" width="18" height="12" fill="none" stroke="#F3EDE0" stroke-width="1.6" stroke-dasharray="4 3"/>`; }
+  return s;
+}
+function gateStage(final){
+  const B=GATE.base;
+  const panels=GATE.panels.map(([x0,x1,id])=>{const c=DAY[id].sky; return `<rect x="${x0}" y="0" width="${x1-x0}" height="150" fill="${c[0]}"/><rect x="${x0}" y="150" width="${x1-x0}" height="150" fill="${c[1]}"/><rect x="${x0}" y="300" width="${x1-x0}" height="170" fill="${c[2]}"/><rect x="${x1-1}" y="0" width="2" height="470" fill="#000" opacity=".12"/>`;}).join("");
+  const sunX=final?1430:200, sunY=final?396:330, sunC=final?"#E0784E":"#FBE2A6";
+  const sky=`${panels}<rect x="0" y="8" width="1600" height="12" fill="#4A5550"/>
+    ${L(40,44,1560,44,"#3a2e22",2.4)}${C(40,44,9,"#8A6A48",2)}${C(1560,44,9,"#8A6A48",2)}
+    <g class="edge loop" style="animation:gtSun 4s steps(48) infinite">${L(sunX,44,sunX,sunY-34,"rgba(30,30,30,.5)",2)}${C(sunX,44,6,"#C99A3B",0)}${C(sunX,sunY,34,sunC,5)}</g>
+    ${[[560,130],[1120,150]].map(([x,y],i)=>`${L(x+40,20,x+40,y-12,"rgba(30,30,30,.4)",2)}<g class="edge loop" style="transform-origin:${x+40}px 20px;animation:gtSwing ${3.2+i}s ${-i}s steps(${Math.round((3.2+i)*12)}) infinite"><path d="M${x} ${y} q8 -36 42 -32 q16 -28 50 -12 q34 -8 38 24 q20 4 16 20 Z" fill="${final?"#5E5880":"#B7A9B8"}" transform="translate(5 5)" opacity=".5"/><path d="M${x} ${y} q8 -36 42 -32 q16 -28 50 -12 q34 -8 38 24 q20 4 16 20 Z" fill="${final?"#7A7299":"#FBF4EE"}"/></g>`).join("")}`;
+  const hill="M0 470 L0 438 L90 428 L200 434 L320 424 L460 432 L600 422 L760 430 L900 420 L1060 430 L1200 422 L1360 432 L1480 424 L1600 430 L1600 470Z";
+  const hills=`<path d="${hill}" fill="#7A877C" transform="translate(5 5)"/><path d="${hill}" fill="#9AA79A"/><rect x="0" y="466" width="1600" height="5" fill="#3E4A40"/>`;
+  const lawn=`<rect x="0" y="470" width="1600" height="430" fill="#6E9460"/><rect x="800" y="470" width="800" height="430" fill="#5F8455" opacity=".5"/>`;
+  const tree=x=>`${L(x+8,520,x+24,B,"#8A6A48",3)}<rect x="${x-3}" y="500" width="7" height="${B-500}" fill="#8A6A48"/><path d="M${x-30} 500 q-4 -24 18 -28 q8 -22 30 -14 q22 -4 22 18 q14 10 2 24 q-10 10 -30 8 q-28 4 -42 -8Z" fill="#4E6B4C" transform="translate(4 4)"/><path d="M${x-30} 500 q-4 -24 18 -28 q8 -22 30 -14 q22 -4 22 18 q14 10 2 24 q-10 10 -30 8 q-28 4 -42 -8Z" fill="#6F8F6A"/>`;
+  // the hook: a puppet peeks out from behind the classroom flat, looks at us, ducks back
+  const peek=final?"":`<g class="edge loop" style="animation:gtPeek 7s steps(84) infinite">${person(316,560,.34,1,[[[330,480]]],{cls:"",shadow:false,props:["lanyard"]})}</g>`;
+  const gateCol=final?"#B88A4A":"#2E4E45";
+  const header=final?`${R(20,70,1560,120,gateCol,6)}${[0,1,2,3,4,5].map(i=>`<rect x="20" y="${84+i*18}" width="1560" height="1.4" fill="#8C6A48" opacity=".45"/>`).join("")}${T(800,160,86,"sten","#2C1F12","WHERE DO YOU STAND?")}`
+    : `${R(20,70,1560,120,gateCol,6)}${T(800,164,96,"sign","#F1E6CF","WHERE YOU STAND")}
+       ${L(560,190,560,214,"#5C4A38",3)}${L(1040,190,1040,214,"#5C4A38",3)}
+       <g class="edge loop" style="transform-origin:800px 190px;animation:gtSway 3s steps(36) infinite">${R(500,208,600,52,"#C9A273",5,4)}<text x="800" y="243" font-size="27" text-anchor="middle" fill="#2C1F12" style="font-family:Bitter,Georgia,serif;font-style:italic;font-weight:500">Five AI maybes. Dawn to dusk. You decide.</text></g>`;
+  const post=x=>`${L(x+30,560,x+(x<800?150:-90),900,"#9E7650",10)}${R(x,70,60,830,"#C9A273",6)}${[12,26,44].map(d=>`<rect x="${x+d}" y="80" width="1.4" height="810" fill="#A47D4E" opacity=".6"/>`).join("")}`;
+  const sheet=`<g transform="rotate(-2 164 650)">${R(104,560,124,172,"#F4F1E8",4)}<text x="114" y="584" font-size="13" class="tw" font-weight="700" fill="#3E3A78">COURSE</text><text x="114" y="600" font-size="13" class="tw" font-weight="700" fill="#3E3A78">REGISTRATION</text>
+     ${[0,1,2,3,4,5,6].map(i=>`<rect x="114" y="${614+i*14}" width="${[96,84,100,78,92,104,60][i]}" height="3.4" fill="#9A96BC"/>`).join("")}${C(116,566,4,"var(--brass)",1)}${C(216,566,4,"var(--brass)",1)}</g>`;
+  const dusk=final?`<rect x="0" y="0" width="1600" height="900" fill="#1E2244" opacity=".42"/>`:"";
+  const finaleSign=final?`<polygon points="640,300 960,300 1060,800 540,800" fill="rgba(255,226,160,.10)"/>
+    ${L(600,800,600,330,"#B88A4A",14)}${L(1000,800,1000,330,"#B88A4A",14)}${R(570,316,460,22,"#B88A4A",5)}${R(588,786,24,14,"#7A6A52",2)}${R(988,786,24,14,"#7A6A52",2)}
+    ${L(660,338,660,372,"#5C4A38",3)}${L(940,338,940,372,"#5C4A38",3)}
+    <g class="edge loop" style="transform-origin:800px 338px;animation:gtSway 3.4s steps(41) infinite">${R(610,366,380,140,"#F1E6CF",7,6)}<rect x="622" y="378" width="356" height="116" rx="4" fill="none" stroke="#2E4E45" stroke-width="4"/>${T(800,460,58,"sign","#2E4E45","Questions?","middle",'textLength="320" lengthAdjust="spacingAndGlyphs"')}${C(634,380,6,"var(--brass)",1)}${C(966,380,6,"var(--brass)",1)}</g>`:"";
+  const finaleCast=final?`${person(1090,800,.5,-1,[[[1068,600],[1060,590,0,50],[1076,594,50,100]]],{cls:"",shadow:false,props:["lanyard"],dur:1.4})}
+    <style>@keyframes qFlag{0%,100%{transform:skewY(0)}50%{transform:skewY(-8deg)}}</style>
+    ${[[1150,700,"#D97B4A","2027"],[1205,672,"#E0B33C","2030"],[1265,708,"#4A7FC1","SOON"],[1320,664,"#5FA38E","NEVER"],[1375,700,"#8C6A48","2040"],[1410,660,"#7E6BB3","ALREADY"]].map(([x,y,c,t],i)=>`${L(x,y,x,y-80,"#D9C9A3",4)}<g class="edge loop" style="transform-origin:${x}px ${y-80}px;animation:qFlag ${1.6+(i%3)*.3}s ${-i*.3}s steps(19) infinite"><polygon points="${x},${y-80} ${x+70},${y-70} ${x},${y-58}" fill="${c}"/>${T(x+26,y-65,12,"lbl","#1F1A14",t)}</g>`).join("")}
+    <path d="M560 640 C500 700 420 720 360 780" fill="none" stroke="#1F1A14" stroke-width="5"/>
+    <g transform="translate(600 610) scale(3.6)">${robotSvg().replace('id="stRobot" transform="translate(-60 180)"','')}</g>
+    ${R(250,800,120,60,"#6D5E48",4)}<rect x="270" y="760" width="56" height="40" fill="#2C3A44"/><rect x="274" y="764" width="48" height="32" fill="#7FD3C5" opacity=".9"/>
+    ${person(360,830,.5,-1,[[[306,730]],[[314,738]]],{cls:"",shadow:false,props:[],garment:"#5E5A78",extra:`<rect x="294" y="724" width="30" height="16" rx="6" fill="#2C2116"/>`})}`:"";
+  return `<style>@keyframes gtSun{0%,90%{transform:translate(0,0)}92%{transform:translate(0,-4px)}95%{transform:translate(0,2px)}100%{transform:translate(0,0)}}
+     @keyframes gtSwing{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}@keyframes gtSway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}}
+     @keyframes gtSteam{0%{transform:translate(0,0) scale(.6);opacity:.9}100%{transform:translate(12px,-46px) scale(1.6);opacity:0}}
+     @keyframes gtPeek{0%,42%{transform:translateX(0)}44%,66%{transform:translateX(46px)}68%,100%{transform:translateX(0)}}
+     @keyframes camPan{0%,100%{transform:rotate(-14deg)}50%{transform:rotate(22deg)}}</style>
+    ${sky}${hills}${lawn}${peek}${miniFacades(final)}${[365,685,945,1235].map(tree).join("")}${brickRoad(final)}${finaleCast}${dusk}${finaleSign}
+    ${final?`<rect x="1268" y="380" width="200" height="34" fill="#FFD27A" opacity=".55"/><polygon points="1356,560 1394,560 1470,620 1280,620" fill="rgba(255,210,122,.15)"/>`:""}
+    ${post(40)}${post(1500)}${sheet}${header}`;
+}
+
+/* the bird on a wire: waits, flies in from the left, lands on the bench at a random spot, flies back off */
+function mountClassBird(){
+  const bird=document.getElementById("clBird"), wire=document.getElementById("clWire"); if(!bird) return;
+  const wings=[...bird.querySelectorAll("[data-w]")], pose=p=>wings.forEach(w=>w.style.display=w.dataset.w===p?"":"none");
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  let st="wait",n=Math.round(rnd(12,36)),x=-30,y=140,tx=0,ty=162,sx=0,sy=0,steps=0,k=0,last=-1,peck=0;const t0=performance.now();
+  const draw=flip=>{bird.setAttribute("transform",`translate(${x.toFixed(1)} ${(y+peck).toFixed(1)}) scale(${flip?-1:1} 1)`);wire.setAttribute("x1",x.toFixed(1));wire.setAttribute("y1",(y-5).toFixed(1));wire.setAttribute("x2",(x+6).toFixed(1));};
+  const step=()=>{ if(stage.classList.contains("frozen")) return; k++;
+    if(st==="wait"){x=-30;draw(false);if(--n<=0){st="in";sx=-20;sy=rnd(110,140);tx=rnd(32,70);steps=Math.round(rnd(22,34));n=0;}return;}
+    if(st==="in"){n++;const t=n/steps;x=sx+(tx-sx)*t;y=sy+(ty-sy)*t-Math.sin(t*Math.PI)*14;pose(k%2?"up":"dn");draw(false);if(n>=steps){st="sit";n=Math.round(rnd(18,48));x=tx;y=ty;pose("fold");}return;}
+    if(st==="sit"){peck=Math.random()<.15?1.5:0;draw(Math.random()<.04);if(--n<=0){peck=0;st="out";sx=x;sy=y;steps=Math.round(rnd(14,22));n=0;}return;}
+    if(st==="out"){n++;const t=n/steps;x=sx+(-40-sx)*t;y=sy-t*rnd(30,44);pose(k%2?"up":"dn");draw(true);if(n>=steps){st="wait";n=Math.round(rnd(24,72));}}};
+  const tick=now=>{const F=Math.floor((now-t0)/1000*12);if(F!==last){last=F;step();} if(bird.isConnected) requestAnimationFrame(tick);};
+  pose("up"); requestAnimationFrame(tick);
+}
+
+/* ---------- beats ---------- */
+const beats = [];
+beats.push({label:"The gate · opening", render:()=>`<div class="layer cw"><div class="layer">${svg(gateStage(false))}</div></div>`, cls:"cl-a", sound:"bell"});
+beats.push({label:"The gate · course registration", render:()=>`<div class="layer gtw">${svg(gateStage(false))}</div><div class="layer gt-reg">${svg(regScene(-1))}</div>`, cls:"gt-push", sound:"tick"});
+["AI 101","AI 201","AI 210","AI 220","AI 301","AI 350","AI 999","chatbots vs AGI"].forEach((c,i)=>beats.push({label:`Registration · ${c}`, render:()=>`<div class="layer">${svg(regScene(i))}</div>`, cls:"", sound:"tick"}));
+STOPS.forEach(s=>{
+  const st=()=>stopStage(s), stC=()=>stopStage(s,true), kind=s.obj==="treadmill"||s.obj==="anamorph"?"toy":"machine";
+  beats.push({label:`${s.name} · the maybe`, render:s.id==="classroom"?()=>st()+(window.__fromPrev?`<div class="layer gt-tear">${svg(regScene(7))}</div>`:""):st, cls:`cl-a st-${s.id}`, sound:"steps"});
+  beats.push({label:`${s.name} · the ${kind}`, render:st, cls:`cl-b frozen st-${s.id}`, sound:"steps2"});
+  beats.push({label:`${s.name} · ${s.fall==="hold"?"the flat holds":"the fall"}`, render:stC, cls:`cl-c after frozen st-${s.id} fall-${s.fall}`, sound:s.sound});
+});
+beats.push({label:"The gate at dusk · finale", render:()=>`<div class="layer cw"><div class="layer">${svg(gateStage(true))}</div></div>`, cls:"cl-a", sound:"finale"});
+
+// ===== Backlot foley: synthesized stagecraft sounds (pure Web Audio, no samples) =====
+// Drop-in: defines ac, muted, audio(), SOUND{bell,tick,steps,steps2,keaton,peel,fly,fold,hold,finale}.
+let ac=null, muted=false;
+const MASTER=0.7;   // overall level into the compressor (tweak first)
+const VERB=0.12;    // default reverb send per sound (0 = dry, ~0.4 = distant)
+const SPEECH_DIP=-5; // dB cut around 2.6 kHz on the whole bus, to leave room for the voice
+let BUS=null, ROOM=null; const NZ={};
+
+function audio(){
+  if(!ac){ try{ ac=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; } buildEngine(); }
+  if(ac.state==="suspended") ac.resume();
+  return ac;
+}
+
+function buildEngine(){
+  const sr=ac.sampleRate, R=Math.random;
+  // cached 2 s noise buffers, normalised
+  const mk=gen=>{ const b=ac.createBuffer(1,sr*2,sr), d=b.getChannelData(0); let m=0;
+    for(let i=0;i<d.length;i++){ d[i]=gen(); m=Math.max(m,Math.abs(d[i])); }
+    for(let i=0;i<d.length;i++) d[i]*=.9/m; return b; };
+  NZ.white=mk(()=>R()*2-1);
+  let b0=0,b1=0,b2=0; NZ.pink=mk(()=>{ const w=R()*2-1; b0=.99765*b0+w*.099; b1=.963*b1+w*.2965; b2=.57*b2+w*1.0527; return b0+b1+b2+w*.1848; });
+  let br=0; NZ.brown=mk(()=>(br=(br+.02*(R()*2-1))/1.02));
+  // master bus: gain -> HPF (laptops/earbuds/Zoom reproduce little below ~100 Hz) -> speech-pocket dip -> gentle compressor
+  BUS=ac.createGain(); BUS.gain.value=MASTER;
+  const hp=filt("highpass",90,.7), dip=filt("peaking",2600,.7); dip.gain.value=SPEECH_DIP;
+  const comp=ac.createDynamicsCompressor();
+  comp.threshold.value=-18; comp.knee.value=12; comp.ratio.value=4; comp.attack.value=.004; comp.release.value=.25;
+  BUS.connect(hp).connect(dip).connect(comp).connect(ac.destination);
+  // room: small wooden stage, ~0.9 s, tail darkens over time, a few early reflections
+  const len=sr*.9|0, ir=ac.createBuffer(2,len,sr);
+  for(let c=0;c<2;c++){ const d=ir.getChannelData(c); let y=0;
+    for(let i=0;i<len;i++){ const x=i/len; y+=((R()*2-1)-y)*(.5-.45*x); d[i]=i<sr*.006?0:y*Math.exp(-i/(sr*.13)); }
+    for(let k=0;k<6;k++) d[(sr*(.006+R()*.03))|0]+=(R()-.5)*.6; }
+  ROOM=ac.createConvolver(); ROOM.buffer=ir; ROOM.connect(BUS);
+}
+
+// ---------- small helpers ----------
+const rnd=(a,b)=>a+Math.random()*(b-a);
+function filt(type,f,q=.7){ const b=ac.createBiquadFilter(); b.type=type; b.frequency.value=f; b.Q.value=q; return b; }
+function nsrc(type){ const s=ac.createBufferSource(); s.buffer=NZ[type]; s.loop=true; return s; }
+// route to bus (panned) + reverb send; returns nodes for cleanup
+function out(node,pan=0,wet=VERB){ const p=ac.createStereoPanner(), w=ac.createGain(); p.pan.value=pan; w.gain.value=wet;
+  node.connect(p).connect(BUS); p.connect(w).connect(ROOM); return [p,w]; }
+const cleanup=(src,nodes)=>{ src.onended=()=>nodes.forEach(n=>n.disconnect()); };
+
+// filtered noise burst: linear attack a, exponential decay; optional filter sweep to f2
+function burst(t,dur,{type="pink",ft="bandpass",f=800,f2,q=.8,g=.2,a=.004,pan=0,wet=VERB}={}){
+  const s=nsrc(type), b=filt(ft,f,q), v=ac.createGain(); v.gain.value=0;
+  v.gain.setValueAtTime(0,t); v.gain.linearRampToValueAtTime(g,t+a); v.gain.setTargetAtTime(0,t+a,Math.max(.004,(dur-a)/3));
+  if(f2){ b.frequency.setValueAtTime(f,t); b.frequency.exponentialRampToValueAtTime(f2,t+dur); }
+  s.connect(b).connect(v); cleanup(s,[s,b,v,...out(v,pan,wet)]);
+  s.start(t,rnd(0,1.9)); s.stop(t+dur*1.6+.05);
+}
+// noise whose gain follows a 1 kHz-resolution curve (grains, flutter, rasps)
+function shaped(t,c,{type="white",ft="bandpass",f=3000,q=.8,pan=0,wet=VERB}={}){
+  const dur=c.length/1000, s=nsrc(type), b=filt(ft,f,q), v=ac.createGain(); v.gain.value=0;
+  c[0]=c[c.length-1]=0; v.gain.setValueCurveAtTime(c,t,dur);
+  s.connect(b).connect(v); cleanup(s,[s,b,v,...out(v,pan,wet)]);
+  s.start(t,rnd(0,1.9)); s.stop(t+dur+.05);
+}
+function curve(dur,fn){ const N=Math.ceil(dur*1000), c=new Float32Array(N); for(let i=0;i<N;i++) c[i]=fn(i/(N-1)); return c; }
+// random grain train: dens grains/s, each decaying over dk ms, level g, density/level shaped by shape(x)
+function grains(dur,dens,dk,g,shape=()=>1){ const N=Math.ceil(dur*1000), c=new Float32Array(N);
+  for(let k=0;k<dens*dur;k++){ const p=Math.random()*N|0, a=g*Math.random()**1.5*shape(p/N);
+    for(let j=0;j<dk*5&&p+j<N;j++) c[p+j]+=a*Math.exp(-j/dk); }
+  for(let i=0;i<N;i++) c[i]=Math.min(c[i],g*1.5); return c; }
+
+// modal knock: a few inharmonic decaying sines (higher modes die faster) + contact tick
+const WOOD=[1,2.32,4.25,6.63], BRASS=[1,2.76,5.4,8.93];
+function knock(t,f,g,{decay=.06,modes=WOOD,pan=0,wet=VERB,tick=.3}={}){
+  const m=ac.createGain(), nodes=[m,...out(m,pan,wet)];
+  modes.forEach((r,i)=>{ const s=ac.createOscillator(), v=ac.createGain(), d=decay/(1+i*.8);
+    s.frequency.value=f*r*rnd(.98,1.02); v.gain.value=0;
+    v.gain.setValueAtTime(0,t); v.gain.linearRampToValueAtTime(g/(1+i*1.3),t+.002); v.gain.setTargetAtTime(0,t+.002,d);
+    s.connect(v).connect(m); nodes.push(s,v); if(i===0) cleanup(s,nodes);
+    s.start(t); s.stop(t+.002+d*9); });
+  if(tick) burst(t,.012,{type:"white",f:Math.min(f*6,5000),q:1.2,g:g*tick,pan,wet});
+}
+// creak: stick-slip pulse train (sawtooth) through two wood resonances; rate & amplitude random-walk, with gaps
+function creak(t,dur,rate,fc,g,{pan=0,wet=VERB,rise=0,shape=x=>Math.sin(Math.PI*x)}={}){
+  const N=Math.max(8,Math.ceil(dur*200)), fr=new Float32Array(N), am=new Float32Array(N); let r=1,a=.7;
+  for(let i=0;i<N;i++){ const x=i/(N-1);
+    r=Math.min(1.4,Math.max(.7,r+rnd(-.08,.08))); a=Math.min(1,Math.max(0,a+rnd(-.25,.25)));
+    fr[i]=rate*r*(1+rise*x); am[i]=a>.2?g*a*shape(x):0; }
+  am[0]=am[N-1]=0;
+  const o=ac.createOscillator(), b1=filt("bandpass",fc,6), b2=filt("bandpass",fc*2.1,8), h=ac.createGain(), v=ac.createGain();
+  o.type="sawtooth"; o.frequency.value=fr[0]; o.frequency.setValueCurveAtTime(fr,t,dur); h.gain.value=.5; v.gain.value=0;
+  v.gain.setValueCurveAtTime(am,t,dur);
+  o.connect(b1).connect(v); o.connect(b2).connect(h).connect(v); cleanup(o,[o,b1,b2,h,v,...out(v,pan,wet)]);
+  o.start(t); o.stop(t+dur+.02);
+}
+// handbell: partials [ratio, level, decay s], each a slightly detuned pair (slow warm beating), soft mallet
+const HB=[[1,1,2.8],[2,.12,1.5],[3,.3,1.1],[4.2,.07,.5],[5.4,.04,.3]];
+function bell(t,f,g,{pan=0,wet=.35,tone=2400}={}){
+  const lp=filt("lowpass",tone,.5), nodes=[lp,...out(lp,pan,wet)];
+  HB.forEach(([r,l,d],i)=>[-1,1].forEach(sg=>{ const s=ac.createOscillator(), v=ac.createGain();
+    s.frequency.value=f*r+sg*rnd(.2,.7); v.gain.value=0;
+    v.gain.setValueAtTime(0,t); v.gain.linearRampToValueAtTime(g*l/2,t+.005); v.gain.setTargetAtTime(0,t+.005,d/3);
+    s.connect(v).connect(lp); nodes.push(s,v); if(i===0&&sg>0) cleanup(s,nodes);
+    s.start(t); s.stop(t+d*2.7+.05); }));
+  burst(t,.01,{type:"white",f:1800,q:1.5,g:g*.12,pan,wet});
+}
+// STEP_WET = room on each step; STEP_ECHO = slapback off the backlot walls (delay s, level)
+const STEP_WET=.06, STEP_ECHO=[], STEP_LEVEL=6;
+// footstep, old-time-radio style: a foley artist's hard shoes on a hollow wooden walking board.
+// A heel "tok" (noise through a resonant wooden band, so it has a hollow color without a cartoon pitch),
+// then a lighter toe "tik". Three takes to choose from:
+//   A board  - hollow, mid wood, the classic walking board
+//   B crisp  - leather heel on a hard floor, brighter and snappier
+//   C heavy  - a slower, weightier shoe, a little scuff on the toe
+const STEP_STYLES={
+  A:{heel:[620,4,.034,.5], click:[1900,.04], toe:[1050,3.5,.02,.2], gap:[.085,.1], scuff:0},
+  B:{heel:[880,3,.024,.42], click:[2400,.09], toe:[1350,3,.016,.18], gap:[.065,.08], scuff:0},
+  C:{heel:[480,5,.045,.95], click:[1600,.05], toe:[820,4,.026,.32], gap:[.1,.125], scuff:.04},
+};
+let STEP_STYLE="C";
+function step(t,g=1,pan=0,wet=STEP_WET,echo=true){ const S=STEP_STYLES[STEP_STYLE], v=g*rnd(.85,1.1)*STEP_LEVEL, j=rnd(.94,1.06);
+  if(echo) STEP_ECHO.forEach(([dt,e])=>step(t+dt,g*e,-pan*.6,wet,false));
+  const [hf,hq,hd,hg]=S.heel, [cf,cg]=S.click, [tf,tq,td,tg]=S.toe;
+  burst(t,hd,{type:"pink",f:hf*j,q:hq,g:hg*v,a:.0008,pan,wet});            // heel tok
+  burst(t,.008,{type:"white",f:cf*j,q:1,g:cg*v,a:.0005,pan,wet});          // contact click
+  const toe=t+rnd(...S.gap);
+  burst(toe,td,{type:"pink",f:tf*j,q:tq,g:tg*v,a:.0008,pan,wet});          // toe tik
+  if(S.scuff) burst(toe+.005,.06,{type:"white",f:2600,f2:1700,q:.6,g:S.scuff*v,a:.008,pan,wet});
+}
+// big flat landing on the deck: low modal body + brown-noise thud + mid "whap" of trapped air
+function slam(t,g=1,pan=0){
+  knock(t,rnd(105,115),.5*g,{decay:.14,modes:[1,1.58,2.3,3.4],pan,wet:.22,tick:.1});
+  knock(t,rnd(180,200),.28*g,{decay:.08,pan,wet:.22,tick:.1});
+  burst(t,.3,{type:"brown",f:280,q:.5,g:1.1*g,pan,wet:.22});
+  burst(t,.09,{f:750,q:.6,g:.3*g,pan,wet:.22});
+}
+
+// ---------- cues (t = start time) ----------
+const SOUND={
+  // distant handbell at the gate: rising fifth, open, unresolved
+  bell:t=>{ bell(t,392,.22,{pan:-.1,wet:.45,tone:2200}); bell(t+.55,587.3,.15,{pan:.1,wet:.45,tone:2200}); },
+  // pencil looping a row: 2-3 graphite strokes, different every time, plus the lead touching down
+  tick:t=>{ const k=2+(Math.random()*2|0), d=rnd(.18,.32), hi=rnd(4200,5600);
+    knock(t,rnd(800,1100),.08,{decay:.012,tick:.4,wet:.03});
+    shaped(t,grains(d,rnd(900,1500),2.5,.35,x=>Math.sin(Math.PI*x*k)**2*(1-.4*x)),{f:hi,q:.7,pan:rnd(-.15,.15),wet:.03}); },
+  // walk-in: four steps, same cadence as before, jittered
+  steps:t=>{ [0,.48,.96,1.44].forEach((s,i)=>step(t+s+rnd(-.025,.025),i%2?.85:1,-.15+i*.1)); },
+  // push-in: steps, brass thumb-latch, then the two doors creak open (~1.45 s)
+  steps2:t=>{ [0,.45,.9].forEach((s,i)=>step(t+s+rnd(-.025,.025),(i%2?.85:1)*(1-i*.08),0));
+    knock(t+1.3,rnd(1150,1300),.06,{decay:.025,modes:BRASS,tick:.5,wet:.1});
+    knock(t+1.37,rnd(850,950),.04,{decay:.02,modes:BRASS,wet:.1});
+    creak(t+1.45,.8,rnd(14,18),rnd(480,540),.5,{pan:-.4,rise:.4});
+    creak(t+1.5,.75,rnd(17,21),rnd(580,640),.42,{pan:.4,rise:.3});
+    burst(t+1.45,.7,{f:350,f2:600,q:.7,g:.06,a:.4,wet:.2});
+    knock(t+2.2,rnd(130,150),.1,{decay:.05,wet:.2}); },
+  // facade tips forward: brace gives (0.6), strain creak accelerates, air builds, flat slams (2.0), small bounce
+  keaton:t=>{ knock(t+.6,rnd(360,400),.14,{decay:.03,tick:.4});
+    creak(t+.62,1.15,rnd(7,9),rnd(420,480),.55,{rise:2.5,shape:x=>Math.sin(Math.PI*Math.min(1,x*1.15))});
+    burst(t+1.35,.65,{f:180,f2:520,q:.7,g:.28,a:.6,wet:.15});
+    slam(t+2.0,.85);
+    knock(t+2.13,rnd(210,240),.12,{decay:.04}); knock(t+2.21,rnd(250,280),.05,{decay:.03});
+    shaped(t+2.05,grains(.6,60,4,.035,x=>1-x),{f:5000,q:.5,wet:.2}); },
+  // card strips peel (0.5-1.05 staggered): tear, flutter down (~1.3 s), soft papery slap
+  peel:t=>{ const n=6; for(let i=0;i<n;i++){ const s=t+.5+i*.11+rnd(-.02,.02), pan=-.5+i*.2, d=rnd(.15,.25), rate=rnd(8,13), ph=rnd(0,6);
+      shaped(s,grains(d,rnd(400,600),3,.25,x=>1-.5*x),{f:rnd(2000,2800),q:.9,pan,wet:.08});
+      shaped(s+.15,curve(1.1,x=>.14*Math.sin(Math.PI*x)*(.25+.75*Math.abs(Math.sin(ph+x*1.1*rate*Math.PI)))),{type:"pink",f:rnd(650,950),q:1.2,pan,wet:.12});
+      burst(s+1.3,.06,{f:rnd(400,520),q:.7,g:.3,pan});
+      knock(s+1.3,rnd(170,230),.12,{decay:.025,pan,tick:.1}); } },
+  // dorm flat flies out (0.5-1.8): rope lock clack, rope rasp + pulley squeal, whoosh fading up, batten hits stop
+  fly:t=>{ knock(t+.45,rnd(650,750),.08,{decay:.02,tick:.4});
+    shaped(t+.5,grains(1.25,1200,4,.25,x=>Math.sin(Math.PI*x)**.5*(.3+.7*x)),{type:"pink",f:800,q:1.3,wet:.1});
+    creak(t+.5,1.25,20,650,.6,{rise:2,wet:.2});
+    burst(t+.55,1.3,{f:250,f2:650,q:.9,g:.4,a:.7,wet:.2});
+    knock(t+1.85,rnd(160,180),.12,{decay:.06,wet:.5}); burst(t+1.85,.1,{type:"brown",f:260,q:.6,g:.2,wet:.5}); },
+  // library opens like a book (0.5-2.4): split crack, two hinge creaks L/R, page-turn air, two soft thumps
+  fold:t=>{ knock(t+.5,rnd(550,650),.06,{decay:.02}); shaped(t+.5,grains(.12,500,3,.08),{f:2400,q:.8});
+    creak(t+.55,1.7,rnd(12,15),rnd(450,500),.45,{pan:-.5,shape:x=>Math.sin(Math.PI*x)*(1-.4*x)});
+    creak(t+.6,1.65,rnd(15,18),rnd(540,600),.4,{pan:.5,shape:x=>Math.sin(Math.PI*x)*(1-.4*x)});
+    burst(t+1.3,1.0,{f:300,f2:800,q:.8,g:.12,a:.7,wet:.2});
+    shaped(t+1.6,grains(.7,150,3,.04,x=>Math.sin(Math.PI*x)),{ft:"highpass",f:5000,q:.5});
+    [[2.38,-.5],[2.44,.5]].forEach(([s,pan])=>{ knock(t+s,rnd(150,170),.25,{decay:.07,pan,tick:.1});
+      burst(t+s,.1,{type:"brown",f:260,q:.6,g:.45,pan}); }); },
+  // bookstore flat wobbles but holds (0.2-2.6): two straining braces + rocking knocks; then steps around back
+  hold:t=>{ const w=x=>Math.abs(Math.sin(Math.PI*2*1.8*x*2.4/2))*(1-.6*x)*Math.min(1,x*8);
+    creak(t+.2,2.4,rnd(18,24),rnd(480,560),.5,{pan:.15,shape:w});
+    creak(t+.25,2.3,rnd(9,12),rnd(300,340),.4,{pan:-.2,shape:w});
+    for(let k=0;k<5;k++) knock(t+.37+k*.55+rnd(-.02,.02),rnd(150,175),.14*(1-k*.18),{decay:.04});
+    [2.95,3.42,3.9].forEach((s,i)=>step(t+s+rnd(-.025,.025),.75,-.3+i*.25,.1)); },
+  // dusk at the gate: same handbell, descending D-B-G, resolving home (G held, soft low G underneath)
+  finale:t=>{ bell(t,587.3,.13,{pan:.1,wet:.45,tone:2200}); bell(t+.5,493.9,.13,{wet:.45,tone:2200});
+    bell(t+1.05,392,.22,{pan:-.1,wet:.45,tone:2200}); bell(t+1.07,196,.1,{wet:.5,tone:1600}); },
+};
+// wrap each cue: lazily create the context, respect `muted`, schedule a hair ahead of now
+for(const k of Object.keys(SOUND)){ const fn=SOUND[k];
+  SOUND[k]=()=>{ const a=audio(); if(!a||muted||!BUS) return; fn(a.currentTime+.02); }; }
+
+/* ---------- Anatomy figure: the drinking bird v2, no self-drip; only the ladle returns output to the glass (built in Claude Code with the Anatomy skill), mounted live in the library doorway ---------- */
+function mountBird(svg, onLadle){
+  const NS = 'http://www.w3.org/2000/svg';
+  
+  const OFF = [3, 4];          // paper-thickness underlayer offset, screen space
+  const FPS = 12, CYCLE = 30;  // 2.5 s per dip
+  const PIVOT = [445, 330], LPIVOT = [131, 200], WATER = 372;
+
+  const C = {
+    kraft: '#c9a273', kraftDk: '#b28a5b', kraftEdge: '#6f4f2c', flute: '#a47d4e', speck: '#9e7749',
+    cream: '#f2e7c9', creamEdge: '#a8946b',
+    brass: '#c99a3b', brassEdge: '#6e5018', brassHi: '#e6c46e', brassDk: '#8f6a22',
+    glass: '#cfdcd8', glassBack: '#eaf1ee', glassEdge: '#7f9892',
+    red: '#7a5a39', felt: '#3e5552', feltEdge: '#1f2c2a', hatBand: '#3a6fc4',
+    feather: '#8f6a3f', ladle: '#9a958c', ladleRim: '#b5b0a6', ladleEdge: '#4f4b45',
+    mud: '#7a5a39', mudDk: '#5b4127', ink: '#2c2116',
+  };
+
+  // Glass bands, top to bottom. Thinnest collapses first.
+  const BANDS = [
+    { name: 'gold',   h: 28, col: '#e0b13a' },
+    { name: 'teal',   h: 58, col: '#2a9d8f' },
+    { name: 'violet', h: 26, col: '#7b5cb8' },
+    { name: 'blue',   h: 70, col: '#3a6fc4' },
+    { name: 'orange', h: 38, col: '#e0782f' },
+  ];
+  const COLLAPSE = BANDS.map((b, i) => i).sort((a, b) => BANDS[a].h - BANDS[b].h);
+
+  // ---------- tiny drawing helpers ----------
+  const el = (tag, attrs, parent) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  };
+  const f2 = v => +v.toFixed(2);
+  const rect = (x, y, w, h, r = 0) => r
+    ? `M${x + r} ${y}H${x + w - r}A${r} ${r} 0 0 1 ${x + w} ${y + r}V${y + h - r}A${r} ${r} 0 0 1 ${x + w - r} ${y + h}H${x + r}A${r} ${r} 0 0 1 ${x} ${y + h - r}V${y + r}A${r} ${r} 0 0 1 ${x + r} ${y}Z`
+    : `M${x} ${y}H${x + w}V${y + h}H${x}Z`;
+  const disc = (cx, cy, r, ry = r) =>
+    `M${cx - r} ${cy}A${r} ${ry} 0 1 0 ${cx + r} ${cy}A${r} ${ry} 0 1 0 ${cx - r} ${cy}Z`;
+  const poly = pts => 'M' + pts.map(p => `${f2(p[0])} ${f2(p[1])}`).join('L') + 'Z';
+
+  // A strip of card from a to b, width w, round end at a.
+  const strip = (a, b, w) => {
+    const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy);
+    const ux = dx / L, uy = dy / L, nx = -uy * w / 2, ny = ux * w / 2;
+    const pts = [[b[0] + nx, b[1] + ny], [b[0] - nx, b[1] - ny]];
+    for (let i = 0; i <= 10; i++) {
+      const t = Math.PI * i / 10, c = Math.cos(t), s = Math.sin(t);
+      pts.push([a[0] - nx * c - ux * w / 2 * s, a[1] - ny * c - uy * w / 2 * s]);
+    }
+    return poly(pts);
+  };
+
+  // A band of card along a polyline, half-width h, mitred at the bends.
+  const band = (pts, h) => {
+    const n = pts.slice(1).map((b, i) => {
+      const a = pts[i], L = Math.hypot(b[0] - a[0], b[1] - a[1]);
+      return [-(b[1] - a[1]) / L, (b[0] - a[0]) / L];
+    });
+    const off = pts.map((p, i) => {
+      const a = n[Math.max(0, i - 1)], b = n[Math.min(n.length - 1, i)];
+      const m = [a[0] + b[0], a[1] + b[1]], k = (a[0] * m[0] + a[1] * m[1]);
+      return [m[0] / k * h, m[1] / k * h];
+    });
+    return poly([...pts.map((p, i) => [p[0] + off[i][0], p[1] + off[i][1]]),
+                 ...pts.map((p, i) => [p[0] - off[i][0], p[1] - off[i][1]]).reverse()]);
+  };
+
+  // A rotating group of card parts; underlayers stay offset in screen space.
+  const group = (parent, origin) => ({ g: el('g', {}, parent), origin, uls: [] });
+  const setAngle = (grp, deg) => {
+    const r = deg * Math.PI / 180, c = Math.cos(r), s = Math.sin(r);
+    grp.g.setAttribute('transform', `translate(${grp.origin[0]} ${grp.origin[1]}) rotate(${deg})`);
+    const ox = f2(OFF[0] * c + OFF[1] * s), oy = f2(-OFF[0] * s + OFF[1] * c);
+    for (const u of grp.uls) u.setAttribute('transform', `translate(${ox} ${oy})`);
+  };
+  const toScreen = (grp, deg, x, y) => {
+    const r = deg * Math.PI / 180, c = Math.cos(r), s = Math.sin(r);
+    return [grp.origin[0] + x * c - y * s, grp.origin[1] + x * s + y * c];
+  };
+
+  // One piece of card: dark offset underlayer, then the face.
+  const part = (parent, d, fill, edge, grp) => {
+    const host = grp ? grp.g : parent;
+    const u = el('path', { d, fill: edge }, host);
+    if (grp) grp.uls.push(u); else u.setAttribute('transform', `translate(${OFF[0]} ${OFF[1]})`);
+    const p = el('path', { d, fill }, host);
+    return { u, p, set(d2) { u.setAttribute('d', d2); p.setAttribute('d', d2); }, show(v) { u.style.display = p.style.display = v ? '' : 'none'; } };
+  };
+
+  // Brass paper fastener: head, rim, flat glint.
+  const fastener = (parent, x, y, r, grp) => {
+    const host = grp ? grp.g : parent;
+    part(parent, disc(x, y, r), C.brass, C.brassEdge, grp);
+    el('path', { d: disc(x + r * 0.18, y + r * 0.18, r * 0.62), fill: C.brassDk }, host);
+    el('path', { d: disc(x, y, r * 0.62), fill: C.brass }, host);
+    el('path', { d: disc(x - r * 0.3, y - r * 0.3, r * 0.3), fill: C.brassHi }, host);
+  };
+
+  // Deterministic kraft speckle inside a box.
+  let seed = 7;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const speckle = (parent, x, y, w, h, n) => {
+    let d = '';
+    for (let i = 0; i < n; i++) d += disc(f2(x + rnd() * w), f2(y + rnd() * h), f2(0.5 + rnd() * 0.7));
+    el('path', { d, fill: C.speck }, parent);
+  };
+
+  const mix = (a, b, t) => {
+    const pa = [1, 3, 5].map(i => parseInt(a.slice(i, i + 2), 16));
+    const pb = [1, 3, 5].map(i => parseInt(b.slice(i, i + 2), 16));
+    return '#' + pa.map((v, i) => Math.round(v + (pb[i] - v) * t).toString(16).padStart(2, '0')).join('');
+  };
+
+  const root = el('g', { transform: 'translate(0 -32)' }, svg);
+
+  // ---------- base ----------
+  part(root, rect(84, 634, 40, 12, 2), C.kraftDk, C.kraftEdge);
+  part(root, rect(536, 634, 40, 12, 2), C.kraftDk, C.kraftEdge);
+  part(root, rect(56, 612, 568, 22, 2), C.kraft, C.kraftEdge);
+  el('path', { d: rect(58, 616, 564, 14), fill: C.flute }, root);
+  {
+    let d = 'M58 623';
+    for (let x = 58, up = true; x < 622; x += 6, up = !up) d += `Q${x + 3} ${up ? 615.5 : 630.5} ${Math.min(x + 6, 622)} 623`;
+    el('path', { d, fill: 'none', stroke: C.kraft, 'stroke-width': 1.6 }, root);
+  }
+
+  // ---------- ladle post ----------
+  part(root, poly([[120, 612], [120, 568], [94, 612]]), C.kraftDk, C.kraftEdge);
+  part(root, poly([[142, 612], [142, 562], [174, 612]]), C.kraftDk, C.kraftEdge);
+  part(root, strip([131, 196], [131, 612], 22), C.kraft, C.kraftEdge);
+  el('path', { d: 'M126 214V612M136 214V612', stroke: C.flute, 'stroke-width': 0.8, fill: 'none' }, root);
+  speckle(root, 122, 230, 18, 370, 22);
+  fastener(root, 108, 600, 3.4);
+  fastener(root, 152, 600, 3.4);
+
+  // ---------- catch tray: shelf, short stand, back panel ----------
+  part(root, poly([[142, 360], [142, 402], [182, 360]]), C.kraftDk, C.kraftEdge);
+  part(root, rect(138, 352, 72, 8, 1.5), C.kraft, C.kraftEdge);
+  part(root, rect(170, 334, 22, 18, 1), C.kraftDk, C.kraftEdge);
+  fastener(root, 147, 356, 2.6);
+  fastener(root, 202, 356, 2.6);
+  fastener(root, 181, 343, 2.6);
+  part(root, rect(150, 290, 62, 44, 2), C.kraftDk, C.kraftEdge);
+
+  // ---------- far stand leg + crossbar ----------
+  part(root, rect(382, 604, 32, 8, 1.5), C.kraftDk, C.kraftEdge);
+  part(root, strip(PIVOT, [398, 612], 16), C.kraftDk, C.kraftEdge);
+  fastener(root, 398, 608, 3.2);
+  part(root, rect(398, 559, 96, 11, 2), C.kraft, C.kraftEdge);
+  speckle(root, 412, 561, 66, 7, 8);
+
+  // ---------- drip gutter (back layer): spout -> tray ----------
+  const GUT = [[426, 238], [247, 244], [206, 296]];
+  part(root, strip([424, 240], [430, 420], 6), C.kraftDk, C.kraftEdge);
+  part(root, band(GUT, 4.5), C.kraft, C.kraftEdge);
+  el('path', { d: band(GUT.map(([x, y]) => [x, y - 2]), 1.2), fill: C.flute }, root);
+  fastener(root, 424, 240, 2.8);
+  const GUT_LEN = [];
+  GUT.slice(1).forEach((b, i) => GUT_LEN.push(Math.hypot(b[0] - GUT[i][0], b[1] - GUT[i][1])));
+  const gutterAt = s => {
+    for (let i = 0; i < GUT_LEN.length; i++) {
+      if (s <= GUT_LEN[i] || i === GUT_LEN.length - 1) {
+        const t = Math.min(1, s / GUT_LEN[i]), a = GUT[i], b = GUT[i + 1];
+        return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+      }
+      s -= GUT_LEN[i];
+    }
+  };
+  const blobs = [0, 1, 2].map(() => part(root, '', C.mud, C.mudDk));
+
+  // ---------- glass back + coaster ----------
+  part(root, rect(214, 608, 156, 4, 1), C.cream, C.creamEdge);
+  part(root, rect(224, 352, 136, 256), C.glassBack, C.glassEdge);
+
+  // ---------- the bird ----------
+  const bird = group(root, PIVOT);
+  part(null, poly([[22, 124], [42, 96], [56, 70], [68, 44], [66, 62], [76, 60], [62, 84], [72, 86], [54, 106], [62, 110], [36, 132]]), C.feather, C.kraftEdge, bird);
+  part(null, rect(-5, -112, 10, 236, 5), C.glass, C.glassEdge, bird);
+  const tubeFluid = el('path', { fill: C.red }, bird.g);
+  part(null, disc(0, 140, 37), C.glass, C.glassEdge, bird);
+  const bodyFluid = el('path', { fill: C.red }, bird.g);
+  el('path', { d: rect(-27, 120, 6, 18, 3), fill: '#ffffff', 'fill-opacity': 0.6 }, bird.g);
+  part(null, rect(-9, -7, 18, 14, 2), C.brass, C.brassEdge, bird);
+  part(null, rect(-8, -104, 16, 5, 1.5), C.cream, C.creamEdge, bird);
+  part(null, disc(0, -125, 24), C.felt, C.feltEdge, bird);
+  part(null, poly([[-20, -112], [-64, -106], [-70, -100], [-70, -93], [-65, -93], [-64, -100], [-20, -106]]), C.cream, C.creamEdge, bird);
+  part(null, poly([[-16, -136], [-82, -122], [-16, -114]]), C.cream, C.creamEdge, bird);
+  el('path', { d: poly([[-18, -125.6], [-76, -122.2], [-18, -124.4]]), fill: C.creamEdge }, bird.g);
+  part(null, disc(-9, -133, 6.5), C.cream, C.creamEdge, bird);
+  el('path', { d: disc(-11, -133, 3), fill: C.ink }, bird.g);
+  part(null, rect(-17, -184, 34, 32, 2), C.cream, C.creamEdge, bird);
+  el('path', { d: rect(-17, -163, 34, 7), fill: C.hatBand }, bird.g);
+  part(null, rect(-27, -153, 54, 6, 2), C.cream, C.creamEdge, bird);
+
+  // ---------- near stand leg + pivot ----------
+  part(root, rect(478, 604, 32, 8, 1.5), C.kraft, C.kraftEdge);
+  part(root, strip(PIVOT, [492, 612], 18), C.kraft, C.kraftEdge);
+  {
+    // fibre lines along the near leg, end to end
+    const a = PIVOT, b = [492, 612];
+    el('path', { d: `M${a[0] + 3} ${a[1] + 14}L${b[0] + 3} ${b[1]}`, stroke: C.flute, 'stroke-width': 0.8, fill: 'none' }, root);
+  }
+  fastener(root, 408, 564.5, 3.2);
+  fastener(root, 484, 564.5, 3.2);
+  fastener(root, 494, 608, 3.2);
+  fastener(root, PIVOT[0], PIVOT[1], 7);
+  const drips = [0, 1, 2].map(() => part(root, '', C.mud, C.mudDk));
+
+  // ---------- glass contents ----------
+  const bandEls = [];
+  {
+    let y = WATER;
+    for (const b of BANDS) {
+      const r = el('path', { d: rect(232, y, 120, b.h) }, root);
+      const edge = el('path', { d: rect(232, y, 120, 2) }, root);
+      bandEls.push({ r, edge });
+      y += b.h;
+    }
+  }
+  // the submerged beak and spout, seen through the water
+  el('clipPath', { id: 'water' }, svg).appendChild(el('path', { d: rect(232, WATER, 120, 220) }));
+  const ghost = group(el('g', { 'clip-path': 'url(#water)' }, root), PIVOT);
+  el('path', { d: poly([[-16, -136], [-82, -122], [-16, -114]]) + poly([[-20, -112], [-64, -106], [-70, -100], [-70, -93], [-65, -93], [-64, -100], [-20, -106]]), fill: '#2a1d10', 'fill-opacity': 0.3 }, ghost.g);
+  const stream = part(root, '', C.mud, C.mudDk);
+  const splash = [part(root, '', C.mud, C.mudDk), part(root, '', C.mud, C.mudDk)];
+
+  // glass front: walls, bottom, rim, glints
+  part(root, rect(224, 352, 8, 256), C.glass, C.glassEdge);
+  part(root, rect(352, 352, 8, 256), C.glass, C.glassEdge);
+  part(root, rect(224, 592, 136, 16), C.glass, C.glassEdge);
+  part(root, rect(220, 348, 144, 6, 2), C.glass, C.glassEdge);
+  el('path', { d: rect(237, 384, 4, 196, 2), fill: '#ffffff', 'fill-opacity': 0.5 }, root);
+  el('path', { d: rect(256, 384, 2, 110, 1), fill: '#ffffff', 'fill-opacity': 0.4 }, root);
+
+  // ---------- ladle on its pivot arm ----------
+  const ladle = group(root, LPIVOT);
+  part(null, rect(-300, -3.5, 404, 7, 3.5), C.ladle, C.ladleEdge, ladle);
+  part(null, poly([[96, -3.5], [104, -3.5], [100, 7], [92, 7]]), C.ladle, C.ladleEdge, ladle);
+  const mound = part(null, 'M93 5Q114 -16 135 5Z', C.mud, C.mudDk, ladle);
+  part(null, 'M94 6A20 18 0 0 0 134 6Z', C.ladle, C.ladleEdge, ladle);
+  part(null, rect(92, 3, 44, 5, 2), C.ladleRim, C.ladleEdge, ladle);
+  fastener(null, 100, 0, 2.6, ladle);
+  fastener(root, LPIVOT[0], LPIVOT[1], 6.5);
+
+  // ---------- catch tray: mud and front lip ----------
+  const trayMud = el('path', { fill: C.mud }, root);
+  const traySurface = el('path', { fill: mix(C.mud, '#ffffff', 0.25) }, root);
+  part(root, rect(147, 316, 68, 20, 2), C.kraft, C.kraftEdge);
+  speckle(root, 160, 320, 44, 12, 7);
+  fastener(root, 153, 326, 2.6);
+  fastener(root, 209, 326, 2.6);
+
+  // ---------- generation counter ----------
+  part(root, rect(528, 566, 76, 46, 3), C.brass, C.brassEdge);
+  el('path', { d: rect(534, 572, 64, 34, 2), fill: C.brassDk }, root);
+  el('path', { d: rect(535, 573, 62, 32, 2), fill: C.brass }, root);
+  el('text', { x: 540, y: 594, 'font-family': 'ui-monospace, Menlo, monospace', 'font-size': 10, 'font-weight': 700, 'letter-spacing': 1.5, fill: C.brassEdge }, root).textContent = 'GEN';
+  part(root, rect(568, 576, 24, 26, 2), C.ink, C.brassEdge);
+  el('clipPath', { id: 'win' }, svg).appendChild(el('path', { d: rect(570, 578, 20, 22, 1) }));
+  const wheelClip = el('g', { 'clip-path': 'url(#win)' }, root);
+  el('path', { d: rect(570, 578, 20, 22), fill: C.cream }, wheelClip);
+  const wheel = el('g', {}, wheelClip);
+  for (let i = 0; i <= 6; i++) {
+    el('text', { x: 580, y: 596 + i * 26, 'text-anchor': 'middle', 'font-family': 'ui-monospace, Menlo, monospace', 'font-size': 18, 'font-weight': 700, fill: C.ink }, wheel).textContent = String(i % 6);
+  }
+  el('path', { d: rect(570, 578, 20, 3), fill: C.creamEdge, 'fill-opacity': 0.6 }, wheelClip);
+  const tab = group(root, [598, 566]);
+  part(null, rect(-2, -16, 4, 18, 2), C.brass, C.brassEdge, tab);
+  for (const [x, y] of [[533, 571], [599, 571], [533, 607], [599, 607]]) fastener(root, x, y, 2.6);
+
+  // ---------- timeline (12 fps keyframes, no easing) ----------
+  const BIRD = [];
+  for (let f = 0; f <= 13; f++) BIRD.push(f2(10 - 50 * (f / 13) ** 2));
+  BIRD.push(-55, -70, -80, -82, -80, -81, -80, -62, -35, -5, 18, 22, 14, 7, 11, 10);
+  // Ladle angle per frame: rest, swing down past the glass, scoop in the tray,
+  // rise back to the pour angle, pour (14-19), return to rest.
+  const LADLE = [
+    -4, -4, -4, -4, -4, -4, -4,   // 0-6   rest
+    8, 24, 42, 54,                // 7-10  swing down past the pour
+    58, 58,                       // 11-12 scoop in the tray
+    42,                           // 13    rise
+    28, 28, 29, 28, 28, 28,       // 14-19 pour
+    18, 6, 0,                     // 20-22 return
+    -4, -4, -4, -4, -4, -4, -4,   // 23-29 rest
+  ];
+  const SPOUT = [-67.5, -93];
+  const DRIP_FRAMES = [24, 25, 26];  // spout is over the gutter as the bird tops out
+  const BLOB_SPEED = 30;             // px per frame along the gutter
+  // Each drip lands on the gutter, runs down it, and drops into the tray.
+  const DRIPS = DRIP_FRAMES.map(e => {
+    const a = BIRD[e] * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+    const sx = PIVOT[0] + SPOUT[0] * c - SPOUT[1] * s, sy = PIVOT[1] + SPOUT[0] * s + SPOUT[1] * c;
+    const s0 = (GUT[0][0] - sx) / (GUT[0][0] - GUT[1][0]) * GUT_LEN[0];
+    const total = GUT_LEN[0] + GUT_LEN[1];
+    const arriveAge = 1 + Math.ceil((total - s0) / BLOB_SPEED);
+    return { e, sx, sy, s0, arriveAge, arriveFrame: (e + arriveAge) % CYCLE };
+  });
+  const SCOOP_FRAME = 13;  // the bowl lifts out with its load
+  const TRAY_LOW = 312, TRAY_STEP = 4;
+
+  const tubeLevel = a => Math.max(-106, 70 - (10 - a) / 92 * 176);
+  const bodySegment = a => {
+    const h = Math.min(160, 126 + Math.max(0, 10 - a) / 92 * 26), R = 32, cy = 140;
+    const dx = Math.sqrt(Math.max(0, R * R - (h - cy) ** 2));
+    return `M${f2(-dx)} ${f2(h)}A${R} ${R} 0 ${h < cy ? 1 : 0} 0 ${f2(dx)} ${f2(h)}Z`;
+  };
+
+  function bandColors(c, f) {
+    if (c < 0) return BANDS.map(b => b.col);
+    const cols = BANDS.map(b => b.col);
+    if (c < 5) {
+      for (let k = 0; k < c; k++) cols[COLLAPSE[k]] = C.mud;
+      const t = f >= 20 ? 1 : f === 19 ? 0.66 : f === 18 ? 0.33 : 0;
+      const i = COLLAPSE[c];
+      cols[i] = mix(BANDS[i].col, C.mud, t);
+    } else {
+      for (let i = 0; i < BANDS.length; i++) {
+        const fromBottom = BANDS.length - 1 - i;
+        if (f < 25 + fromBottom) cols[i] = C.mud;
+      }
+    }
+    return cols;
+  }
+
+  function counterPos(c, f) {
+    if (c < 0) return 0;
+    const start = c < 5 ? 22 : 25;
+    if (f < start) return c;
+    return c + Math.min(1, (f - start + 1) / 3);
+  }
+
+  function render(F) {
+    const c = Math.floor(F / CYCLE) % 7 - 1, f = F % CYCLE;
+
+    // bird
+    const a = BIRD[f];
+    setAngle(bird, a);
+    setAngle(ghost, a);
+    tubeFluid.setAttribute('d', rect(-2.5, f2(tubeLevel(a)), 5, f2(126 - tubeLevel(a)), 2.5));
+    bodyFluid.setAttribute('d', bodySegment(a));
+
+    // ladle and its pour
+    const l = LADLE[f];
+    setAngle(ladle, l);
+    if (onLadle) onLadle(l);
+    const pouring = f >= 14 && f <= 19;
+    mound.show(f === 12 || f === 13);
+    stream.show(pouring);
+    splash.forEach(s => s.show(pouring));
+    if (pouring) {
+      const [lx, ly] = toScreen(ladle, l, 134, 6);
+      const x0 = lx + 1, y0 = ly + 2, ph = f * 1.7;
+      const L = [], Rt = [];
+      for (let y = y0, i = 0; y <= WATER + 2; y += 8, i++) {
+        const w = 2.2 + 0.9 * Math.sin(ph + i * 1.3), sx = 1.2 * Math.sin(ph * 0.7 + i);
+        L.push([x0 + sx - w, y]); Rt.unshift([x0 + sx + w, y]);
+      }
+      stream.set(poly([...L, ...Rt]));
+      const k = f % 2 ? 1 : -1;
+      splash[0].set(disc(x0 - 7 * k, WATER - 5 - (f % 3), 2.4));
+      splash[1].set(disc(x0 + 9 * k, WATER - 9 + (f % 3), 1.8));
+    }
+
+    // spout drips -> gutter -> tray
+    DRIPS.forEach((d, i) => {
+      const age = (f - d.e + CYCLE) % CYCLE;
+      drips[i].show(age === 0);
+      if (age === 0) {
+        const x = f2(d.sx), y = f2(d.sy + 6);
+        drips[i].set(`M${x} ${f2(y - 5)}Q${f2(x + 3.4)} ${f2(y + 1)} ${x} ${f2(y + 3.2)}Q${f2(x - 3.4)} ${f2(y + 1)} ${x} ${f2(y - 5)}Z`);
+      }
+      const onGutter = age >= 1 && age < d.arriveAge;
+      blobs[i].show(onGutter);
+      if (onGutter) {
+        const [x, y] = gutterAt(d.s0 + BLOB_SPEED * (age - 1));
+        blobs[i].set(disc(f2(x), f2(y - 5.5), 3.4, 2.4));
+      }
+    });
+
+    // tray level: up with each arriving drip, down with each scoop
+    const amount = DRIPS.filter(d => d.arriveFrame <= f).length - (f >= SCOOP_FRAME ? DRIPS.length : 0);
+    const ty = TRAY_LOW - TRAY_STEP * amount;
+    trayMud.setAttribute('d', rect(152, ty, 58, 334 - ty));
+    traySurface.setAttribute('d', rect(152, ty, 58, 1.6));
+
+    // glass bands
+    const cols = bandColors(c, f);
+    cols.forEach((col, i) => {
+      bandEls[i].r.setAttribute('fill', col);
+      const top = i === 0;
+      const same = !top && cols[i - 1] === col;
+      bandEls[i].edge.setAttribute('fill', top ? mix(col, '#ffffff', 0.35) : mix(col, '#000000', 0.3));
+      bandEls[i].edge.style.display = same ? 'none' : '';
+    });
+
+    // counter
+    const pos = counterPos(c, f);
+    wheel.setAttribute('transform', `translate(0 ${f2(-pos * 26)})`);
+    const clicking = pos !== Math.floor(pos) || (f === (c < 5 ? 24 : 27));
+    setAngle(tab, clicking ? -28 : 0);
+  }
+
+  // ---------- stepped loop ----------
+  let last = -1;
+  const t0 = window.__machineT0 ?? performance.now();
+  const tick = now => {
+    const F = Math.floor((now - t0) / 1000 * FPS);
+    if (F !== last) { last = F; render(F); }
+    if (svg.isConnected) requestAnimationFrame(tick);
+  };
+  render(0); requestAnimationFrame(tick);
+}
+
+/* ---------- Anatomy figure: the profile assembler and auction (built in Claude Code with the Anatomy skill), mounted live in the dorm doorway; bids are re-rolled each loop ---------- */
+function mountAuction(svg, onGrip){
+  const NS = 'http://www.w3.org/2000/svg';
+  
+  const OFF = [3, 4];               // paper-thickness underlayer, screen space
+  const FPS = 12;
+  const DEG_PER_FRAME = 20;          // the crank: one turn = 18 frames = one pin
+  const TURNS = 6;                   // 4 turns build the bust, 2 run the auction
+  const LOOP = TURNS * 360 / DEG_PER_FRAME;   // 108 frames, 9 s
+  const CRANK = [40, 676], CRANK_R = 80, CRANK_START = 90;
+  const BELT_Y = 452, BUST_X = 420, SLICE_H = 34.2, PRESS_X = 260, LIFT_X = 340, DROP_X = 110;
+
+  const C = {
+    kraft: '#c9a273', kraftDk: '#b28a5b', kraftEdge: '#6f4f2c', flute: '#a47d4e', speck: '#9e7749',
+    cream: '#f3ead2', creamEdge: '#a8946b',
+    brass: '#c99a3b', brassEdge: '#6e5018', brassHi: '#e6c46e', brassDk: '#8f6a22',
+    blue: '#2f63b5', blueEdge: '#1d3d70', ink: '#3b2c1c', belt: '#4a3a2a',
+  };
+
+  // ---------- helpers ----------
+  const el = (tag, attrs, parent) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (parent) parent.appendChild(e);
+    return e;
+  };
+  const f2 = v => +v.toFixed(2);
+  const rect = (x, y, w, h, r = 0) => r
+    ? `M${x + r} ${y}H${x + w - r}A${r} ${r} 0 0 1 ${x + w} ${y + r}V${y + h - r}A${r} ${r} 0 0 1 ${x + w - r} ${y + h}H${x + r}A${r} ${r} 0 0 1 ${x} ${y + h - r}V${y + r}A${r} ${r} 0 0 1 ${x + r} ${y}Z`
+    : `M${x} ${y}H${x + w}V${y + h}H${x}Z`;
+  const disc = (cx, cy, r, ry = r) => `M${cx - r} ${cy}A${r} ${ry} 0 1 0 ${cx + r} ${cy}A${r} ${ry} 0 1 0 ${cx - r} ${cy}Z`;
+  const poly = pts => 'M' + pts.map(p => `${f2(p[0])} ${f2(p[1])}`).join('L') + 'Z';
+  const strip = (a, b, w) => {
+    const dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy);
+    const ux = dx / L, uy = dy / L, nx = -uy * w / 2, ny = ux * w / 2;
+    const pts = [[b[0] + nx, b[1] + ny], [b[0] - nx, b[1] - ny]];
+    for (let i = 0; i <= 10; i++) {
+      const t = Math.PI * i / 10, c = Math.cos(t), s = Math.sin(t);
+      pts.push([a[0] - nx * c - ux * w / 2 * s, a[1] - ny * c - uy * w / 2 * s]);
+    }
+    return poly(pts);
+  };
+  const ulOffset = deg => {
+    const r = deg * Math.PI / 180, c = Math.cos(r), s = Math.sin(r);
+    return `translate(${f2(OFF[0] * c + OFF[1] * s)} ${f2(-OFF[0] * s + OFF[1] * c)})`;
+  };
+  // A group placed by translate + rotate; its underlayers stay offset in screen space.
+  const group = parent => ({ g: el('g', {}, parent), uls: [] });
+  const place = (grp, x, y, deg = 0, extra = '') => {
+    grp.g.setAttribute('transform', `translate(${f2(x)} ${f2(y)}) rotate(${f2(deg)})${extra}`);
+    const t = ulOffset(deg);
+    for (const u of grp.uls) u.setAttribute('transform', t);
+  };
+  const part = (parent, d, fill, edge, grp) => {
+    const host = grp ? grp.g : parent;
+    const u = el('path', { d, fill: edge }, host);
+    if (grp) grp.uls.push(u); else u.setAttribute('transform', `translate(${OFF[0]} ${OFF[1]})`);
+    return el('path', { d, fill }, host);
+  };
+  const fastener = (parent, x, y, r, grp) => {
+    const host = grp ? grp.g : parent;
+    part(parent, disc(x, y, r), C.brass, C.brassEdge, grp);
+    el('path', { d: disc(x + r * 0.18, y + r * 0.18, r * 0.62), fill: C.brassDk }, host);
+    el('path', { d: disc(x, y, r * 0.62), fill: C.brass }, host);
+    el('path', { d: disc(x - r * 0.3, y - r * 0.3, r * 0.3), fill: C.brassHi }, host);
+  };
+  let seed = 5;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const speckle = (parent, x, y, w, h, n) => {
+    let d = '';
+    for (let i = 0; i < n; i++) d += disc(f2(x + rnd() * w), f2(y + rnd() * h), f2(0.5 + rnd() * 0.7));
+    el('path', { d, fill: C.speck }, parent);
+  };
+  const label = (parent, x, y, text, size, fill, extra = {}) => {
+    const t = el('text', { x, y, 'text-anchor': 'middle', 'font-family': 'ui-monospace, Menlo, monospace',
+      'font-size': size, 'font-weight': 700, fill, ...extra }, parent);
+    t.textContent = text;
+    return t;
+  };
+  // Clock hands for h:m, as one flat path (hands as thin bars).
+  const clockHands = (cx, cy, r, h, m) => {
+    const bar = (deg, len, w) => {
+      const a = (deg - 90) * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+      const nx = -s * w / 2, ny = c * w / 2;
+      return poly([[cx + nx, cy + ny], [cx + c * len + nx, cy + s * len + ny], [cx + c * len - nx, cy + s * len - ny], [cx - nx, cy - ny]]);
+    };
+    return bar(((h % 12) + m / 60) * 30, r * 0.55, r * 0.16) + bar(m * 6, r * 0.85, r * 0.11);
+  };
+  const clockFace = (parent, cx, cy, r, h, m, grp) => {
+    part(parent, disc(cx, cy, r + 2.2), C.blue, C.blueEdge, grp);
+    const host = grp ? grp.g : parent;
+    el('path', { d: disc(cx, cy, r), fill: C.cream }, host);
+    el('path', { d: clockHands(cx, cy, r, h, m), fill: C.ink }, host);
+    el('path', { d: disc(cx, cy, Math.max(0.9, r * 0.12)), fill: C.ink }, host);
+  };
+
+  // The four location points: each pin carries the time it was recorded.
+  const TIMES = [[7, 40], [12, 15], [18, 5], [23, 30]];
+
+  // Map pin, tip at the origin, head up.
+  const PIN = 'M0 0L-17.32 -28A20 20 0 1 1 17.32 -28Z';
+  const makePin = (parent, h, m) => {
+    const grp = group(parent);
+    part(null, PIN, C.cream, C.creamEdge, grp);
+    clockFace(null, 0, -38, 12, h, m, grp);
+    return grp;
+  };
+
+  // Bust silhouette, axis x = 0, base y = 0; four slices of SLICE_H, bottom up.
+  const BUST = 'M-59.8 0V-14.4Q-57.5 -30 -34.5 -32.4L-15 -34.8V-67.2A32.2 36 0 1 1 15 -67.2V-34.8L34.5 -32.4Q57.5 -30 59.8 -14.4V0Z';
+  const SLICE_CLOCK = [[-38, -16], [0, -52], [0, -86], [0, -118]];
+
+  // ---------- base ----------
+  part(svg, rect(130, 648, 44, 12, 2), C.kraftDk, C.kraftEdge);
+  part(svg, rect(590, 648, 44, 12, 2), C.kraftDk, C.kraftEdge);
+  part(svg, rect(60, 626, 592, 22, 2), C.kraft, C.kraftEdge);
+  el('path', { d: rect(62, 630, 588, 14), fill: C.flute }, svg);
+  {
+    let d = 'M62 637';
+    for (let x = 62, up = true; x < 650; x += 6, up = !up) d += `Q${x + 3} ${up ? 629.5 : 644.5} ${Math.min(x + 6, 650)} 637`;
+    el('path', { d, fill: 'none', stroke: C.kraft, 'stroke-width': 1.6 }, svg);
+  }
+
+  // ---------- back structure: posts and legs ----------
+  part(svg, strip([52, 196], [52, 626], 14), C.kraftDk, C.kraftEdge);           // hopper post
+  part(svg, rect(46, 196, 40, 10, 2), C.kraftDk, C.kraftEdge);
+  part(svg, strip([194, 280], [194, 626], 12), C.kraftDk, C.kraftEdge);         // press posts
+  part(svg, strip([326, 280], [326, 626], 12), C.kraftDk, C.kraftEdge);
+  part(svg, strip([150, 470], [150, 626], 10), C.kraftDk, C.kraftEdge);         // conveyor legs
+  part(svg, strip([440, 470], [440, 626], 10), C.kraftDk, C.kraftEdge);
+  part(svg, strip([452, 280], [452, 626], 10), C.kraftDk, C.kraftEdge);         // bench posts
+  part(svg, strip([646, 280], [646, 626], 10), C.kraftDk, C.kraftEdge);
+  part(svg, strip([LIFT_X, 336], [LIFT_X, 626], 8), C.kraftDk, C.kraftEdge);    // lift rail
+
+  // build station backboard with the dashed head-and-shoulders outline
+  part(svg, rect(350, 302, 140, 150, 3), C.kraftDk, C.kraftEdge);
+  speckle(svg, 356, 308, 128, 138, 24);
+  el('path', { d: BUST, transform: `translate(${BUST_X} ${BELT_Y})`, fill: 'none', stroke: C.ink,
+    'stroke-width': 2, 'stroke-dasharray': '6 5', 'stroke-linejoin': 'round' }, svg);
+  for (const [x, y] of [[357, 309], [483, 309]]) fastener(svg, x, y, 2.8);
+
+  // ---------- bidding paddles, behind the bench ----------
+  const BIDS = [14, 22, 37, 51];
+  const paddles = BIDS.map((n, i) => {
+    const grp = group(svg);
+    part(null, rect(-3.5, 0, 7, 170, 2), C.kraft, C.kraftEdge, grp);
+    part(null, disc(0, 0, 23, 24), C.blue, C.blueEdge, grp);
+    el('path', { d: disc(0, 0, 19, 20), fill: C.cream }, grp.g);
+    const txt = label(grp.g, 0, 7, String(n), 19, C.blue);
+    return { grp, txt, x: 480 + 50 * i };
+  });
+  part(svg, rect(446, 228, 206, 62, 3), C.kraft, C.kraftEdge);
+  el('path', { d: rect(452, 236, 194, 3), fill: C.flute }, svg);
+  speckle(svg, 452, 244, 194, 40, 26);
+  for (const x of [452, 646]) fastener(svg, x, 280, 3);
+
+  // ---------- hopper stock (pins waiting behind the hopper front) ----------
+  [[94, 186, 2], [126, 182, 0], [110, 192, 3]].forEach(([x, y, t]) => {
+    const p = makePin(svg, ...TIMES[t]);
+    place(p, x, y, 0, ' scale(1.2)');
+  });
+
+  // ---------- conveyor ----------
+  part(svg, rect(79, 452, 432, 22, 11), C.belt, '#2a2018');
+  el('path', { d: rect(83, 456, 424, 14, 7), fill: C.kraftDk }, svg);
+  el('path', { d: rect(92, 459, 406, 8, 2), fill: C.kraft }, svg);
+  for (const x of [120, 200, 280, 360, 440]) fastener(svg, x, 463, 2.4);
+  el('clipPath', { id: 'beltTop' }, svg).appendChild(el('path', { d: rect(90, 451, 410, 6) }));
+  const cleats = el('path', { fill: '#2a2018', 'clip-path': 'url(#beltTop)' }, svg);
+  fastener(svg, 500, 463, 5);
+
+  // lift platform
+  const platform = group(svg);
+  part(null, rect(-30, 0, 60, 6, 1.5), C.kraft, C.kraftEdge, platform);
+
+  // ---------- pins in transit and bust slices ----------
+  const pin = makePin(svg, 0, 0);
+  const pinFaces = TIMES.map(([h, m]) => {
+    const g = el('g', {}, pin.g);
+    el('path', { d: disc(0, -38, 12), fill: C.cream }, g);
+    el('path', { d: clockHands(0, -38, 12, h, m), fill: C.ink }, g);
+    el('path', { d: disc(0, -38, 1.4), fill: C.ink }, g);
+    return g;
+  });
+
+  el('clipPath', { id: 'aboveBase' }, svg).appendChild(el('path', { d: rect(-100, -100, 900, 726) }));
+  const sliceLayer = el('g', { 'clip-path': 'url(#aboveBase)' }, svg);
+  const slices = TIMES.map(([h, m], r) => {
+    const id = 'band' + r;
+    const top = -(r + 1) * SLICE_H;
+    el('clipPath', { id }, svg).appendChild(el('path', { d: rect(-75, top - 0.5, 150, SLICE_H + 1) }));
+    const grp = group(sliceLayer);
+    const inner = el('g', { 'clip-path': `url(#${id})` }, grp.g);
+    grp.uls.push(el('path', { d: BUST, fill: C.creamEdge }, inner));
+    el('path', { d: BUST, fill: C.cream }, inner);
+    el('path', { d: rect(-75, top, 150, 2.6), fill: C.blue, 'clip-path': 'url(#bustClip)' }, inner);
+    const [cx, cy] = SLICE_CLOCK[r];
+    el('path', { d: disc(cx, cy, 10.4), fill: C.blue }, grp.g);
+    el('path', { d: disc(cx, cy, 8.2), fill: C.cream }, grp.g);
+    el('path', { d: clockHands(cx, cy, 8.2, h, m), fill: C.ink }, grp.g);
+    return grp;
+  });
+  el('clipPath', { id: 'bustClip' }, svg).appendChild(el('path', { d: BUST }));
+
+  // YOU tag, hung from the neck
+  const tag = group(sliceLayer);
+  el('path', { d: 'M0 -2L-2 -15', stroke: C.ink, 'stroke-width': 1.2, fill: 'none' }, tag.g);
+  part(null, poly([[-24, 0], [24, 0], [24, 24], [-24, 24]]), C.cream, C.creamEdge, tag);
+  el('path', { d: rect(-21, 3, 42, 18, 1.5), fill: 'none', stroke: C.blue, 'stroke-width': 1.6 }, tag.g);
+  label(tag.g, 0, 18, 'YOU', 14, C.blue, { 'letter-spacing': 1.5 });
+  fastener(null, 0, -2, 2.4, tag);
+
+  // ---------- press (front) ----------
+  part(svg, rect(182, 280, 156, 16, 3), C.kraft, C.kraftEdge);
+  speckle(svg, 190, 284, 140, 8, 10);
+  const ramRod = part(svg, '', C.kraftDk, C.kraftEdge);
+  const platen = group(svg);
+  part(null, rect(-38, -20, 76, 20, 2), C.kraft, C.kraftEdge, platen);
+  el('path', { d: rect(-34, -5, 68, 2.4), fill: C.flute }, platen.g);
+  fastener(null, -30, -12, 2.4, platen);
+  fastener(null, 30, -12, 2.4, platen);
+  const cam = group(svg);
+  part(null, disc(0, 0, 13), C.brass, C.brassEdge, cam);
+  el('path', { d: disc(0, 6, 4), fill: C.brassDk }, cam.g);
+  fastener(svg, 194, 288, 3);
+  fastener(svg, 326, 288, 3);
+
+  // ---------- hopper front with drop flap ----------
+  const flap = group(svg);
+  part(null, rect(0, -3, 36, 6, 2), C.kraftDk, C.kraftEdge, flap);
+  part(svg, poly([[64, 140], [156, 140], [156, 246], [130, 292], [90, 292], [64, 246]]), C.kraft, C.kraftEdge);
+  el('path', { d: rect(70, 148, 80, 4), fill: C.flute }, svg);
+  speckle(svg, 72, 158, 76, 80, 16);
+  for (const [x, y] of [[72, 156], [148, 156], [72, 238], [148, 238]]) fastener(svg, x, y, 2.8);
+  fastener(svg, 52, 201, 3);
+
+  // ---------- lectern, stopwatch, gavel ----------
+  part(svg, poly([[528, 471], [664, 457], [658, 626], [534, 626]]), C.kraft, C.kraftEdge);
+  speckle(svg, 556, 580, 72, 40, 12);
+  part(svg, poly([[518, 463], [672, 445], [673, 455], [519, 473]]), C.kraftDk, C.kraftEdge);
+  const DIAL = [590, 542], DIAL_R = 37, SWEEP = 300;
+  part(svg, disc(DIAL[0], DIAL[1] - DIAL_R - 7, 6), C.brass, C.brassEdge);
+  part(svg, disc(...DIAL, DIAL_R + 6), C.brass, C.brassEdge);
+  el('path', { d: disc(...DIAL, DIAL_R), fill: C.cream }, svg);
+  {
+    let d = '';
+    for (let i = 0; i <= 10; i++) {
+      const a = (-90 + SWEEP * i / 10) * Math.PI / 180, c = Math.cos(a), s = Math.sin(a);
+      const r0 = DIAL_R - (i % 5 === 0 ? 8 : 4.5), w = i % 5 === 0 ? 1.1 : 0.7;
+      d += poly([[DIAL[0] + c * r0 - s * w, DIAL[1] + s * r0 + c * w], [DIAL[0] + c * DIAL_R - s * w, DIAL[1] + s * DIAL_R + c * w],
+                 [DIAL[0] + c * DIAL_R + s * w, DIAL[1] + s * DIAL_R - c * w], [DIAL[0] + c * r0 + s * w, DIAL[1] + s * r0 - c * w]]);
+    }
+    el('path', { d, fill: C.ink }, svg);
+  }
+  label(svg, DIAL[0] - 13, DIAL[1] - 11, '0.1 s', 9.5, C.blue);
+  const hand = group(svg);
+  part(null, poly([[-1.6, 4], [1.6, 4], [0.8, -DIAL_R + 5], [-0.8, -DIAL_R + 5]]), C.ink, '#c9b993', hand);
+  fastener(svg, ...DIAL, 3.2);
+
+  const GAVEL = [636, 444];
+  const gavel = group(svg);
+  part(null, rect(-56, -3, 58, 6, 3), C.kraftDk, C.kraftEdge, gavel);
+  part(null, rect(-70, -12, 18, 24, 3), C.kraft, C.kraftEdge, gavel);
+  el('path', { d: rect(-70, -7, 18, 2.6) + rect(-70, 4.4, 18, 2.6), fill: C.brass }, gavel.g);
+  fastener(svg, ...GAVEL, 4);
+
+  // ---------- drive: crank pulley, belt, conveyor pulley, crank arm (front) ----------
+  const P1 = CRANK, R1 = 30, P2 = [90, 463], R2 = 22;
+  part(svg, strip(CRANK, [96, 636], 20), C.kraftDk, C.kraftEdge);   // crank bracket
+  {
+    const dx = P2[0] - P1[0], dy = P2[1] - P1[1], d = Math.hypot(dx, dy);
+    const phi = Math.atan2(dy, dx), beta = Math.acos((R1 - R2) / d);
+    const pt = (c, r, a) => [c[0] + r * Math.cos(a), c[1] + r * Math.sin(a)];
+    const a = pt(P1, R1, phi + beta), b = pt(P2, R2, phi + beta), c = pt(P2, R2, phi - beta), e = pt(P1, R1, phi - beta);
+    const beltD = `M${f2(a[0])} ${f2(a[1])}L${f2(b[0])} ${f2(b[1])}A${R2} ${R2} 0 0 0 ${f2(c[0])} ${f2(c[1])}` +
+      `L${f2(e[0])} ${f2(e[1])}A${R1} ${R1} 0 1 0 ${f2(a[0])} ${f2(a[1])}Z`;
+    el('path', { d: beltD, fill: 'none', stroke: '#2a2018', 'stroke-width': 5, transform: `translate(${OFF[0]} ${OFF[1]})` }, svg);
+    el('path', { d: beltD, fill: 'none', stroke: C.belt, 'stroke-width': 5 }, svg);
+  }
+  const spokes = (r, n) => {
+    let d = '';
+    for (let i = 0; i < n; i++) {
+      const a = i * 2 * Math.PI / n, c = Math.cos(a), s = Math.sin(a);
+      d += poly([[-s * 2, c * 2], [c * r - s * 2, s * r + c * 2], [c * r + s * 2, s * r - c * 2], [s * 2, -c * 2]]);
+    }
+    return d;
+  };
+  const pulley2 = group(svg);
+  part(null, disc(0, 0, R2 - 2), C.kraft, C.kraftEdge, pulley2);
+  el('path', { d: spokes(R2 - 6, 4), fill: C.kraftDk }, pulley2.g);
+  fastener(svg, ...P2, 4.5);
+  const pulley1 = group(svg);
+  part(null, disc(0, 0, R1 - 2), C.kraft, C.kraftEdge, pulley1);
+  el('path', { d: spokes(R1 - 7, 4), fill: C.kraftDk }, pulley1.g);
+  const crankArm = group(svg);
+  part(null, rect(-8, -8, CRANK_R + 16, 16, 8), C.kraft, C.kraftEdge, crankArm);
+  el('path', { d: rect(6, -1.5, CRANK_R - 16, 3, 1.5), fill: C.flute }, crankArm.g);
+  part(null, disc(CRANK_R, 0, 11), C.kraftDk, C.kraftEdge, crankArm);
+  fastener(null, CRANK_R, 0, 4, crankArm);
+  fastener(svg, ...CRANK, 6);
+
+  // ---------- the model: every part is a function of the crank angle ----------
+  const crankAt = F => ((CRANK_START + DEG_PER_FRAME * F) % 360 + 360) % 360;
+  const gripAt = F => {
+    const a = crankAt(F) * Math.PI / 180;
+    return [f2(CRANK[0] + CRANK_R * Math.cos(a)), f2(CRANK[1] + CRANK_R * Math.sin(a))];
+  };
+
+  const PIN_DROP = [336, 396];
+  const PLATEN = { 9: 382, 10: 420, 11: 376 };        // platen underside y; rest 368
+  const SQUASH = 'scale(1.8 0.54)';
+  const BUST_RIDE = { 74: 25, 75: 50 };
+  const SLIDE_OFF = [[90, 0], [130, -6], [168, -2], [176, 40], [176, 110], [176, 190]];  // frames 98-103
+  const GAVEL_ANGLE = { 96: 0, 97: 0, 98: 20 };
+  const PADDLE_UP = 104, PADDLE_REST = 260;
+
+  function bustOffset(G) {
+    if (G < 74) return [0, 0];
+    if (G < 98) return [BUST_RIDE[G] ?? 50, 0];
+    if (G < 104) return SLIDE_OFF[G - 98];
+    return null;
+  }
+
+  let bidLoop = -1;
+  const newBids = () => { let b = 6 + Math.floor(Math.random() * 14); paddles.forEach(p => { p.txt.textContent = String(b); b += 5 + Math.floor(Math.random() * 16); }); };
+  function render(F) {
+    const G = ((F % LOOP) + LOOP) % LOOP;
+    const loopN = Math.floor(F / LOOP); if (loopN !== bidLoop) { bidLoop = loopN; newBids(); }
+    if (onGrip) onGrip(gripAt(G));
+    const crank = DEG_PER_FRAME * G;          // degrees turned since the loop began
+    const turn = Math.floor(crank / 360);     // 0..5
+    const f = Math.floor((crank % 360) / DEG_PER_FRAME);   // frame within the turn, 0..17
+    const building = turn < 4;
+
+    // drive train
+    place(crankArm, ...CRANK, crankAt(G));
+    place(pulley1, ...CRANK, crankAt(G));
+    place(pulley2, ...P2, crankAt(G) * R1 / R2);
+    let cd = '';
+    for (let i = 0; i < 8; i++) {
+      const x = 90 + ((i * 64 + 25 * G) % 512);
+      cd += rect(x, 451, 4, 5);
+    }
+    cleats.setAttribute('d', cd);
+
+    // press: one-lobe cam, one stroke per turn
+    place(cam, PRESS_X, 288, crankAt(G));
+    const py = PLATEN[f] ?? 368;
+    place(platen, PRESS_X, py);
+    ramRod.previousSibling.setAttribute('d', rect(PRESS_X - 6, 296, 12, py - 20 - 296));
+    ramRod.setAttribute('d', rect(PRESS_X - 6, 296, 12, py - 20 - 296));
+
+    // hopper flap opens once per turn while pins remain
+    place(flap, 92, 292, building && f <= 1 ? 70 : 0);
+
+    // the pin of this turn
+    if (building && f <= 9) {
+      pin.g.style.display = '';
+      pinFaces.forEach((g, i) => { g.style.display = i === turn ? '' : 'none'; });
+      if (f <= 1) place(pin, DROP_X, PIN_DROP[f], 0, ' scale(1.2)');
+      else place(pin, Math.min(PRESS_X, DROP_X + 25 * (f - 2)), BELT_Y, 0, ' scale(1.2)');
+    } else if (building && f === 10) {
+      pin.g.style.display = '';
+      place(pin, PRESS_X, BELT_Y, 0, ' ' + SQUASH);
+    } else pin.g.style.display = 'none';
+
+    // slices: pressed, lifted to height, slid onto the stack
+    const off = bustOffset(G);
+    let platformY = BELT_Y;
+    slices.forEach((s, r) => {
+      const lift = r * SLICE_H;
+      const done = turn > r || (turn === r && f >= 15);
+      const active = turn === r && f >= 11 && f < 15;
+      if (!off || (!done && !active)) { s.g.style.display = 'none'; return; }
+      s.g.style.display = '';
+      if (done) { place(s, BUST_X + off[0], BELT_Y + off[1]); return; }
+      const pos = { 11: [PRESS_X, BELT_Y + lift], 12: [LIFT_X, BELT_Y + lift], 13: [LIFT_X, BELT_Y + lift / 2], 14: [LIFT_X, BELT_Y] }[f];
+      place(s, ...pos);
+      if (f >= 12) platformY = pos[1] - lift;
+    });
+    if (building && f >= 15) {
+      const top = BELT_Y - turn * SLICE_H;
+      platformY = { 15: top, 16: (top + BELT_Y) / 2 }[f] ?? BELT_Y;
+    }
+    place(platform, LIFT_X, platformY);
+
+    // tag: hung on once the fourth slice is in
+    if (off && G >= 72) {
+      tag.g.style.display = '';
+      place(tag, BUST_X + off[0] + 6, BELT_Y + off[1] - 34, G === 72 ? 28 : -6);
+    } else tag.g.style.display = 'none';
+
+    // auction: paddles pop in turn, stopwatch sweeps to 0.1 s, gavel falls
+    paddles.forEach((p, i) => {
+      const t = G - (80 + 3 * i);
+      let up = t >= 1 ? 1 : t === 0 ? 0.5 : 0;
+      if (G >= 101) up = 0; else if (G === 100) up *= 0.5;
+      place(p.grp, p.x, PADDLE_REST - PADDLE_UP * up);
+    });
+    let sweep = 0;
+    if (G >= 80 && G <= 99) sweep = SWEEP * Math.min(1, (G - 79) / 16);
+    else if (G >= 100 && G <= 103) sweep = SWEEP * (103 - G) / 4;
+    place(hand, ...DIAL, sweep);
+    place(gavel, ...GAVEL, GAVEL_ANGLE[G] ?? 35);
+  }
+
+
+  {
+    let last = -1;
+    const t0 = window.__machineT0 ?? performance.now();
+    const tick = now => {
+      const F = Math.floor((now - t0) / 1000 * FPS);
+      if (F !== last) { last = F; render(F); }
+      if (svg.isConnected) requestAnimationFrame(tick);
+    };
+    render(0);
+    requestAnimationFrame(tick);
+  }
+}
+
+/* ---------- cafeteria toy: the treadmill (cut card, matched to the Anatomy machines' material vocabulary) ---------- */
+function mountTreadmill(svg, onGrip){
+  const NS='http://www.w3.org/2000/svg', OFF=[3,4], FPS=12;
+  const C={kraft:'#c9a273',kraftDk:'#b28a5b',kraftEdge:'#6f4f2c',flute:'#a47d4e',speck:'#9e7749',
+    cream:'#f2e7c9',creamDk:'#e2d3ad',creamEdge:'#a8946b',brass:'#c99a3b',brassEdge:'#6e5018',brassHi:'#e6c46e',brassDk:'#8f6a22',
+    ink:'#2c2116',belt:'#3a2e22',beltEdge:'#1f1812',blue:'#3a6fc4',
+    sky:'#9cc3d5',sky2:'#b9d6e2',hill:'#7fa889',hill2:'#6a9676',tree:'#5e8a50',trunk:'#6b5136',path:'#d9c9a3',dash:'#f4eedd'};
+  const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;};
+  const f2=v=>+v.toFixed(2);
+  const rect=(x,y,w,h,r=0)=>r?`M${x+r} ${y}H${x+w-r}A${r} ${r} 0 0 1 ${x+w} ${y+r}V${y+h-r}A${r} ${r} 0 0 1 ${x+w-r} ${y+h}H${x+r}A${r} ${r} 0 0 1 ${x} ${y+h-r}V${y+r}A${r} ${r} 0 0 1 ${x+r} ${y}Z`:`M${x} ${y}H${x+w}V${y+h}H${x}Z`;
+  const disc=(cx,cy,r)=>`M${cx-r} ${cy}A${r} ${r} 0 1 0 ${cx+r} ${cy}A${r} ${r} 0 1 0 ${cx-r} ${cy}Z`;
+  const part=(p,d,fill,edge)=>{const u=el('path',{d,fill:edge,transform:`translate(${OFF[0]} ${OFF[1]})`},p);const f=el('path',{d,fill},p);return{u,f,set(d2){u.setAttribute('d',d2);f.setAttribute('d',d2);}};};
+  const fastener=(p,x,y,r)=>{part(p,disc(x,y,r),C.brass,C.brassEdge);el('path',{d:disc(x+r*.18,y+r*.18,r*.62),fill:C.brassDk},p);el('path',{d:disc(x,y,r*.62),fill:C.brass},p);el('path',{d:disc(x-r*.3,y-r*.3,r*.3),fill:C.brassHi},p);};
+  let seed=11; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  const speckle=(p,x,y,w,h,n)=>{let d='';for(let i=0;i<n;i++)d+=disc(f2(x+rnd()*w),f2(y+rnd()*h),f2(.5+rnd()*.7));el('path',{d,fill:C.speck},p);};
+  const flute=(p,x,y,w)=>{let d=`M${x} ${y}`;for(let xx=x,up=true;xx<x+w;xx+=6,up=!up)d+=`Q${xx+3} ${y+(up?-6:6)} ${Math.min(xx+6,x+w)} ${y}`;el('path',{d,fill:'none',stroke:C.flute,'stroke-width':1.6},p);};
+  const limb=(p,col,edge,w)=>{const u=el('line',{stroke:edge,'stroke-width':w,'stroke-linecap':'round',transform:`translate(${OFF[0]} ${OFF[1]})`},p);const f=el('line',{stroke:col,'stroke-width':w,'stroke-linecap':'round'},p);return{set(a,b){for(const e of[u,f]){e.setAttribute('x1',f2(a[0]));e.setAttribute('y1',f2(a[1]));e.setAttribute('x2',f2(b[0]));e.setAttribute('y2',f2(b[1]));}}};};
+  const lbl=(p,x,y,txt,size,fill,anchor='middle')=>{const t=el('text',{x,y,'text-anchor':anchor,'font-family':'ui-monospace, Menlo, monospace','font-size':size,'font-weight':700,fill,'letter-spacing':1},p);t.textContent=txt;return t;};
+
+  const uid='tm'+Math.floor(Math.random()*1e6);
+  const root=el('g',{},svg);
+
+  /* base bench */
+  part(root,rect(70,642,40,12,2),C.kraftDk,C.kraftEdge); part(root,rect(550,642,40,12,2),C.kraftDk,C.kraftEdge);
+  part(root,rect(40,620,580,22,2),C.kraft,C.kraftEdge); el('path',{d:rect(42,624,576,14),fill:C.flute},root); flute(root,42,631,576);
+
+  /* panorama box posts */
+  part(root,rect(112,380,22,240,2),C.kraftDk,C.kraftEdge); part(root,rect(526,380,22,240,2),C.kraftDk,C.kraftEdge);
+  speckle(root,114,400,18,210,14); speckle(root,528,400,18,210,14);
+
+  /* panorama: a painted scroll seen through a window, wound between two spools */
+  const WX=140,WY=150,WW=380,WH=200,STRIP=760;
+  part(root,rect(96,112,468,276,6),C.kraft,C.kraftEdge); speckle(root,100,116,460,268,90);
+  el('path',{d:rect(WX-6,WY-6,WW+12,WH+12,3),fill:C.kraftEdge},root);
+  const clip=el('clipPath',{id:uid+'w'},svg); el('path',{d:rect(WX,WY,WW,WH)},clip);
+  const win=el('g',{'clip-path':`url(#${uid}w)`},root);
+  const scroll=el('g',{},win);
+  const scene=(x0)=>{
+    const g=el('g',{transform:`translate(${x0} 0)`},scroll);
+    el('path',{d:rect(0,WY,STRIP,WH),fill:C.sky},g); el('path',{d:rect(0,WY+110,STRIP,40),fill:C.sky2},g);
+    el('path',{d:`M0 ${WY+150} Q90 ${WY+95} 190 ${WY+140} T380 ${WY+125} T570 ${WY+140} T760 ${WY+150} V${WY+WH} H0Z`,fill:C.hill},g);
+    el('path',{d:`M0 ${WY+165} Q120 ${WY+130} 260 ${WY+160} T520 ${WY+150} T760 ${WY+165} V${WY+WH} H0Z`,fill:C.hill2},g);
+    for(const [x,s] of [[40,1],[150,.8],[290,1.15],[420,.9],[560,1.05],[690,.85]]){
+      el('path',{d:rect(x-4*s,WY+150-26*s,8*s,30*s),fill:C.trunk},g); el('path',{d:disc(x,WY+150-40*s,22*s),fill:C.tree},g);
+    }
+    el('path',{d:rect(0,WY+172,STRIP,28),fill:C.path},g);
+    for(let x=10;x<STRIP;x+=60) el('path',{d:rect(x,WY+184,30,4),fill:C.dash},g);
+    /* the same signpost keeps coming around */
+    el('path',{d:rect(486,WY+108,6,64),fill:C.trunk},g);
+    el('path',{d:`M440 ${WY+96} H548 L562 ${WY+108} L548 ${WY+120} H440Z`,fill:C.cream},g);
+    lbl(g,496,WY+113,'FUTURE',12,C.ink);
+  };
+  scene(0); scene(STRIP);
+  el('path',{d:rect(WX,WY,WW,6),fill:'#000','fill-opacity':.12},win);
+  const spools=[];
+  for(const x of [118,542]){ part(root,disc(x,250,30),C.cream,C.creamEdge); const sp=el('g',{},root);
+    for(let i=0;i<3;i++) el('path',{d:rect(-2.5,-24,5,48,2),fill:C.creamEdge,transform:`rotate(${i*60})`},sp);
+    spools.push({sp,x}); fastener(root,x,250,6); }
+  part(root,rect(240,96,180,26,3),C.cream,C.creamEdge); lbl(root,330,115,'PROGRESS',15,C.ink);
+
+  /* drive belts (behind the treadmill) */
+  const CP=[600,548];
+  el('path',{d:`M${CP[0]-14} ${CP[1]-22} L548 268 M${CP[0]+16} ${CP[1]-18} L566 262`,stroke:C.belt,'stroke-width':4,fill:'none'},root);
+  el('path',{d:`M${CP[0]} ${CP[1]-26} L490 532 M${CP[0]} ${CP[1]+26} L490 584`,stroke:C.belt,'stroke-width':4,fill:'none'},root);
+
+  /* treadmill */
+  part(root,rect(166,592,14,30,2),C.kraftDk,C.kraftEdge); part(root,rect(480,592,14,30,2),C.kraftDk,C.kraftEdge);
+  part(root,rect(144,532,372,56,26),C.belt,C.beltEdge);
+  el('path',{d:rect(156,540,348,40,18),fill:'#4a3b2c'},root);
+  const cclip=el('clipPath',{id:uid+'c'},svg); el('path',{d:rect(170,532,320,8)},cclip);
+  const cleats=el('g',{'clip-path':`url(#${uid}c)`},root); const cleatRow=el('g',{},cleats);
+  for(let x=150;x<540;x+=30) el('path',{d:rect(x,532,14,7,1),fill:C.kraftDk},cleatRow);
+  const rollers=[];
+  for(const x of [170,490]){ part(root,disc(x,560,20),C.kraft,C.kraftEdge); const sp=el('g',{},root);
+    el('path',{d:rect(-2.5,-15,5,30,2),fill:C.kraftEdge},sp); el('path',{d:rect(-15,-2.5,30,5,2),fill:C.kraftEdge},sp);
+    rollers.push({sp,x}); fastener(root,x,560,5); }
+  part(root,rect(150,590,360,10,3),C.kraft,C.kraftEdge);
+
+  /* console: steps climb, distance never moves */
+  part(root,rect(452,430,14,104,2),C.kraftDk,C.kraftEdge);
+  part(root,rect(400,368,118,66,4),C.brass,C.brassEdge);
+  el('path',{d:rect(406,374,106,54,3),fill:C.brassDk},root); el('path',{d:rect(407,375,104,52,3),fill:C.brass},root);
+  lbl(root,416,392,'STEPS',10,C.brassEdge,'start'); lbl(root,416,418,'KM',10,C.brassEdge,'start');
+  part(root,rect(446,380,60,18,2),C.ink,C.brassEdge); part(root,rect(446,406,60,18,2),C.ink,C.brassEdge);
+  const steps=lbl(root,476,394,'00000',14,C.cream); lbl(root,476,420,'0.00',14,C.cream);
+  for(const [x,y] of [[404,372],[514,372],[404,430],[514,430]]) fastener(root,x,y,2.6);
+
+  /* runner: a jointed paper puppet */
+  const HIP=[300,452], SH=[316,378], L1=48, L2=48, A1=36, A2=34;
+  const back=el('g',{},root), body=el('g',{},root), front=el('g',{},root);
+  const bl=[limb(back,C.creamDk,C.creamEdge,15),limb(back,C.creamDk,C.creamEdge,13)], ba=[limb(back,C.creamDk,C.creamEdge,12),limb(back,C.creamDk,C.creamEdge,11)];
+  part(body,`M${HIP[0]-14} ${HIP[1]+6} L${SH[0]-16} ${SH[1]-4} Q${SH[0]} ${SH[1]-14} ${SH[0]+16} ${SH[1]-2} L${HIP[0]+14} ${HIP[1]+6} Q${HIP[0]} ${HIP[1]+16} ${HIP[0]-14} ${HIP[1]+6}Z`,C.cream,C.creamEdge);
+  const head=part(body,disc(SH[0]+12,SH[1]-30,20),C.cream,C.creamEdge);
+  const sweat=el('path',{d:'',fill:C.blue},body);
+  const fl=[limb(front,C.cream,C.creamEdge,15),limb(front,C.cream,C.creamEdge,13)], fa=[limb(front,C.cream,C.creamEdge,12),limb(front,C.cream,C.creamEdge,11)];
+  const joints=el('g',{},front);
+  const HIPA=[34,24,6,-14,-30,-22,-2,20], KNEE=[8,4,10,26,62,82,56,24];
+
+  /* crank: the only thing that moves any of it */
+  part(root,rect(592,548,16,74,2),C.kraftDk,C.kraftEdge);
+  part(root,disc(CP[0],CP[1],26),C.kraft,C.kraftEdge);
+  const tag=el('g',{class:'q'},root); el('path',{d:`M592 590 L566 606`,stroke:C.creamEdge,'stroke-width':1.5},tag);
+  part(tag,rect(526,600,62,30,3),C.cream,C.creamEdge); lbl(tag,557,620,'$29/mo',12,C.ink);
+  /* coin-op: each stride shakes a coin from the runner's pocket; the belt carries it into the meter, and the chute rolls it to the vendor's jar */
+  const coinL=el('g',{class:'q'},root);
+  el('path',{d:'M40 612 L26 618 L26 664 L614 676',fill:'none',stroke:C.kraftEdge,'stroke-width':16,'stroke-linejoin':'round',transform:'translate(3 4)'},coinL);
+  el('path',{d:'M40 612 L26 618 L26 664 L614 676',fill:'none',stroke:C.kraftDk,'stroke-width':16,'stroke-linejoin':'round'},coinL);
+  el('path',{d:'M40 612 L26 618 L26 664 L614 676',fill:'none',stroke:C.flute,'stroke-width':6,'stroke-linejoin':'round'},coinL);
+  part(coinL,rect(42,540,66,80,4),C.brass,C.brassEdge); el('path',{d:rect(48,548,54,26,3),fill:C.ink},coinL);
+  el('path',{d:rect(64,536,22,5,2),fill:C.ink},coinL); lbl(coinL,75,596,'PAID',11,C.brassEdge); const paid=lbl(coinL,75,567,'$0',14,C.cream);
+  for(const [x,y] of [[46,544],[104,544],[46,616],[104,616]]) fastener(coinL,x,y,2.6);
+  const jarCoins=el('g',{},coinL);
+  el('path',{d:'M622 664 H668 V708 Q668 716 660 716 H630 Q622 716 622 708Z',fill:'#dfeef0','fill-opacity':.28,stroke:'#8fa7ad','stroke-width':2.5},coinL);
+  el('path',{d:rect(618,656,54,9,3),fill:'#8fa7ad'},coinL); el('path',{d:'M628 672 V704',stroke:'#fff','stroke-opacity':.5,'stroke-width':3},coinL);
+  const coins=[0,1,2].map(()=>{const g=el('g',{},coinL); part(g,disc(0,0,7),C.brass,C.brassEdge); el('path',{d:disc(-2,-2,2.4),fill:C.brassHi},g); return g;});
+  const PER=30, arc=(a,b,s,h)=>[a[0]+(b[0]-a[0])*s, a[1]+(b[1]-a[1])*s-h*Math.sin(Math.PI*s)];
+  const coinAt=t=>{ if(t<=5) return arc([300,462],[280,528],t/5,40); if(t<=18) return [280-(t-5)*10,528]; if(t<=23) return arc([150,528],[76,540],(t-18)/5,22);
+    if(t<30) return null; if(t<=34) return arc([40,612],[30,660],(t-30)/4,0); if(t<=58) return [30+584*(t-34)/24,662+12*(t-34)/24]; if(t<=62) return arc([614,674],[645,700],(t-58)/4,10); return null; };
+  const arm=part(root,'',C.kraft,C.kraftEdge); const knob=part(root,'',C.kraftDk,C.kraftEdge);
+  fastener(root,CP[0],CP[1],6);
+  const knobF=el('g',{},root);
+
+  const P=(o,a,l)=>[o[0]+Math.sin(a*Math.PI/180)*l, o[1]+Math.cos(a*Math.PI/180)*l];
+  function render(F){
+    const theta=(90+30*F)%360, t=theta*Math.PI/180;
+    const g=[CP[0]+70*Math.cos(t), CP[1]+70*Math.sin(t)];
+    if(onGrip) onGrip(g);
+    arm.set(`M${CP[0]} ${CP[1]} L${f2(g[0])} ${f2(g[1])}`); arm.u.setAttribute('stroke',C.kraftEdge); arm.f.setAttribute('stroke',C.kraft);
+    arm.u.setAttribute('stroke-width',12); arm.f.setAttribute('stroke-width',12); arm.u.setAttribute('stroke-linecap','round'); arm.f.setAttribute('stroke-linecap','round');
+    knob.set(disc(f2(g[0]),f2(g[1]),9));
+    knobF.innerHTML=''; fastener(knobF,f2(g[0]),f2(g[1]),3.5);
+    const spin=(30*F)%360;
+    spools.forEach(s=>s.sp.setAttribute('transform',`translate(${s.x} 250) rotate(${spin})`));
+    rollers.forEach(r=>r.sp.setAttribute('transform',`translate(${r.x} 560) rotate(${-spin})`));
+    scroll.setAttribute('transform',`translate(${WX-((F*12)%STRIP)} 0)`);
+    cleatRow.setAttribute('transform',`translate(${-((F*10)%30)} 0)`);
+    const p=F%8;
+    const legs=[[HIPA[p],KNEE[p]],[HIPA[(p+4)%8],KNEE[(p+4)%8]]];
+    const bounce=(p%4===1||p%4===2)?-4:0;
+    const hip=[HIP[0],HIP[1]+bounce], sh=[SH[0],SH[1]+bounce];
+    body.setAttribute('transform',`translate(0 ${bounce})`);
+    joints.innerHTML='';
+    legs.forEach(([a,k],i)=>{ const kn=P(hip,a,L1), ft=P(kn,a-k,L2); const L=i?bl:fl; L[0].set(hip,kn); L[1].set(kn,ft); if(!i) fastener(joints,f2(kn[0]),f2(kn[1]),3); });
+    legs.forEach(([a],i)=>{ const u=-0.9*a, el2=P(sh,u,A1), hd=P(el2,u+80,A2); const A=i?fa:ba; A[0].set(sh,el2); A[1].set(el2,hd); if(i) fastener(joints,f2(el2[0]),f2(el2[1]),3); });
+    fastener(joints,hip[0],hip[1],4); fastener(joints,sh[0],sh[1],3.5);
+    const sw=F%24; sweat.setAttribute('d', sw<10 ? `M${SH[0]+30} ${SH[1]-46+sw*3} q4 6 0 9 q-4 -3 0 -9Z` : '');
+    steps.textContent=String(Math.floor(F/4)%100000).padStart(5,'0');
+    coins.forEach((g,j)=>{ const c=Math.floor(F/PER)-j, t=F-c*PER, p=c>=0?coinAt(t):null; g.style.display=p?'':'none'; if(p) g.setAttribute('transform',`translate(${f2(p[0])} ${f2(p[1])}) rotate(${(t*40)%360})`); });
+    paid.textContent='$'+(F>=24?Math.floor((F-24)/PER)+1:0);
+    const nj=F>=62?Math.min(9,Math.floor((F-62)/PER)+1):0;
+    if(jarCoins.childElementCount!==nj){ jarCoins.innerHTML=''; for(let i=0;i<nj;i++) el('ellipse',{cx:645+((i*7)%9)-4,cy:710-i*4.6,rx:13,ry:3.4,fill:i%2?C.brass:C.brassDk,stroke:C.brassEdge,'stroke-width':1},jarCoins); }
+  }
+  let last=-1; const t0=window.__machineT0 ?? performance.now();
+  const tick=now=>{const F=Math.floor((now-t0)/1000*FPS); if(F!==last){last=F;render(F);} if(svg.isConnected) requestAnimationFrame(tick);};
+  render(0); requestAnimationFrame(tick);
+}
+
+/* ---------- classroom machine: the height gate ("YOU MUST BE THIS HUMAN") ----------
+   Each essay is a standing card whose HEIGHT is the detector's "how human" score; whole-card color says who wrote it.
+   A brass bar on the post is the threshold. Cards that reach the bar pass to HUMAN; shorter cards are stamped AI and
+   drop into the AI bin. The bins fill with visible stacks, so the pile is the tally. Twice per loop the administrator
+   lowers the bar: one gold card is spared and one grey card slips through with it. */
+function mountHeightGate(svg, onGrip){
+  const NS='http://www.w3.org/2000/svg', OFF=[3,4], FPS=12, PER=36;
+  const C={kraft:'#c9a273',kraftDk:'#b28a5b',kraftEdge:'#6f4f2c',flute:'#a47d4e',speck:'#9e7749',cream:'#f3ead2',creamEdge:'#a8946b',
+    brass:'#c99a3b',brassEdge:'#6e5018',brassHi:'#e6c46e',brassDk:'#8f6a22',ink:'#2c2116',belt:'#3a2e22',red:'#C8463F',
+    teal:'#2a9d8f',tealDk:'#1d6e64',gold:'#e0b13a',goldDk:'#a37f1f',grey:'#9aa0a6',greyDk:'#6c7177'};
+  const KIND={t:[C.teal,C.tealDk],g:[C.gold,C.goldDk],r:[C.grey,C.greyDk]};
+  /* 12 cards: kind, height. Cards 6 and 7 meet the lowered bar. */
+  const CARDS=[['t',215],['g',150],['r',95],['t',230],['g',168],['r',110],['g',140],['r',130],['t',220],['g',142],['r',118],['t',208]];
+  const BAR_UP=175, BAR_DN=118, BELT=470, GATE_X=262, CW=78, LOOP=CARDS.length*PER;
+  const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;};
+  const f2=v=>+v.toFixed(2);
+  const rect=(x,y,w,h,r=0)=>r?`M${x+r} ${y}H${x+w-r}A${r} ${r} 0 0 1 ${x+w} ${y+r}V${y+h-r}A${r} ${r} 0 0 1 ${x+w-r} ${y+h}H${x+r}A${r} ${r} 0 0 1 ${x} ${y+h-r}V${y+r}A${r} ${r} 0 0 1 ${x+r} ${y}Z`:`M${x} ${y}H${x+w}V${y+h}H${x}Z`;
+  const disc=(cx,cy,r)=>`M${cx-r} ${cy}A${r} ${r} 0 1 0 ${cx+r} ${cy}A${r} ${r} 0 1 0 ${cx-r} ${cy}Z`;
+  const part=(p,d,fill,edge)=>{const u=el('path',{d,fill:edge,transform:`translate(${OFF[0]} ${OFF[1]})`},p);const f=el('path',{d,fill},p);return{u,f,set(d2){u.setAttribute('d',d2);f.setAttribute('d',d2);}};};
+  const fastener=(p,x,y,r)=>{part(p,disc(x,y,r),C.brass,C.brassEdge);el('path',{d:disc(x+r*.18,y+r*.18,r*.62),fill:C.brassDk},p);el('path',{d:disc(x,y,r*.62),fill:C.brass},p);el('path',{d:disc(x-r*.3,y-r*.3,r*.3),fill:C.brassHi},p);};
+  let seed=5; const rnd=()=>(seed=(seed*16807)%2147483647)/2147483647;
+  const speckle=(p,x,y,w,h,n)=>{let d='';for(let i=0;i<n;i++)d+=disc(f2(x+rnd()*w),f2(y+rnd()*h),f2(.5+rnd()*.7));el('path',{d,fill:C.speck},p);};
+  const lbl=(p,x,y,txt,size,fill,extra={})=>{const t=el('text',Object.assign({x,y,'text-anchor':'middle','font-family':'"Big Shoulders Stencil Display", Impact, sans-serif','font-size':size,'font-weight':800,fill,'letter-spacing':2},extra),p);t.textContent=txt;return t;};
+  const root=el('g',{},svg);
+
+  /* base bench */
+  part(root,rect(60,662,40,12,2),C.kraftDk,C.kraftEdge); part(root,rect(560,662,40,12,2),C.kraftDk,C.kraftEdge);
+  part(root,rect(30,640,600,22,2),C.kraft,C.kraftEdge); el('path',{d:rect(32,644,596,14),fill:C.flute},root);
+
+  /* the stamp's post, behind the conveyor; its rod slides through a brass sleeve at the top */
+  part(root,rect(92,392,16,248,3),C.kraftDk,C.kraftEdge); speckle(root,94,400,12,230,14);
+  /* conveyor */
+  part(root,rect(48,488,14,152,2),C.kraftDk,C.kraftEdge); part(root,rect(420,488,14,152,2),C.kraftDk,C.kraftEdge);
+  part(root,rect(36,BELT,412,20,10),C.belt,'#1f1812');
+  const cleatClip=el('clipPath',{id:'hgc'+Math.floor(rnd()*1e6)},svg); el('path',{d:rect(46,BELT,392,5)},cleatClip);
+  const cleats=el('g',{'clip-path':`url(#${cleatClip.id})`},root); const cleatRow=el('g',{},cleats);
+  for(let x=20;x<480;x+=28) el('path',{d:rect(x,BELT,12,5,1),fill:C.kraftDk},cleatRow);
+  fastener(root,56,BELT+10,6); fastener(root,428,BELT+10,6);
+
+  /* bins: open crates so the stacks show; big labels */
+  const bin=(x,label)=>{ part(root,rect(x,520,160,8,2),C.kraftDk,C.kraftEdge); part(root,rect(x,528,10,112,2),C.kraft,C.kraftEdge); part(root,rect(x+150,528,10,112,2),C.kraft,C.kraftEdge);
+  };
+  bin(150,'AI'); bin(462,'HUMAN');
+  const pileAI=el('g',{},root), pileHU=el('g',{},root);
+  root.appendChild(pileAI); root.appendChild(pileHU);
+  /* crate fronts drawn after piles so the label board sits in front */
+  const front=el('g',{},root);
+  for(const [x,label] of [[150,'AI'],[462,'HUMAN']]){ part(front,rect(x-6,600,172,40,3),C.kraft,C.kraftEdge); speckle(front,x-4,602,168,36,30); lbl(front,x+80,632,label,30,C.ink); fastener(front,x+4,606,3); fastener(front,x+156,606,3); }
+
+  /* the post, the sign and the bar */
+  part(root,rect(440,90,20,550,3),C.kraftDk,C.kraftEdge); speckle(root,442,100,16,520,40);
+  const sign=el('g',{},root); part(sign,rect(250,96,184,124,6),C.cream,C.creamEdge); part(sign,rect(428,140,14,12,2),C.kraftDk,C.kraftEdge);
+  lbl(sign,342,136,'YOU MUST',26,C.ink); lbl(sign,342,166,'BE THIS',26,C.ink); lbl(sign,342,204,'HUMAN',38,C.ink);
+  fastener(sign,258,104,3); fastener(sign,426,104,3); fastener(sign,258,212,3); fastener(sign,426,212,3);
+  const bar=el('g',{},root);
+  part(bar,rect(250,-7,210,14,4),C.brass,C.brassEdge); el('path',{d:rect(254,-4,200,3),fill:C.brassHi},bar);
+  part(bar,rect(446,-10,8,20,2),C.brassDk,C.brassEdge);
+  const rod=el('g',{},root); part(rod,rect(447,-251,6,251,3),C.kraftDk,C.kraftEdge); part(rod,rect(447,-251,160,6,3),C.kraftDk,C.kraftEdge);
+  part(rod,rect(583,-262,34,26,4),C.belt,'#1f1812'); for(let i=0;i<4;i++) el('path',{d:rect(587+i*8,-262,2,26),fill:'#5a4a3a'},rod); fastener(rod,450,-248,4);
+
+  /* stamp arm and the moving card */
+  /* the stamp hangs on an arm from a collar at the top of its post; the post turns 180 degrees to swing the stamp onto the card */
+  const collar=el('g',{},root); part(collar,rect(86,BELT-76,28,28,4),C.brass,C.brassEdge); const collarStripe=el('path',{fill:C.brassEdge},collar); fastener(collar,100,BELT-54,3.5);
+  const stampBack=el('g',{},root);
+  const card=el('g',{},root); const cardFace=part(card,'',C.teal,C.tealDk); const lines=el('g',{},card); const stampMark=el('g',{},card);
+  const stampFront=el('g',{},root);
+  const arm=el('g',{}); const armBar=part(arm,'',C.kraft,C.kraftEdge); const head=part(arm,'',C.belt,'#1f1812'); const headPlate=part(arm,'',C.brassDk,C.brassEdge);
+
+  const barY=G=>{ const i=Math.floor(G/PER), f=G%PER;
+    const up=BELT-BAR_UP, dn=BELT-BAR_DN, ease=t=>t<=0?up:t>=1?dn:up+(dn-up)*t;
+    if(i===5&&f>=26) return ease((f-25)/9); if(i===6||i===7) return dn; if(i===8&&f<12) return ease(1-(f+1)/12); return up; };
+  const passes=(i,G)=>CARDS[i][1] >= BELT - barY(i*PER+18);
+  const pile=(g,list,x)=>{ g.innerHTML=''; list.forEach((k,j)=>{ const [c,dk]=KIND[k]; part(g,rect(x+16,588-j*11,128,10,2),c,dk); if(g===pileAI) el('path',{d:rect(x+60,589-j*11,40,7,1),fill:'none',stroke:C.red,'stroke-width':2},g); }); };
+
+  function render(F){
+    const G=((F%LOOP)+LOOP)%LOOP, i=Math.floor(G/PER), f=G%PER, [k,h]=CARDS[i], [col,dk]=KIND[k];
+    const by=barY(G);
+    bar.setAttribute('transform',`translate(0 ${f2(by)})`); rod.setAttribute('transform',`translate(0 ${f2(by)})`);
+    if(onGrip) onGrip([600, f2(by-249)]);
+    cleatRow.setAttribute('transform',`translate(${(F*7)%28} 0)`);
+    /* piles of everything already sorted this loop */
+    const ai=[],hu=[]; for(let j=0;j<i;j++){ (passes(j)?hu:ai).push(CARDS[j][0]); }
+    const pass=passes(i);
+    if(f>=33) (pass?hu:ai).push(k);
+    pile(pileAI,ai,150); pile(pileHU,hu,462);
+    /* the current card */
+    let x,y=BELT,rot=0,show=true;
+    if(f<=15){ x=-90+(GATE_X+90)*(f/15); }
+    else if(f<=21){ x=GATE_X; }
+    else if(pass){ const t=Math.min(1,(f-21)/7); x=GATE_X+(500-GATE_X)*t; if(f>=28){ y=BELT+(f-27)*26; } if(f>=33) show=false; }
+    else { x=GATE_X; if(f>=27){ const t=Math.min(1,(f-26)/6); x=GATE_X-60*t; y=BELT+120*t; rot=-80*t; } if(f>=33) show=false; }
+    card.style.display=show?'':'none';
+    card.setAttribute('transform',`translate(${f2(x)} ${f2(y)}) rotate(${rot})`);
+    cardFace.set(rect(0,-h,CW,h,4)); cardFace.f.setAttribute('fill',col); cardFace.u.setAttribute('fill',dk);
+    lines.innerHTML=''; for(let j=0;j<Math.floor((h-30)/16);j++) el('path',{d:rect(12,-h+18+j*16,CW-24-(j%3)*8,4,2),fill:C.cream,opacity:.75},lines);
+    stampMark.innerHTML=''; if(!pass&&f>=23){ const cy=-62; el('path',{d:rect(8,cy-18,CW-16,36,3),fill:'none',stroke:C.red,'stroke-width':5},stampMark); lbl(stampMark,CW/2,cy+12,'AI',30,C.red); }
+    /* the stamp swings in only for cards that fall short */
+    /* the post turns: the arm swings 180 degrees through the front onto the card, presses, and swings back */
+    let phi=180;
+    if(!pass){ if(f>=16&&f<=21) phi=180-180*((f-15)/6); else if(f>=22&&f<=23) phi=0; else if(f>=24&&f<=29) phi=-180*((f-23)/6); }
+    const pr=phi*Math.PI/180, co=Math.cos(pr), sn=Math.sin(pr), PX=100, PY=BELT-62, AL=200;
+    /* swinging toward the viewer: the nearer the stamp comes (sin), the bigger and lower it draws, so the turn reads as coming out of the frame, not behind the card */
+    const near=1+.9*sn, drop=34*sn;
+    const hx=PX+AL*co, hy=PY+drop+((!pass&&f>=22&&f<=23)?3:0);
+    ((sn>.05||phi<10)?stampFront:stampBack).appendChild(arm);
+    /* the arm is always one piece from the collar to the stamp, whichever way it points */
+    const at=10*near; armBar.set(Math.abs(co)<.4
+      ? `M${PX-5} ${PY-5} L${PX+5} ${PY-5} L${f2(hx+at/2)} ${f2(hy)} L${f2(hx-at/2)} ${f2(hy)}Z`
+      : `M${PX} ${PY-5} L${f2(hx)} ${f2(hy-at/2)} L${f2(hx)} ${f2(hy+at/2)} L${PX} ${PY+5}Z`);
+    const hw=(16+30*Math.abs(co))*near, hh=44*near; head.set(rect(f2(hx-hw/2),f2(hy-hh/2),f2(hw),f2(hh),4));
+    headPlate.set(sn>.6 ? rect(f2(hx-hw/2+6),f2(hy-hh/2+6),f2(hw-12),f2(hh-12),3) : rect(f2(co>=0?hx+hw/2-6:hx-hw/2-2),f2(hy-12*near),8,f2(24*near),2));
+    collarStripe.setAttribute('d',rect(f2(88+22*(((phi%360)+360)%360/360)),BELT-74,3,24));
+    /* the bar lifts out of the way for cards that pass */
+    bar.style.opacity=(pass&&f>=22&&f<=27)?.35:1;
+  }
+  let last=-1; const t0=window.__machineT0 ?? performance.now();
+  const tick=now=>{const F=Math.floor((now-t0)/1000*FPS); if(F!==last){last=F;render(F);} if(svg.isConnected) requestAnimationFrame(tick);};
+  render(0); requestAnimationFrame(tick);
+}
+
+/* ---------- playback ---------- */
+const stage=document.getElementById("stage"), hud=document.getElementById("hud"), hint=document.getElementById("hint");
+let idx=0, started=false;
+function fitStage(){ const s=Math.min(innerWidth/1600, innerHeight/900); stage.style.transform=`scale(${s}) translate(-50%,-50%)`; stage.style.transform=`translate(-50%,-50%) scale(${s})`; stage.style.transformOrigin="50% 50%"; stage.style.left="50%"; stage.style.top="50%"; }
+/* a machine keeps running from beat to beat within one stop, so tapping from the doorway to the reveal doesn't restart it */
+let lastShown=null;
+function show(i, withSound=true){
+  idx=Math.max(0,Math.min(beats.length-1,i));
+  const b=beats[idx];
+  stage.className=b.cls;
+  const stopOf=k=>beats[k].label.split(" · ")[0];
+  window.__fromPrev = lastShown!==null && idx===lastShown+1;
+  if(!(lastShown!==null && idx===lastShown+1 && stopOf(lastShown)===stopOf(idx))) window.__machineT0=performance.now();
+  lastShown=idx;
+  stage.innerHTML=b.render();
+  hud.textContent=`${idx+1} / ${beats.length} · ${b.label}`;
+  clearTimeout(hopTimer); if(stage.classList.contains('after')) scheduleHop();
+  if(stage.querySelector('#clBird')) mountClassBird();
+  if(stage.querySelector('#stRobot')) mountRobot();
+  mountSquirrel();
+  stage.querySelectorAll('.fireLight').forEach(mountFire);
+  stage.querySelectorAll('.bkFrags').forEach(mountBackFrags);
+  const bm=stage.querySelector('#birdMount'); if(bm) mountBird(bm, ladleArm);
+  const dm=stage.querySelector('#detMount'); if(dm) mountHeightGate(dm, detArm);
+  const am=stage.querySelector('#aucMount'); if(am) mountAuction(am, aucArm);
+  const tm=stage.querySelector('#tmMount'); if(tm) mountTreadmill(tm, tmArm);
+  if(withSound && started && SOUND[b.sound]) SOUND[b.sound]();
+}
+/* now and then, a revealed operator gives a nervous little hop */
+let hopTimer=null;
+function scheduleHop(){ hopTimer=setTimeout(()=>{ const ops=[...stage.querySelectorAll('.op')]; if(ops.length){ const o=ops[Math.floor(Math.random()*ops.length)]; o.classList.add('hop'); setTimeout(()=>o.classList.remove('hop'),700);} scheduleHop(); }, 4000+Math.random()*7000); }
+function next(){ if(!started){ started=true; hint.hidden=true; audio(); show(idx); return; } if(idx<beats.length-1) show(idx+1); }
+function prev(){ if(idx>0) show(idx-1); }
+addEventListener("keydown",e=>{
+  if(["ArrowRight","PageDown"," ","Enter"].includes(e.key)){ e.preventDefault(); next(); }
+  else if(["ArrowLeft","PageUp","Backspace"].includes(e.key)){ e.preventDefault(); prev(); }
+  else if(e.key==="h"||e.key==="H"){ hud.hidden=!hud.hidden; }
+  else if(e.key==="m"||e.key==="M"){ muted=!muted; }
+  else if(e.key==="f"||e.key==="F"){ const p=document.documentElement.requestFullscreen?.(); if(p&&p.catch) p.catch(()=>{}); }
+  else if(/^[1-9]$/.test(e.key)){ const n=+e.key; const target=n===1?0:10+(n-2)*3; if(n<=7) show(target); }
+});
+document.getElementById("viewport").addEventListener("click",next);
+addEventListener("resize",fitStage);
+fitStage(); show(0,false);
+</script>
