@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef, useCallback } from 'react'
 import Header from '@/components/Header'
 import Main from '@/components/Main'
 import Footer from '@/components/Footer'
-import { AskDave } from '@/components/AskDave'
 
 export default function Home() {
   const [isArticleVisible, setIsArticleVisible] = useState(false)
@@ -155,7 +154,6 @@ export default function Home() {
         />
         <Footer timeout={timeout} />
       </div>
-      <AskDave />
     </div>
   )
 }

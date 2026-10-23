@@ -4,8 +4,6 @@ import { Resend } from 'resend'
 import { contactRatelimit } from '@/lib/rate-limit'
 import { headers } from 'next/headers'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
-
 export async function submitContactForm(formData: {
   name: string
   email: string
@@ -94,6 +92,7 @@ export async function submitContactForm(formData: {
     }
 
     // Send email via Resend
+    const resend = new Resend(process.env.RESEND_API_KEY)
     const { error } = await resend.emails.send({
       from: 'Contact Form <incoming@davekanter.com>',
       to: ['raydot@gmail.com'],

@@ -18,6 +18,9 @@ export function AskDave() {
   const [loading, setLoading] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const formRef = useRef<HTMLFormElement>(null)
+  const chatWindowRef = useRef<HTMLDivElement>(null)
+  const expandBtnRef = useRef<HTMLButtonElement>(null)
 
   // Focus input when chat opens
   useEffect(() => {
@@ -31,22 +34,24 @@ export function AskDave() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, loading])
 
+  // Close the chat and return focus to the launcher button, per the
+  // dialog pattern (focus must go back to the control that opened it).
+  const closeChat = () => {
+    setIsExpanded(false)
+    setTimeout(() => expandBtnRef.current?.focus(), 0)
+  }
+
   // Handle keyboard shortcuts
   useEffect(() => {
     const handleKeyboard = (e: KeyboardEvent) => {
       // Escape to close chat
       if (e.key === 'Escape' && isExpanded) {
-        setIsExpanded(false)
+        closeChat()
       }
       // Ctrl+Enter or Cmd+Enter to send message
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter' && isExpanded) {
         e.preventDefault()
-        const form = document.querySelector('form')
-        if (form) {
-          form.dispatchEvent(
-            new Event('submit', { cancelable: true, bubbles: true })
-          )
-        }
+        formRef.current?.requestSubmit()
       }
     }
     document.addEventListener('keydown', handleKeyboard)
@@ -57,7 +62,7 @@ export function AskDave() {
   useEffect(() => {
     if (!isExpanded) return
 
-    const chatWindow = document.querySelector('[role="region"]')
+    const chatWindow = chatWindowRef.current
     if (!chatWindow) return
 
     const focusableElements = chatWindow.querySelectorAll(
@@ -131,8 +136,10 @@ export function AskDave() {
     <div className={styles.container}>
       {isExpanded ? (
         <div
+          ref={chatWindowRef}
           className={styles.chatWindow}
-          role="region"
+          role="dialog"
+          aria-modal="true"
           aria-label="AI Chat Assistant"
         >
           <div className={styles.header}>
@@ -149,7 +156,7 @@ export function AskDave() {
               )}
             </div>
             <button
-              onClick={() => setIsExpanded(false)}
+              onClick={closeChat}
               className={styles.minimizeBtn}
               aria-label="Minimize chat window (Escape)"
               title="Minimize (Esc)"
@@ -221,7 +228,7 @@ export function AskDave() {
             <div ref={messagesEndRef} />
           </div>
 
-          <form onSubmit={handleSubmit} className={styles.inputForm}>
+          <form ref={formRef} onSubmit={handleSubmit} className={styles.inputForm}>
             <input
               ref={inputRef}
               type="text"
@@ -258,6 +265,7 @@ export function AskDave() {
         </div>
       ) : (
         <button
+          ref={expandBtnRef}
           onClick={() => setIsExpanded(true)}
           className={styles.expandBtn}
           aria-label="Open AI chat assistant"
