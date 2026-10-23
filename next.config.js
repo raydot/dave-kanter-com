@@ -87,6 +87,15 @@ const nextConfig = {
   generateEtags: false,
   // SWC minification is now default in Next.js 15+
 
+  async rewrites() {
+    return [
+      {
+        source: '/campus-backlot',
+        destination: '/external/campus-backlot.html',
+      },
+    ];
+  },
+
   // Security headers
   async headers() {
     return [
