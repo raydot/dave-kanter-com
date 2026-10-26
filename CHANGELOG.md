@@ -1,3 +1,20 @@
+# [2.14.0](https://github.com/raydot/dave-kanter-com/compare/v2.13.0...v2.14.0) (2026-10-26)
+
+
+### Bug Fixes
+
+* correct VoterPrime title and framework experience claims in chatbot context ([9176e23](https://github.com/raydot/dave-kanter-com/commit/9176e231f2c6ab9a928eaafd44565ea2c822c77c))
+* improve portfolio accessibility and mobile spacing ([3c05dd3](https://github.com/raydot/dave-kanter-com/commit/3c05dd3c9774f298618049562cedc421d0dcce5f))
+* remove generic strategic-thinker line from chatbot context ([5ad1be8](https://github.com/raydot/dave-kanter-com/commit/5ad1be84e98da96b4d2f64b96fdaf53412a6446f))
+
+
+### Features
+
+* add generated cover art for the Coding Interview Mastery entry ([864efcb](https://github.com/raydot/dave-kanter-com/commit/864efcb5acdc7a7e2a209cb594a44a8dfaf235d0))
+* complete portfolio redesign content and add Blog nav link ([6ad678a](https://github.com/raydot/dave-kanter-com/commit/6ad678ac200da7a7ad052ecdbbbb92f685c3306b))
+* redesign homepage portfolio as a lean card list with detail pane ([ec9d5a5](https://github.com/raydot/dave-kanter-com/commit/ec9d5a5bec4594ca74dde2d5e39174c42624632a))
+* reposition site as AI engineering leader and add blog card ([9c74cad](https://github.com/raydot/dave-kanter-com/commit/9c74cad1ac0014ad9fabb8381bcde0f8ea26faec))
+
 # [2.13.0](https://github.com/raydot/dave-kanter-com/compare/v2.12.3...v2.13.0) (2026-10-23)
 
 
