@@ -1,0 +1,461 @@
+{
+  "groups": [
+    {
+      "id": "ai",
+      "name": "AI",
+      "color": "#4ecdc4"
+    },
+    {
+      "id": "business",
+      "name": "Business Software",
+      "color": "#3498db"
+    },
+    {
+      "id": "retail",
+      "name": "Retail & Commerce",
+      "color": "#e67e22"
+    },
+    {
+      "id": "healthcare",
+      "name": "Healthcare",
+      "color": "#27ae60"
+    },
+    {
+      "id": "web",
+      "name": "Web & Apps",
+      "color": "#9b59b6"
+    },
+    {
+      "id": "teaching",
+      "name": "Teaching & Writing",
+      "color": "#e0607e"
+    }
+  ],
+  "projects": [
+    {
+      "id": "voterprime",
+      "title": "VoterPrime",
+      "year": "2025–present",
+      "group": "ai",
+      "hook": "Founding CTO. AI that matches voters to political content",
+      "description": "VoterPrime (a/k/a Hungry Eagle) is a civic engagement nonprofit focused on providing voters information to help them make informed voting choices. Founding CTO. Responsible for technical architecture and AI/ML work: OpenAI embeddings for semantic matching of political content, GPT for sentiment and intensity detection and category management.",
+      "technologies": [
+        "OpenAI embeddings",
+        "GPT-4o",
+        "GPT-3.5",
+        "Semantic matching"
+      ],
+      "image": "voterprime.png",
+      "alt": "VoterPrime"
+    },
+    {
+      "id": "beagle",
+      "title": "Beagle",
+      "year": "2026",
+      "group": "ai",
+      "hook": "Solo build of an evaluation harness for multi-turn LLM agent correction",
+      "description": "Beagle is a pre-registered evaluation harness that tests whether a correction mechanism actually improves multi-turn agent reliability. Sole architect and developer. Four synthetic environments with computable ground truth (no LLM judge), five controller conditions, and an automated invariant suite enforcing experimental validity — parity between conditions, no controller-state leakage to the agent under test, no condition-dependent data exclusion. Built to test a control-theory-derived correction mechanism of my own design; produced a defensible null result and characterized why: task-level agent error is step-shaped, so derivative-based control has nothing to resolve. Provisional patent applied for.",
+      "technologies": [
+        "Python",
+        "Ollama",
+        "Claude API",
+        "pytest",
+        "pandas/scipy"
+      ],
+      "image": "beagle.svg",
+      "alt": "Beagle"
+    },
+    {
+      "id": "spookyai",
+      "title": "SpookyAI",
+      "year": "2027",
+      "group": "ai",
+      "hook": "Spooky action at a distance, for your coding agents",
+      "description": "Coming in 2027",
+      "technologies": [
+        "Python",
+        "MCP",
+        "fastembed",
+        "sqlite-vec",
+        "bge-small-en-v1.5"
+      ],
+      "image": "spooky.svg",
+      "alt": "Spooky"
+    },
+    {
+      "id": "track2",
+      "title": "Track2",
+      "year": "2026",
+      "group": "web",
+      "hook": "Better habits, two at a time",
+      "description": "Improve your habits two at a time with Track2. Designed and built solo as an iPhone app.",
+      "technologies": [
+        "React Native",
+        "Expo / EAS",
+        "TypeScript",
+        "Jest",
+        "GitHub Actions"
+      ],
+      "image": "tracktwo.png",
+      "alt": "Track2"
+    },
+    {
+      "id": "coding-interview-book",
+      "title": "Nailing the Coding Interview",
+      "year": "2024",
+      "group": "teaching",
+      "hook": "Free-to-read draft of a data structures and algorithms book for junior and mid-level interviews",
+      "description": "A book on data structures and algorithms for engineers preparing for junior and mid-level coding interviews. Covers Big O notation, data structures and algorithms. An unfinished draft, free to read online.",
+      "technologies": [],
+      "image": "coding-interview.svg",
+      "alt": "Nailing the Coding Interview",
+      "url": "https://codinginterviewsbook.davekanter.com/"
+    },
+    {
+      "id": "uc-berkeley-school-of-information",
+      "title": "UC Berkeley School of Information",
+      "year": "2009",
+      "group": "teaching",
+      "hook": "Taught 'The History of New Media'",
+      "description": "Taught 'The History of New Media' at the UC Berkeley School of Information. Student final project involved writing research papers and simple applications that demonstrated understanding of the technological changes brought about by the internet and web, including social media.",
+      "technologies": [],
+      "image": "uc-berkeley.svg",
+      "alt": "UC Berkeley"
+    },
+    {
+      "id": "parsons-school-of-design",
+      "title": "Parsons School of Design",
+      "year": "1999–2008",
+      "group": "teaching",
+      "hook": "Full-time faculty, head of programming for the MFA in Design and Technology",
+      "description": "Head of programming faculty for the MFA in Design and Technology program. Courses taught include C/C++, Java, Computer Science for Art Majors, Independent Study, Advanced Programming, Collaboration Studio, Thesis Writing, Thesis Studio and Thesis Advising. Member of Faculty Senate.",
+      "technologies": [],
+      "image": "parsons.svg",
+      "alt": "Parsons School of Design"
+    },
+    {
+      "id": "academy-of-art-university",
+      "title": "Academy of Art University",
+      "year": "2013",
+      "group": "teaching",
+      "hook": "Full-time faculty, tech lead for graduate program in Web Design and Technology",
+      "description": "Full-time faculty and tech lead at Academy of Art University graduate program in Web Design and Technology. Taught courses on foundational computer science, web development, and mobile development. Supervised programming faculty and departmental tech initiatives.",
+      "technologies": [],
+      "image": "aau.png",
+      "alt": "Academy of Art"
+    },
+    {
+      "id": "albertsons",
+      "title": "Albertsons Companies",
+      "year": "2022",
+      "group": "retail",
+      "hook": "Senior developer for Albertsons Companies national grocery stores, via Publicis Sapient",
+      "description": "Frontend and AEM developer for national grocery store chain. Worked on the Safeway stores mobile app and national weekly promotional materials.",
+      "technologies": [
+        "Next.js",
+        "Jest",
+        "Adobe Experience Manager"
+      ],
+      "image": "albertsons.png",
+      "alt": "Albertsons Companies"
+    },
+    {
+      "id": "sonepar",
+      "title": "Sonepar",
+      "year": "2023",
+      "group": "business",
+      "hook": "React developer and architect, via Publicis Sapient",
+      "description": "React developer and initial architect for a B2B electrical distribution website built to support progressive enhancement and fault-tolerant delivery.",
+      "technologies": [
+        "React",
+        "Astro",
+        "JavaScript"
+      ],
+      "image": "sonepar.png",
+      "alt": "Sonepar"
+    },
+    {
+      "id": "capital-group",
+      "title": "Capital Group",
+      "year": "2024–2025",
+      "group": "business",
+      "hook": "Presentation sales software, via Publicis Sapient",
+      "description": "Sales presentation software for Capital Group, delivered through Publicis Sapient. Migrated the app from vanilla JS to Next.js modules, then supported and extended it. Technical lead.",
+      "technologies": [
+        "Next.js",
+        "React",
+        "Sass",
+        "Jest",
+        "JavaScript"
+      ],
+      "image": "capital-group.svg",
+      "alt": "Capital Group"
+    },
+    {
+      "id": "terumo",
+      "title": "Terumo",
+      "year": "2026",
+      "group": "healthcare",
+      "hook": "Lead developer for an interactive installation at corporate headquarters",
+      "description": "Lead developer for an interactive installation at Terumo corporate headquarters. Built project slide display templates, integrated project timing with working MQTT sensors, coupled installation with Android tablet applications for slide curation.",
+      "technologies": [
+        "JavaScript",
+        "Next.js",
+        "MQTT",
+        "Sanity Studio CMS"
+      ],
+      "image": "terumo.webp",
+      "alt": "Terumo"
+    },
+    {
+      "id": "ded-reckoning-blog",
+      "title": "Ded Reckoning Blog",
+      "year": "2025",
+      "group": "teaching",
+      "hook": "Thoughts on AI/ML engineering, web development, and technical leadership",
+      "description": "Writing on AI/ML engineering, web development, and technical leadership, from a fullstack developer with 20+ years of experience.",
+      "technologies": [],
+      "image": "ded-reckoning.svg",
+      "alt": "Ded Reckoning Blog",
+      "url": "/blog"
+    },
+    {
+      "id": "signant-health",
+      "title": "Signant Health",
+      "year": "2020",
+      "group": "healthcare",
+      "hook": "Lead frontend developer for a clinical-trial technology site, on React and Kubernetes",
+      "description": "Lead frontend developer for the interactive, responsive website of a company that runs the infrastructure for double-blind drug trials for pharmaceutical companies. Built in Node/React and MUI, deployed with Docker and Kubernetes.",
+      "technologies": [
+        "React",
+        "Node.js",
+        "MUI",
+        "Docker",
+        "Kubernetes"
+      ],
+      "image": "signant.webp",
+      "alt": "Signant Health website"
+    },
+    {
+      "id": "beyond-napa-valley",
+      "title": "Beyond Napa Valley",
+      "year": "2019",
+      "group": "web",
+      "hook": "Website and marketing for a tourism mobile app",
+      "description": "Website, React development, server development and marketing for tourism mobile application.",
+      "technologies": [
+        "React",
+        "Node.js",
+        "Firebase",
+        "API Development"
+      ],
+      "image": "bnv.png",
+      "alt": "Beyond Napa Valley website and marketing"
+    },
+    {
+      "id": "adobe",
+      "title": "Adobe",
+      "year": "2018",
+      "group": "business",
+      "hook": "React components on Adobe's Spectrum design systems",
+      "description": "Developed React components to integrate Adobe ReactSpectrum and SpectrumCSS design systems for the Adobe Web team. Created configurable and scalable carousel component for enterprise-level web applications.",
+      "technologies": [
+        "React",
+        "ReactSpectrum",
+        "SpectrumCSS",
+        "Design Systems"
+      ],
+      "image": "adobe.png",
+      "alt": "Adobe ReactSpectrum design system components"
+    },
+    {
+      "id": "rubicon-project",
+      "title": "Rubicon Project",
+      "year": "2018",
+      "group": "business",
+      "hook": "Header bidding for Hearst, SoundCloud and Taboola",
+      "description": "Solutions Engineer for digital advertising technology platform. Led technical implementation of header bidding and server-based advertising solutions for major publishers including Hearst, SoundCloud, and Taboola.",
+      "technologies": [
+        "Header Bidding",
+        "JavaScript",
+        "Ad Tech",
+        "Server Integration"
+      ],
+      "image": "rubicon.png",
+      "alt": "Rubicon Project digital advertising platform"
+    },
+    {
+      "id": "trenchless-titan",
+      "title": "Trenchless Titan",
+      "year": "2018",
+      "group": "web",
+      "hook": "Website and brand campaign for a sewer repair company",
+      "description": "Website and brand campaign for trenchless sewer repair company.",
+      "technologies": [
+        "PHP",
+        "CSS3",
+        "Branding"
+      ],
+      "image": "trenchless.jpg",
+      "alt": "Trenchless Titan website and brand campaign"
+    },
+    {
+      "id": "autodesk",
+      "title": "Autodesk",
+      "year": "2016",
+      "group": "business",
+      "hook": "Solr search and Angular vendor sign-up for a translation platform",
+      "description": "Enhanced translation platform accessibility by implementing Ajax/Solr web interface. Built Angular-based vendor registration system and developed web interface for experimental Parametric Human Project.",
+      "technologies": [
+        "Angular",
+        "Ajax",
+        "Solr",
+        "JavaScript"
+      ],
+      "image": "autodesk.avif",
+      "alt": "Autodesk localization and translation platform"
+    },
+    {
+      "id": "pa-human",
+      "title": "PA Human",
+      "year": "2016",
+      "group": "healthcare",
+      "hook": "Actelion Pharmaceuticals site, localized from British to American English",
+      "description": "Redesign and redevelopment for Actelion Pharmaceuticals of a pulmonary arterial hypertension (PAH) website, redeployed from British English to American English.",
+      "technologies": [
+        "HTML5",
+        "CSS3",
+        "JavaScript",
+        "Localization"
+      ],
+      "image": "pahuman.png",
+      "alt": "PAHuman website"
+    },
+    {
+      "id": "saxenda-moa",
+      "title": "Saxenda MOA",
+      "year": "2016",
+      "group": "healthcare",
+      "hook": "Interactive drug method-of-action demo for a healthcare site",
+      "description": "Interactive demonstration of the method-of-action of a weight-loss drug for a healthcare provider website.",
+      "technologies": [
+        "HTML5",
+        "CSS3",
+        "JavaScript",
+        "Animation"
+      ],
+      "image": "saxendamoa.png",
+      "alt": "SaxendaMOA website"
+    },
+    {
+      "id": "opsumit-hcp",
+      "title": "Opsumit HCP",
+      "year": "2015",
+      "group": "healthcare",
+      "hook": "Doctor information site for a healthcare provider",
+      "description": "Doctor information for a healthcare provider website.",
+      "technologies": [
+        "HTML5",
+        "CSS3",
+        "JavaScript",
+        "Responsive"
+      ],
+      "image": "opsumithcp.png",
+      "alt": "OpsumitHCP website"
+    },
+    {
+      "id": "kaiser-permanente-cardiac-care",
+      "title": "Kaiser Permanente Cardiac Care",
+      "year": "2014",
+      "group": "healthcare",
+      "hook": "Doctor and patient stories for a San Francisco medical provider",
+      "description": "Website featuring doctor and patient stories for a San Francisco-based medical provider.",
+      "technologies": [
+        "HTML5",
+        "CSS3",
+        "JavaScript",
+        "CMS"
+      ],
+      "image": "kaiserCardiacCare.png",
+      "alt": "Kaiser Cardiac Care website"
+    },
+    {
+      "id": "monster-poop-book",
+      "title": "Monster Poop Book",
+      "year": "2013",
+      "group": "web",
+      "hook": "Website and marketing for a children's book author",
+      "description": "Website and marketing for a children's book author.",
+      "technologies": [
+        "WordPress",
+        "PHP",
+        "CSS3",
+        "Marketing"
+      ],
+      "image": "monsterpoop.jpg",
+      "alt": "Monster Poop Book website"
+    },
+    {
+      "id": "michael-coffindaffer-studio",
+      "title": "Michael Coffindaffer Studio",
+      "year": "2012",
+      "group": "retail",
+      "hook": "Magento e-commerce for a New York retailer",
+      "description": "E-commerce website built in Magento for New York-based retailer.",
+      "technologies": [
+        "Magento",
+        "PHP",
+        "MySQL",
+        "JavaScript"
+      ],
+      "image": "coffindaffer.jpg",
+      "alt": "Michael Coffindaffer Studio E-commerce / Magento site"
+    },
+    {
+      "id": "lucas-arts",
+      "title": "LucasArts",
+      "year": "2012",
+      "group": "web",
+      "hook": "Lead developer for starwars.com and sister sites",
+      "description": "Lead developer for several LucasArts websites including starwars.com, skysound.com and openexr.com.",
+      "technologies": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Flash",
+        "CMS"
+      ],
+      "image": "starwars.png",
+      "alt": "LucasArts lead web developer"
+    },
+    {
+      "id": "henry-urbach-architecture",
+      "title": "Henry Urbach Architecture",
+      "year": "2005",
+      "group": "web",
+      "hook": "Flash kiosk piece for a Chelsea art gallery",
+      "description": "Multimedia piece to display Chelsea art gallery portfolio. Ran in gallery kiosk.",
+      "technologies": [
+        "Flash",
+        "ActionScript"
+      ],
+      "image": "urbach.jpg",
+      "alt": "Henry Urbach Architecture Multimedia Piece"
+    },
+    {
+      "id": "intel-interactive-house",
+      "title": "Intel Interactive House",
+      "year": "2004",
+      "group": "web",
+      "hook": "Museum installation showing the Intel processor in a future home",
+      "description": "Interactive piece to show the Intel processor at the core of the interactive house of the future. Displayed in the Intel Interactive Museum.",
+      "technologies": [
+        "Flash",
+        "ActionScript",
+        "Hardware Integration"
+      ],
+      "image": "intel.jpg",
+      "alt": "Intel Interactive House Museum Piece"
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-labelledby="ci-title ci-desc">
+  <title id="ci-title">Coding Interview Mastery — know your complexity classes</title>
+  <desc id="ci-desc">A chart of five algorithmic complexity curves plotted against input size: constant, logarithmic, linear, linearithmic, and quadratic, colored from green (efficient) through yellow and orange to red (inefficient), fanning out from a shared origin to five distinct heights.</desc>
+
+  <rect width="800" height="600" fill="#12141a"/>
+
+  <!-- gridlines -->
+  <g stroke="#262a34" stroke-width="1">
+    <line x1="96" y1="200" x2="742" y2="200"/>
+    <line x1="96" y1="288" x2="742" y2="288"/>
+    <line x1="96" y1="376" x2="742" y2="376"/>
+  </g>
+
+  <!-- axes -->
+  <line x1="96" y1="488" x2="742" y2="488" stroke="#4a5164" stroke-width="1.5"/>
+  <line x1="96" y1="112" x2="96" y2="488" stroke="#4a5164" stroke-width="1.5"/>
+
+  <!-- axis labels -->
+  <g fill="#6b7383" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13">
+    <text x="96" y="518">n = 0</text>
+    <text x="742" y="518" text-anchor="end">n = large</text>
+    <text x="700" y="508" text-anchor="end" font-style="italic">input size</text>
+    <text x="52" y="300" text-anchor="middle" transform="rotate(-90 52 300)">operations</text>
+  </g>
+
+  <!-- curves, bottom (efficient) to top (inefficient) -->
+  <path d="M 96 478 L 742 460" fill="none" stroke="#3ad68a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 96 480 C 220 430, 400 392, 742 352" fill="none" stroke="#2dd4bf" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 96 482 L 742 248" fill="none" stroke="#e8c547" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 96 483 C 320 450, 540 300, 742 176" fill="none" stroke="#e8914c" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 96 484 C 420 470, 640 300, 742 120" fill="none" stroke="#e8574c" stroke-width="3" stroke-linecap="round"/>
+
+  <!-- endpoint markers -->
+  <g>
+    <circle cx="742" cy="460" r="4" fill="#3ad68a"/>
+    <circle cx="742" cy="352" r="4" fill="#2dd4bf"/>
+    <circle cx="742" cy="248" r="4" fill="#e8c547"/>
+    <circle cx="742" cy="176" r="4" fill="#e8914c"/>
+    <circle cx="742" cy="120" r="4" fill="#e8574c"/>
+  </g>
+
+  <!-- legend -->
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14">
+    <circle cx="112" cy="140" r="5" fill="#3ad68a"/>
+    <text x="126" y="145" fill="#c3c9d6">O(1)</text>
+    <circle cx="112" cy="164" r="5" fill="#2dd4bf"/>
+    <text x="126" y="169" fill="#c3c9d6">O(log n)</text>
+    <circle cx="230" cy="140" r="5" fill="#e8c547"/>
+    <text x="244" y="145" fill="#c3c9d6">O(n)</text>
+    <circle cx="230" cy="164" r="5" fill="#e8914c"/>
+    <text x="244" y="169" fill="#c3c9d6">O(n log n)</text>
+    <circle cx="112" cy="188" r="5" fill="#e8574c"/>
+    <text x="126" y="193" fill="#c3c9d6">O(n&#178;)</text>
+  </g>
+
+  <!-- title block -->
+  <text x="96" y="58" fill="#f2f4f8"
+        font-family="ui-sans-serif, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+        font-size="27" font-weight="600" letter-spacing="-0.4">Know your complexity classes</text>
+  <text x="96" y="86" fill="#8b93a5"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="14.5">algorithm patterns · data structures · interview prep</text>
+
+  <!-- footer -->
+  <text x="96" y="566" fill="#5c6373"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="13" letter-spacing="1.5">CODING INTERVIEW MASTERY</text>
+  <text x="742" y="566" fill="#5c6373"
+        font-family="ui-monospace, SFMono-Regular, Menlo, monospace"
+        font-size="13" text-anchor="end">technical book · 2024</text>
+</svg>

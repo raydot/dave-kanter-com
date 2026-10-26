@@ -36,7 +36,7 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>Dead Reckoning | Dave Kanter</title>
+    <title>Ded Reckoning | Dave Kanter</title>
     <link>https://davekanter.com/blog</link>
     <description>Thoughts on AI/ML engineering, web development, and technical leadership.</description>
     <language>en-us</language>

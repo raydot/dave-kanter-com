@@ -32,7 +32,7 @@ export async function renderPostImage(slug: string): Promise<Response> {
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
           <div style={{ display: 'flex', fontSize: 28, color: '#7daedf', letterSpacing: 4 }}>
-            DEAD RECKONING
+            DED RECKONING
           </div>
           <div
             style={{

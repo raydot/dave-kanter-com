@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-labelledby="dr-title dr-desc">
+  <title id="dr-title">Ded Reckoning Blog — a course plotted from a known start</title>
+  <desc id="dr-desc">A dashed course line leaves a known starting point and passes through three waypoints, each surrounded by a larger circle of uncertainty, ending in a final position whose circle is the widest.</desc>
+
+  <rect width="800" height="600" fill="#12141a"/>
+
+  <!-- chart grid -->
+  <g stroke="#262a34" stroke-width="1">
+    <line x1="80" y1="150" x2="720" y2="150"/>
+    <line x1="80" y1="300" x2="720" y2="300"/>
+    <line x1="80" y1="450" x2="720" y2="450"/>
+    <line x1="240" y1="80" x2="240" y2="520"/>
+    <line x1="400" y1="80" x2="400" y2="520"/>
+    <line x1="560" y1="80" x2="560" y2="520"/>
+  </g>
+
+  <!-- uncertainty grows with distance from the fix -->
+  <g fill="#4ecdc4" fill-opacity="0.08" stroke="#4ecdc4" stroke-opacity="0.45" stroke-width="1.5">
+    <circle cx="270" cy="400" r="26"/>
+    <circle cx="450" cy="310" r="48"/>
+    <circle cx="610" cy="200" r="78"/>
+  </g>
+
+  <!-- course -->
+  <path d="M 130 460 L 270 400 L 450 310 L 610 200" fill="none" stroke="#4ecdc4" stroke-width="3" stroke-dasharray="10 8" stroke-linecap="round"/>
+
+  <!-- known start, then estimated positions -->
+  <circle cx="130" cy="460" r="9" fill="#e8ecf3"/>
+  <g fill="#4ecdc4">
+    <circle cx="270" cy="400" r="6"/>
+    <circle cx="450" cy="310" r="6"/>
+    <circle cx="610" cy="200" r="6"/>
+  </g>
+
+  <g fill="#6b7383" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14">
+    <text x="130" y="494" text-anchor="middle">known fix</text>
+    <text x="610" y="100" text-anchor="middle">best estimate</text>
+  </g>
+</svg>

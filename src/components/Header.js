@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import Link from 'next/link'
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 // import { faComment } from '@fortawesome/free-solid-svg-icons'
 
@@ -26,9 +27,8 @@ const Header = (props) => {
         <div className="inner">
           <h1>Dave Kanter</h1>
           <p style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3em', justifyContent: 'center' }}>
-            <span style={{ whiteSpace: 'nowrap' }}>Technical Strategist,</span>
-            <span style={{ whiteSpace: 'nowrap' }}>Team Leader &</span>
-            <span style={{ whiteSpace: 'nowrap' }}>Fullstack web developer</span>
+            <span style={{ whiteSpace: 'nowrap' }}>AI Engineering Leader <span aria-hidden="true">|</span></span>
+            <span style={{ whiteSpace: 'nowrap' }}>Fullstack Systems Developer</span>
           </p>
           {/* <p>
             <button
@@ -78,6 +78,9 @@ const Header = (props) => {
             >
               Contact
             </button>
+          </li>
+          <li>
+            <Link href="/blog" className="nav-link">Blog</Link>
           </li>
         </ul>
       </nav>

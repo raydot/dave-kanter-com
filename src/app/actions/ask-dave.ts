@@ -39,39 +39,46 @@ export async function askDave(question: string): Promise<{
     const ip =
       cfConnectingIP || realIP || forwarded?.split(',')[0].trim() || 'unknown'
 
-    let rateLimitResult
+    // Fail open on a rate-limit-service outage: this is a low-traffic site
+    // with a hard 500-char input cap, so an unthrottled burst during a rare
+    // Redis blip is cheap. Blocking every visitor (and leaking infra detail
+    // to them) is the worse failure mode. Log it so a sustained outage is
+    // still visible server-side.
+    let remaining: number | undefined
     try {
-      rateLimitResult = await ratelimit.limit(ip)
+      const rateLimitResult = await ratelimit.limit(ip)
+      if (!rateLimitResult.success) {
+        return {
+          success: false,
+          message:
+            "I'd love to talk more, but I've hit my hourly limit. Let's take a little break and try again later.",
+          remaining: rateLimitResult.remaining,
+        }
+      }
+      remaining = rateLimitResult.remaining
     } catch (error) {
-      console.error('Rate limit error:', error)
-      return {
-        success: false,
-        message:
-          'Rate limiting service unavailable. Please check Redis configuration.',
-      }
+      console.error('Rate limit check failed, allowing request through:', error)
     }
 
-    const { success, remaining } = rateLimitResult
-
-    if (!success) {
-      return {
-        success: false,
-        message: `Rate limit exceeded. You can ask ${remaining} more questions. Please try again later.`,
-        remaining,
-      }
-    }
-
-    // Call Claude API
+    // Call Claude API. daveContext lives in `system` (not concatenated into
+    // the user turn) with cache_control so the ~350-line bio is cached
+    // instead of re-billed as full-price input on every question.
     const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-sonnet-5',
       max_tokens: 1024,
+      system: [
+        {
+          type: 'text',
+          text: daveContext,
+          cache_control: { type: 'ephemeral' },
+        },
+      ],
       messages: [
         {
           role: 'user',
-          content: `${daveContext}\n\nUser Question: ${question}`,
+          content: question,
         },
       ],
-      temperature: 0.7,
     })
 
     const answer = response.content[0]
