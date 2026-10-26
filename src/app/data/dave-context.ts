@@ -277,7 +277,6 @@ STRICT SCOPE: Only answer questions about Dave Kanter's professional background,
 - Proven ability to explain complex concepts (extensive teaching background)
 - Pragmatic approach: builds real systems that solve real problems
 - Strong communicator bridging technical and non-technical audiences
-- **Strategic thinker who understands technology in business context, not just as technical implementation**
 
 # Response Guidelines
 
