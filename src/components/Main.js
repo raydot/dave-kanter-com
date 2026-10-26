@@ -45,13 +45,13 @@ const Main = (props) => {
           />
         </span>
         <p>
-          I&apos;m a full-stack developer who enjoys tackling complex problems
+          I&apos;m a fullstack developer who enjoys tackling complex problems
           across different industries. Over the past 20+ years, I&apos;ve worked
           on everything from high-traffic sites like starwars.com to enterprise
-          Next.js applications for Fortune 500 clients. Lately I&apos;ve been
-          dedicating considerable effort to mastering AI fundamentals and
-          Python, leveraging my programming background to develop comprehensive
-          AI capabilities.
+          Next.js applications for Fortune 500 clients. I now build and evaluate
+          LLM-based systems in Python, including a production semantic-matching
+          backend for VoterPrime and an evaluation harness for multi-turn LLM
+          agents.
         </p>
         <p>
           What makes my background distinctive is combining hands-on development
@@ -61,7 +61,7 @@ const Main = (props) => {
           adoption of transformative technologies. In addition to programming I
           have taught others how to program, and my teaching experience at
           institutions like Parsons School of Design, Academy of Art University,
-          and University of California Berkeley has sharpened my ability to
+          and UC Berkeley School of Information has sharpened my ability to
           communicate complex technical concepts in a variety of contexts and
           lead diverse teams effectively.
         </p>
@@ -106,10 +106,10 @@ const Main = (props) => {
           />
         </span>
         <p>
-          Dave lives in Marin County with his family and pets. Away from the
-          computer, he likes to cook, read, hike, play music and lose at chess.
-          Over the past several years he&apos;s even gotten pretty good at not
-          trying to do all of those things at exact same time.
+          I live in Marin County with my family and pets. Away from the
+          computer, I like to cook, read, hike, play music and lose at chess.
+          Over the past several years I&apos;ve even gotten pretty good at not
+          trying to do all of those things at the exact same time.
         </p>
         {close}
       </article>

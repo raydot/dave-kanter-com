@@ -21,13 +21,13 @@ export const metadata = {
   metadataBase: new URL('https://davekanter.com'),
   title: {
     default:
-      'Dave Kanter - Technical Strategist, Team leader, Full-Stack Developer & Educator',
+      'Dave Kanter - AI Engineering Leader | Fullstack Systems Developer',
     template: '%s | Dave Kanter',
   },
   description:
-    'Full-stack developer with 20+ years experience in enterprise applications, teaching at UC Berkeley, Parsons, and Academy of Art University. Specializing in Next.js, React, and AI.',
+    'AI engineering leader and fullstack systems developer with 20+ years of experience building with Next.js, React, and LLM systems. Also a longtime graduate educator.',
   keywords:
-    'full-stack developer, Next.js, React, JavaScript, web development, educator, UC Berkeley, AI, enterprise applications',
+    'AI engineering, engineering leadership, fullstack developer, systems development, Next.js, React, JavaScript, LLM, graduate educator',
   authors: [{ name: 'Dave Kanter' }],
   creator: 'Dave Kanter',
   publisher: 'Dave Kanter',
@@ -42,16 +42,16 @@ export const metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://davekanter.com',
-    title: 'Dave Kanter - Full-Stack Developer & Educator',
+    title: 'Dave Kanter - AI Engineering Leader & Fullstack Systems Developer',
     description:
-      'Full-stack developer with 20+ years experience in enterprise applications, teaching at UC Berkeley, Parsons, and Academy of Art University.',
+      'AI engineering leader and fullstack systems developer with 20+ years of experience building production web and AI systems. Also a longtime graduate educator.',
     siteName: 'Dave Kanter',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Dave Kanter - Full-Stack Developer & Educator',
+    title: 'Dave Kanter - AI Engineering Leader & Fullstack Systems Developer',
     description:
-      'Full-stack developer with 20+ years experience in enterprise applications, teaching at UC Berkeley, Parsons, and Academy of Art University.',
+      'AI engineering leader and fullstack systems developer with 20+ years of experience building production web and AI systems. Also a longtime graduate educator.',
     creator: '@raydot',
   },
 }

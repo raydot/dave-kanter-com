@@ -21,7 +21,7 @@ export const revalidate = 3600
 export const metadata: Metadata = {
   title: 'Blog',
   description:
-    'Thoughts on AI/ML engineering, web development, and technical leadership from a Staff Frontend Engineer with 20+ years of experience.',
+    'Thoughts on AI/ML engineering, web development, and technical leadership from a fullstack developer with 20+ years of experience.',
   openGraph: {
     title: 'Blog | Dave Kanter',
     description:

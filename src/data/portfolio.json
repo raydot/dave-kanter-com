@@ -37,8 +37,8 @@
       "title": "Signant Health",
       "year": "2020",
       "group": "healthcare",
-      "hook": "Site for a medical testing company, on React and Kubernetes",
-      "description": "Interactive and responsive technology website for a medical testing company. Site built in Node/React and MUI, deployed with Docker and Kubernetes.",
+      "hook": "Lead frontend developer for a clinical-trial technology site, on React and Kubernetes",
+      "description": "Lead frontend developer for the interactive, responsive website of a company that runs the infrastructure for double-blind drug trials for pharmaceutical companies. Built in Node/React and MUI, deployed with Docker and Kubernetes.",
       "technologies": [
         "React",
         "Node.js",
@@ -47,7 +47,7 @@
         "Kubernetes"
       ],
       "image": "signant.webp",
-      "alt": "Signant Health medical testing website"
+      "alt": "Signant Health website"
     },
     {
       "id": "beyond-napa-valley",
@@ -166,7 +166,7 @@
       "year": "2015",
       "group": "healthcare",
       "hook": "Doctor information site for a healthcare provider",
-      "description": "Doctor information for a health care provider website.",
+      "description": "Doctor information for a healthcare provider website.",
       "technologies": [
         "HTML5",
         "CSS3",
@@ -182,7 +182,7 @@
       "year": "2014",
       "group": "healthcare",
       "hook": "Doctor and patient stories for a San Francisco medical provider",
-      "description": "Website featuring doctor and patient stories for a San Francisco based medical provider.",
+      "description": "Website featuring doctor and patient stories for a San Francisco-based medical provider.",
       "technologies": [
         "HTML5",
         "CSS3",
@@ -226,11 +226,11 @@
     },
     {
       "id": "lucas-arts",
-      "title": "Lucas Arts",
+      "title": "LucasArts",
       "year": "2012",
       "group": "web",
       "hook": "Lead developer for starwars.com and sister sites",
-      "description": "Lead developer for several Lucas Arts websites including starwars.com, skysound.com and openexr.com.",
+      "description": "Lead developer for several LucasArts websites including starwars.com, skysound.com and openexr.com.",
       "technologies": [
         "HTML",
         "CSS",
@@ -239,7 +239,7 @@
         "CMS"
       ],
       "image": "starwars.png",
-      "alt": "Lucas Arts lead web developer"
+      "alt": "LucasArts lead web developer"
     },
     {
       "id": "henry-urbach-architecture",
