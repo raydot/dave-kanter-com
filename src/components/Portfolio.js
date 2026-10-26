@@ -7,14 +7,7 @@ import data from '../data/portfolio.json'
 const PHONE_QUERY = '(max-width: 736px)'
 const isDev = process.env.NODE_ENV !== 'production'
 
-// Incomplete entries live in portfolio.drafts.json and show, with a Draft
-// badge and a "needs" note, in development only. The condition is written
-// inline on purpose: the bundler folds process.env.NODE_ENV at build time
-// and drops the require, so drafts are not in the production JavaScript at
-// all (check: grep .next/static/chunks for a draft-only title after a build).
-const drafts =
-  process.env.NODE_ENV !== 'production' ? require('../data/portfolio.drafts.json').projects : []
-const projects = [...drafts, ...data.projects]
+const projects = data.projects
 const groups = data.groups.filter((g) => projects.some((p) => p.group === g.id))
 const groupById = Object.fromEntries(data.groups.map((g) => [g.id, g]))
 
@@ -233,7 +226,6 @@ const Portfolio = () => {
                       </span>
                     </div>
                     <p className={styles.hook}>{p.hook}</p>
-                    {isDev && p.draft && <span className={styles.flag}>{p.draft}</span>}
                   </div>
                   {isOpen && (
                     <div className={styles.more}>
@@ -267,12 +259,6 @@ const Portfolio = () => {
               </span>
             </div>
             <Detail project={active} />
-            {isDev && active.draft && (
-              <>
-                <span className={styles.flag}>{active.draft}</span>
-                {active.todo && <p className={styles.todo}>{active.todo}</p>}
-              </>
-            )}
           </aside>
         )}
       </div>

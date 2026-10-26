@@ -266,25 +266,6 @@
   margin: 0.25rem 0 0;
 }
 
-.flag {
-  background: #f4c542;
-  border-radius: 3px;
-  color: #1b1f22;
-  display: inline-block;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  margin-top: 0.4rem;
-  padding: 0.05rem 0.5rem;
-  text-transform: uppercase;
-}
-
-.pane > .flag {
-  display: block;
-  margin-top: 0.75rem;
-  width: fit-content;
-}
-
 .srOnly {
   clip: rect(0 0 0 0);
   height: 1px;
@@ -297,12 +278,6 @@
 .card:focus-within {
   outline: 2px solid #fff;
   outline-offset: 2px;
-}
-
-.todo {
-  color: #f4c542;
-  font-size: 0.8125rem;
-  margin: 0.5rem 0 0;
 }
 
 .chev {
