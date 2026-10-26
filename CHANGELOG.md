@@ -1,3 +1,10 @@
+## [2.14.1](https://github.com/raydot/dave-kanter-com/compare/v2.14.0...v2.14.1) (2026-10-26)
+
+
+### Bug Fixes
+
+* **deps:** upgrade next to 16.4.1 and refresh sharp and source-map-js ([604486b](https://github.com/raydot/dave-kanter-com/commit/604486b78fcd4aab1279a744ecbd0a7645f9b950))
+
 # [2.14.0](https://github.com/raydot/dave-kanter-com/compare/v2.13.0...v2.14.0) (2026-10-26)
 
 
