@@ -279,6 +279,26 @@
   text-transform: uppercase;
 }
 
+.pane > .flag {
+  display: block;
+  margin-top: 0.75rem;
+  width: fit-content;
+}
+
+.srOnly {
+  clip: rect(0 0 0 0);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.card:focus-within {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
 .todo {
   color: #f4c542;
   font-size: 0.8125rem;
@@ -420,7 +440,7 @@
   .scroller {
     -webkit-mask-image: none;
     mask-image: none;
-    padding: 0.8rem 1rem 2rem;
+    padding: 0.8rem 1rem 5rem;
   }
 
   .card {

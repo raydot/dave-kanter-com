@@ -32,7 +32,7 @@ const usePhone = () =>
 
 function Dot({ group }) {
   const g = groupById[group]
-  return <span className={styles.dot} style={{ background: g.color }} title={g.name} />
+  return <span className={styles.dot} style={{ background: g.color }} title={g.name} aria-hidden="true" />
 }
 
 function Picture({ file, alt, className, eager }) {
@@ -75,7 +75,7 @@ function Detail({ project }) {
         </ul>
       )}
       {project.url && (
-        <a className={styles.view} href={project.url}>
+        <a className={styles.view} href={project.url} aria-label={`View ${project.title}`}>
           View
         </a>
       )}
@@ -227,6 +227,7 @@ const Portfolio = () => {
                       </h3>
                       <span className={styles.year}>
                         <Dot group={p.group} />
+                        <span className={styles.srOnly}>{groupById[p.group].name}, </span>
                         {p.year}
                         {phone && <span className={styles.chev} aria-hidden="true" />}
                       </span>
@@ -255,7 +256,7 @@ const Portfolio = () => {
         </div>
 
         {!phone && active && (
-          <aside className={styles.pane} aria-label="Selected project">
+          <aside className={styles.pane} aria-label="Selected project" aria-live="polite">
             <Picture file={active.image} alt={active.alt} className={styles.paneImg} eager />
             <h3>{active.title}</h3>
             <div className={styles.meta}>
