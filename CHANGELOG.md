@@ -1,3 +1,10 @@
+# [2.13.0](https://github.com/raydot/dave-kanter-com/compare/v2.12.3...v2.13.0) (2026-10-23)
+
+
+### Features
+
+* serve campus-backlot static page at /campus-backlot ([85a136c](https://github.com/raydot/dave-kanter-com/commit/85a136c52c2f9eaeec29cb7faf2b161817543809))
+
 ## [2.12.3](https://github.com/raydot/dave-kanter-com/compare/v2.12.2...v2.12.3) (2026-10-05)
 
 
